@@ -17,9 +17,18 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
     }
 
     // Implement Admin Client to bypass RLS/Permission issues during creation
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    if (!supabaseUrl || !serviceRoleKey) {
+        console.error('Server Configuration Error: Missing Supabase Admin Keys')
+        throw new Error('Internal Server Error: Database configuration missing')
+    }
+
+    console.log('[createOrder] Initializing admin client...')
     const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        supabaseUrl,
+        serviceRoleKey,
         {
             auth: {
                 autoRefreshToken: false,
@@ -29,6 +38,7 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
     )
 
     // 1. Fetch real prices from DB to prevent tampering
+    console.log('[createOrder] Fetching product prices for validation...')
     const itemIds = items.map(i => i.id)
     const { data: dbProducts, error: productsError } = await supabase
         .from('products')
@@ -65,6 +75,8 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
         throw new Error('Invalid order total')
     }
 
+    console.log(`[createOrder] Total calculated: ${calculatedTotal}. Inserting order...`)
+
     // 3. Create Order
     // Note: We try to save 'items' as jsonb if the column exists. 
     // If 'items' column is missing in DB, this might throw. 
@@ -85,8 +97,8 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
     if (orderError) {
         console.error('Order creation failed:', orderError)
         // Fallback: If 'items' column doesn't exist, try excluding it
-        if (orderError.message.includes('items') && orderError.code === '42703') {
-            console.log('Retrying without items column...')
+        if (orderError.message.includes('items') || orderError.code === '42703' || orderError.message.includes('column "items" of relation "orders" does not exist')) {
+            console.log('[createOrder] Retrying without items column (Schema mismatch)...')
             const { data: retryOrder, error: retryError } = await supabase
                 .from('orders')
                 .insert({
@@ -98,12 +110,16 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
                 .select()
                 .single()
 
-            if (retryError) throw new Error(`Failed to create order: ${retryError.message}`)
+            if (retryError) {
+                console.error('[createOrder] Retry failed:', retryError)
+                throw new Error(`Failed to create order: ${retryError.message}`)
+            }
             return retryOrder
         }
 
         throw new Error(`Failed to create order: ${orderError.message}`)
     }
 
+    console.log('[createOrder] Order created successfully:', order.id)
     return order
 }

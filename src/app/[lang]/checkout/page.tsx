@@ -51,6 +51,16 @@ export default function CheckoutPage() {
         e.preventDefault()
         setLoading(true)
         setError(null)
+        console.log('[Checkout] Starting checkout process...')
+
+        // Safety Timeout: Force stop after 30s if stuck
+        const safetyTimeout = setTimeout(() => {
+            if (loading) {
+                console.error('[Checkout] Operation timed out forcefully')
+                setLoading(false)
+                setError('Operation timed out. Please try again.')
+            }
+        }, 30000)
 
         try {
             // Validate email first
@@ -60,18 +70,19 @@ export default function CheckoutPage() {
             }
 
             // 1. Check Session
+            console.log('[Checkout] Stage 1: Checking Session')
             const { data: { session } } = await supabase.auth.getSession()
 
             let userId = session?.user?.id || null
 
             if (!session) {
                 // Guest Checkout Flow - try to create guest user or get existing user ID
-                console.log('[Checkout] No session, attempting guest checkout for:', orderEmail)
+                console.log('[Checkout] Stage 1.5: Guest Checkout for', orderEmail)
 
                 try {
                     // Use AbortController for timeout
                     const controller = new AbortController()
-                    const timeoutId = setTimeout(() => controller.abort(), 15000) // 15 second timeout
+                    const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout for API
 
                     const res = await fetch('/api/guest-checkout', {
                         method: 'POST',
@@ -82,33 +93,25 @@ export default function CheckoutPage() {
 
                     clearTimeout(timeoutId)
 
-                    const data = await res.json()
-
-                    if (!res.ok) {
-                        // User exists - they need to login OR we proceed without session
-                        if (res.status === 409) {
-                            console.log('[Checkout] User exists, proceeding without linking to account')
-                            // Continue without setting session - order will be created with email only
-                        } else {
-                            console.error('[Checkout] Guest checkout API error:', data.error)
-                            // Continue anyway - we can still create order with email only
+                    if (res.ok) {
+                        const data = await res.json()
+                        if (data.userId) {
+                            userId = data.userId
+                            console.log('[Checkout] Guest user identified:', userId)
                         }
-                    } else if (data.userId) {
-                        // New user created, we have their ID
-                        userId = data.userId
-                        console.log('[Checkout] Guest user created with ID:', userId)
-                    }
-                } catch (guestError: any) {
-                    if (guestError.name === 'AbortError') {
-                        console.error('[Checkout] Guest checkout timed out')
                     } else {
-                        console.error('[Checkout] Guest checkout error:', guestError)
+                        // Attempt to read error message properly
+                        const errData = await res.json().catch(() => ({}))
+                        console.warn('[Checkout] Guest checkout API warning:', res.status, errData)
                     }
+
+                } catch (guestError: any) {
+                    console.error('[Checkout] Guest checkout skipped/failed:', guestError)
                     // Continue anyway - we can still create order with email only
                 }
             }
 
-            console.log('[Checkout] Creating order with email:', orderEmail, 'userId:', userId)
+            console.log('[Checkout] Stage 2: Creating Order via Server Action', { email: orderEmail, userId })
 
             // 2. Create Order (Server Action)
             const newOrder = await createOrder(
@@ -122,13 +125,21 @@ export default function CheckoutPage() {
                 userId
             )
 
+            console.log('[Checkout] Stage 3: Order Created', newOrder.id)
+
             // 3. Success
             setIsSuccess(true)
             clearCart()
             showToast('Order placed successfully!', 'success')
+
+            // Clear timeout before redirect
+            clearTimeout(safetyTimeout)
+
+            console.log('[Checkout] Redirecting to payment instructions...')
             router.push(`/${lang}/payment-instructions?order_id=${newOrder.id}`)
 
         } catch (err: any) {
+            clearTimeout(safetyTimeout)
             console.error('[Checkout] Error:', err)
             setError(err.message || 'Something went wrong. Please try again.')
             showToast(err.message || 'Checkout failed', 'error')
