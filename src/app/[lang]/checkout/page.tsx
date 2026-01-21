@@ -19,6 +19,7 @@ export default function CheckoutPage() {
     const { showToast } = useToast()
     const { user } = useAuth()
     const supabase = createClient()
+    const [authChecking, setAuthChecking] = useState(true)
 
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
@@ -26,12 +27,22 @@ export default function CheckoutPage() {
     const [mounted, setMounted] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
 
-    // Pre-fill email if user is logged in
+    const handleSignOut = async () => {
+        await supabase.auth.signOut()
+        window.location.reload()
+    }
+
+    // Check auth state on mount
     useEffect(() => {
-        if (user?.email && !email) {
-            setEmail(user.email)
+        const checkAuth = async () => {
+            const { data: { user: currentUser } } = await supabase.auth.getUser()
+            if (currentUser?.email) {
+                setEmail(currentUser.email)
+            }
+            setAuthChecking(false)
         }
-    }, [user])
+        checkAuth()
+    }, [])
 
     useEffect(() => {
         setMounted(true)
@@ -51,99 +62,68 @@ export default function CheckoutPage() {
         e.preventDefault()
         setLoading(true)
         setError(null)
-        console.log('[Checkout] Starting checkout process...')
+        console.log('[Checkout] Starting process...')
 
-        // Safety Timeout: Force stop after 30s if stuck
-        const safetyTimeout = setTimeout(() => {
+        // Global Timeout
+        const timeout = setTimeout(() => {
             if (loading) {
-                console.error('[Checkout] Operation timed out forcefully')
                 setLoading(false)
-                setError('Operation timed out. Please try again.')
+                setError('Request timed out. Please check your connection.')
+                console.error('Checkout Timeout')
             }
         }, 30000)
 
         try {
-            // Validate email first
             const orderEmail = email.trim()
-            if (!orderEmail) {
-                throw new Error('Email address is required')
-            }
+            if (!orderEmail) throw new Error('Email is required')
 
-            // 1. Check Session
-            console.log('[Checkout] Stage 1: Checking Session')
-            const { data: { session } } = await supabase.auth.getSession()
+            // 1. Determine User ID
+            let userId = user?.id || null
 
-            let userId = session?.user?.id || null
-
-            if (!session) {
-                // Guest Checkout Flow - try to create guest user or get existing user ID
-                console.log('[Checkout] Stage 1.5: Guest Checkout for', orderEmail)
-
+            // If not logged in, try guest flow
+            if (!userId) {
+                console.log('[Checkout] Guest flow for:', orderEmail)
                 try {
-                    // Use AbortController for timeout
-                    const controller = new AbortController()
-                    const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout for API
-
                     const res = await fetch('/api/guest-checkout', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: orderEmail }),
-                        signal: controller.signal
+                        body: JSON.stringify({ email: orderEmail })
                     })
 
-                    clearTimeout(timeoutId)
-
+                    // We don't abort, we just check result
                     if (res.ok) {
                         const data = await res.json()
-                        if (data.userId) {
-                            userId = data.userId
-                            console.log('[Checkout] Guest user identified:', userId)
-                        }
-                    } else {
-                        // Attempt to read error message properly
-                        const errData = await res.json().catch(() => ({}))
-                        console.warn('[Checkout] Guest checkout API warning:', res.status, errData)
+                        if (data.userId) userId = data.userId
                     }
-
-                } catch (guestError: any) {
-                    console.error('[Checkout] Guest checkout skipped/failed:', guestError)
-                    // Continue anyway - we can still create order with email only
+                } catch (err) {
+                    console.error('Guest API failed, proceeding as unlinked guest:', err)
                 }
             }
 
-            console.log('[Checkout] Stage 2: Creating Order via Server Action', { email: orderEmail, userId })
+            console.log('[Checkout] Creating order for:', userId || 'Guest')
 
-            // 2. Create Order (Server Action)
+            // 2. Create Order
             const newOrder = await createOrder(
-                cart.map(item => ({
-                    id: item.id,
-                    name: item.title || 'Product',
-                    price: item.sale_price || item.price,
-                    quantity: item.quantity
+                cart.map(i => ({
+                    id: i.id,
+                    quantity: i.quantity
                 })),
                 orderEmail,
                 userId
             )
 
-            console.log('[Checkout] Stage 3: Order Created', newOrder.id)
-
             // 3. Success
+            clearTimeout(timeout)
             setIsSuccess(true)
             clearCart()
-            showToast('Order placed successfully!', 'success')
-
-            // Clear timeout before redirect
-            clearTimeout(safetyTimeout)
-
-            console.log('[Checkout] Redirecting to payment instructions...')
+            showToast('Order successful! Redirecting...', 'success')
             router.push(`/${lang}/payment-instructions?order_id=${newOrder.id}`)
 
         } catch (err: any) {
-            clearTimeout(safetyTimeout)
-            console.error('[Checkout] Error:', err)
-            setError(err.message || 'Something went wrong. Please try again.')
-            showToast(err.message || 'Checkout failed', 'error')
-            setLoading(false) // Ensure loading is reset on error
+            clearTimeout(timeout)
+            console.error('Checkout Error:', err)
+            setError(err.message || 'Checkout failed')
+            setLoading(false)
         }
     }
 
@@ -179,6 +159,19 @@ export default function CheckoutPage() {
             <div className={styles.header}>
                 <h1 className={styles.title}>{dict.secure_checkout_title}</h1>
                 <p className={styles.subtitle}>{dict.complete_order_subtitle}</p>
+                {user && (
+                    <div style={{ marginTop: '0.5rem', background: '#f6ffed', padding: '0.5rem 1rem', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '8px', border: '1px solid #b7eb8f', color: '#389e0d', fontSize: '0.9rem' }}>
+                        <CheckCircle size={14} />
+                        <span>Logged in as <b>{user.email}</b></span>
+                        <button
+                            onClick={handleSignOut}
+                            style={{ background: 'none', border: 'none', color: '#ff4d4f', textDecoration: 'underline', cursor: 'pointer', marginLeft: '4px', fontSize: '0.9rem' }}
+                            type="button"
+                        >
+                            (Sign out)
+                        </button>
+                    </div>
+                )}
             </div>
 
             <form onSubmit={handlePlaceOrder}>

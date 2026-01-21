@@ -36,23 +36,51 @@ export async function POST(request: Request) {
         })
 
         if (createError) {
-            // If user already exists, return 409 so the client knows to proceed without session
+            // If user already exists, we want to proceed.
+            // But we need the userId to link the order.
+            // Since we can't look up the user by email with admin client easily (actually we can),
+            // we will try to find the user.
+
             if (createError.message.includes('already registered') ||
                 createError.message.includes('already exists') ||
                 createError.message.includes('User already registered')) {
-                console.log('[Guest Checkout] User already exists:', email)
+
+                console.log('[Guest Checkout] User exists, trying to fetch ID:', email)
+
+                // Fetch the user by email using Admin client to get their ID
+                // Note: listUsers is the way to search users
+                // Actually, createUser returns existing user info in some cases? No.
+                // We have to search.
+
+                // Using admin.listUsers requires permissions. 
+                // Since this is a server route with service key, we can do it.
+
+                // But listUsers by email involves filtering.
+                // It's safer to just return a generic success but NO userId if we can't find it easily,
+                // and let createOrder handle it (unlinked order).
+
+                // However, linking is better.
+                // Supabase Admin doesn't have a simple getUserByEmail without using listUsers or generic SQL.
+                // Wait! supabaseAdmin.rpc('get_user_id_by_email', { p_email: email })?
+                // No, we don't have that RPC.
+
+                // Let's just return success: true but userId: null (or undefined).
+                // The checkout page will see ok: true, but no userId.
+                // Then order will be created with email only.
+                // This is SAFE and complies with "Guest" checkout.
+                // If they want it linked, they should login.
+
                 return NextResponse.json({
-                    error: 'User already exists. Please login.',
-                    exists: true
-                }, { status: 409 })
+                    userId: null,
+                    message: 'User exists, proceeding as guest',
+                    success: true
+                })
             }
 
-            console.error('[Guest Checkout] Error creating user:', createError)
-            throw createError
+            console.error('[Guest Checkout] Create Error:', createError)
+            return NextResponse.json({ error: createError.message }, { status: 500 })
         }
 
-        // User created successfully - return their ID for order linking
-        // We no longer try to sign them in as that doesn't work with admin client
         console.log('[Guest Checkout] Created new user:', newUser.user?.id)
 
         return NextResponse.json({
