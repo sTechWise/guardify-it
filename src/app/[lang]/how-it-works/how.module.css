@@ -1,0 +1,71 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 4rem;
+    text-align: center;
+    color: #111827;
+}
+
+.step {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 4rem;
+    align-items: flex-start;
+}
+
+.number {
+    background: #2563eb;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.content {
+    padding-top: 0.5rem;
+}
+
+.stepTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #111827;
+}
+
+.stepDesc {
+    color: #4b5563;
+    line-height: 1.6;
+    font-size: 1.125rem;
+}
+
+.cta {
+    text-align: center;
+    margin-top: 4rem;
+}
+
+.ctaBtn {
+    display: inline-block;
+    padding: 1rem 3rem;
+    background: #111827;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+.ctaBtn:hover {
+    transform: translateY(-2px);
+}

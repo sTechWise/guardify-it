@@ -1,0 +1,318 @@
+/* 3D Scene Container */
+.scene {
+    width: 280px;
+    height: 380px;
+    perspective: 1000px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.carousel {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    animation: rotate 20s infinite linear;
+}
+
+.carousel:hover {
+    animation-play-state: paused;
+}
+
+/* Individual Card Items */
+.cardItem {
+    position: absolute;
+    width: 260px;
+    height: 360px;
+    left: 10px;
+    top: 10px;
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Dark glass effect */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    color: white;
+    /* Backface visibility is important for the 3D effect */
+    backface-visibility: hidden;
+    /* We will set transforms in inline styles in JS, but defaults here */
+}
+
+/* Card Content Styling */
+.cardHeader {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.centralVisual {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+.logo {
+    width: 160px;
+    height: 160px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    font-weight: 800;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.cardItem:hover .logo {
+    transform: scale(1.1);
+}
+
+.logoImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.titleWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.productName {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.productType {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.cardFooter {
+    margin-top: auto;
+    width: 100%;
+}
+
+.priceSection {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.price {
+    justify-content: center;
+}
+
+.priceLabel {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.originalPrice {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+.buyButton {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: white;
+    color: black;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.buyButton:hover {
+    transform: scale(1.02);
+}
+
+/* Specific Brand Styles - More Vibrant and Opaque */
+.chatgpt {
+    background: linear-gradient(135deg, rgba(16, 163, 127, 0.9), rgba(15, 23, 42, 0.95));
+    border: 1px solid rgba(16, 163, 127, 0.5);
+    box-shadow: 0 0 20px rgba(16, 163, 127, 0.3);
+}
+
+.chatgpt .logo {
+    background: white;
+    color: #10a37f;
+}
+
+.chatgpt .buyButton {
+    background: white;
+    color: #10a37f;
+}
+
+.netflix {
+    background: linear-gradient(135deg, rgba(229, 9, 20, 0.9), rgba(15, 23, 42, 0.95));
+    border: 1px solid rgba(229, 9, 20, 0.5);
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.3);
+}
+
+.netflix .logo {
+    background: white;
+    color: #e50914;
+}
+
+.netflix .buyButton {
+    background: white;
+    color: #e50914;
+}
+
+.google {
+    background: linear-gradient(135deg, rgba(66, 133, 244, 0.9), rgba(15, 23, 42, 0.95));
+    border: 1px solid rgba(66, 133, 244, 0.5);
+    box-shadow: 0 0 20px rgba(66, 133, 244, 0.3);
+}
+
+.google .logo {
+    background: white;
+    color: #4285F4;
+}
+
+.google .buyButton {
+    background: white;
+    color: #4285F4;
+}
+
+.perplexity {
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.9), rgba(15, 23, 42, 0.95));
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+}
+
+.perplexity .logo {
+    background: white;
+    color: #0f172a;
+}
+
+.perplexity .buyButton {
+    background: white;
+    color: #0f172a;
+}
+
+.canva {
+    background: linear-gradient(135deg, rgba(82, 39, 255, 0.9), rgba(0, 196, 204, 0.9));
+    border: 1px solid rgba(82, 39, 255, 0.5);
+    box-shadow: 0 0 20px rgba(82, 39, 255, 0.3);
+}
+
+.canva .logo {
+    background: white;
+    color: #7d2ae8;
+}
+
+.canva .buyButton {
+    background: white;
+    color: #7d2ae8;
+}
+
+/* Generic Premium Variants for Dynamic Assignment */
+.variant1 {
+    /* Blue-Cyan Gradient */
+    background: linear-gradient(135deg, rgba(66, 133, 244, 0.9), rgba(6, 182, 212, 0.9));
+    border: 1px solid rgba(6, 182, 212, 0.5);
+    box-shadow: 0 0 20px rgba(66, 133, 244, 0.3);
+}
+
+.variant1 .logo {
+    background: white;
+    color: #0284c7;
+}
+
+.variant1 .buyButton {
+    background: white;
+    color: #0284c7;
+}
+
+.variant2 {
+    /* Purple-Pink Gradient */
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.9), rgba(219, 39, 119, 0.9));
+    border: 1px solid rgba(219, 39, 119, 0.5);
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+}
+
+.variant2 .logo {
+    background: white;
+    color: #7c3aed;
+}
+
+.variant2 .buyButton {
+    background: white;
+    color: #7c3aed;
+}
+
+.variant3 {
+    /* Green-Emerald Gradient */
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(20, 184, 166, 0.9));
+    border: 1px solid rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.variant3 .logo {
+    background: white;
+    color: #059669;
+}
+
+.variant3 .buyButton {
+    background: white;
+    color: #059669;
+}
+
+.variant4 {
+    /* Orange-Amber Gradient */
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(234, 88, 12, 0.9));
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+.variant4 .logo {
+    background: white;
+    color: #ea580c;
+}
+
+.variant4 .buyButton {
+    background: white;
+    color: #ea580c;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotateY(0deg);
+    }
+
+    to {
+        transform: rotateY(360deg);
+    }
+}

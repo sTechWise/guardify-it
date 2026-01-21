@@ -1,0 +1,267 @@
+.flashDeal {
+    background: linear-gradient(90deg, #0f172a, #1e293b);
+    padding: 3rem 0;
+    /* More spacing for grandeur */
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin: 2rem 0;
+}
+
+/* Animated Background Mesh */
+.flashDeal::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.15), transparent 60%);
+    animation: rotateBg 15s linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.flashDeal::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    z-index: 1;
+    opacity: 0.5;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+    /* Ensure content is above background */
+}
+
+@keyframes rotateBg {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+/* Left Side: Timer Section */
+.timerSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+    flex: 1;
+}
+
+@media (min-width: 768px) {
+    .timerSection {
+        align-items: flex-start;
+        text-align: left;
+    }
+}
+
+.dealHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.dealBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .dealBadge {
+        margin: 0;
+    }
+}
+
+.dealTitle {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(to right, #ffffff, #94a3b8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.countdown {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.timeBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+}
+
+.timeVal {
+    font-size: 2rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: white;
+    line-height: 1;
+}
+
+.timeLabel {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-top: 0.25rem;
+    letter-spacing: 0.1em;
+}
+
+.separator {
+    font-size: 2rem;
+    font-weight: 300;
+    color: #334155;
+    margin-top: -1rem;
+}
+
+/* Right Side: Product Card */
+.productCardWrapper {
+    width: 100%;
+    max-width: 480px;
+}
+
+.productCard {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    /* Subtle glow for 'featured' effect */
+    box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.2), 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    animation: popup 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    backdrop-filter: blur(10px);
+}
+
+.imageWrapper {
+    width: 250px;
+    height: 150px;
+    background: #0f172a;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.productImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.productContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.productName {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+}
+
+.priceRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.salePrice {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ef4444;
+    /* Red for deal price */
+}
+
+.regularPrice {
+    font-size: 1rem;
+    color: #64748b;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+.discountBadge {
+    background: #ef4444;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+
+.getDealBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: white;
+    color: black;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.getDealBtn:hover {
+    transform: translateY(-2px);
+    background: #f8fafc;
+}
+
+@keyframes popup {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

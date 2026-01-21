@@ -1,0 +1,86 @@
+.main {
+    min-height: 100vh;
+}
+
+.section {
+    padding: 3rem 0;
+    position: relative;
+}
+
+/* Subtle shadow divider between sections */
+.sectionDivider {
+    position: relative;
+}
+
+.sectionDivider::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1100px;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            var(--border) 15%,
+            var(--border) 85%,
+            transparent 100%);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+}
+
+.sectionSubtitle {
+    color: var(--accent);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.sectionTitle {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text);
+    margin: 0;
+}
+
+.viewAll {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary);
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.viewAll:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.productGrid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .productGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .productGrid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}

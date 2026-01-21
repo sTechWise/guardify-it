@@ -1,0 +1,296 @@
+:root {
+  /* Color System - Professional SaaS Dark Theme (Default) */
+  --background: #0B0F19;
+  --section: #0F1629;
+  --card: #121A2F;
+  --card-elevated: #1A2340;
+  --border: #1E2A4A;
+
+  --primary: #3B82F6;
+  --primary-hover: #2563eb;
+  --accent: #6366F1;
+  --accent-glow: rgba(99, 102, 241, 0.5);
+
+  --text: #F8FAFC;
+  --text-secondary: #E2E8F0;
+  --muted: #94A3B8;
+
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+
+  /* Shadows for dark mode */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+
+  /* Surface Colors */
+  --surface-subtle: #0F1629;
+  --surface-muted: #1E2A4A;
+  --navbar-bg: rgba(11, 15, 25, 0.85);
+  --footer-bg: #0B0F19;
+  --cta-bg: linear-gradient(135deg, #1E40AF 0%, #6366F1 100%);
+
+  /* Headline Gradient - for gradient text */
+  --headline-gradient: linear-gradient(to bottom right, #FFFFFF, #94A3B8);
+
+  --font-sans: var(--font-geist-sans), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Light Theme - Low Contrast Eye-Friendly Design */
+[data-theme="light"] {
+  /* Backgrounds - Softer, lower contrast cream tones */
+  --background: #F5F3F0;
+  /* Muted warm gray background */
+  --section: #F9F7F4;
+  /* Slightly lighter sections */
+  --card: #FDFCFA;
+  /* Soft warm white cards */
+  --card-elevated: #FFFFFF;
+  /* Pure white for elevated emphasis */
+  --border: #E0DCD6;
+  /* Soft warm gray borders */
+
+  /* Depth & Shadows - Softer, more subtle */
+  --shadow-sm: 0 1px 2px rgba(100, 90, 80, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(100, 90, 80, 0.06);
+  --shadow-lg: 0 8px 16px -4px rgba(100, 90, 80, 0.08);
+  --shadow-xl: 0 16px 32px -8px rgba(100, 90, 80, 0.10);
+
+  /* Brand Colors - Slightly softer for reduced eye strain */
+  --primary: #3B7DD8;
+  /* Softer blue */
+  --primary-hover: #2B6BC4;
+  /* Darker on hover */
+  --accent: #7C5CE0;
+  /* Softer purple accent */
+  --accent-glow: rgba(124, 92, 224, 0.06);
+
+  /* Text - Much softer contrast, easier on eyes */
+  --text: #3D3A36;
+  /* Soft dark brown (not black) */
+  --text-secondary: #5C5955;
+  /* Medium warm gray */
+  --muted: #8A8580;
+  /* Light warm gray */
+
+  /* Semantic Colors - Slightly muted */
+  --success: #2A9D6A;
+  --warning: #C98A10;
+  --danger: #D04545;
+
+  /* Surface Colors - Softer warm tones */
+  --surface-subtle: #EFECE8;
+  /* Warm subtle background */
+  --surface-muted: #E3E0DB;
+  /* Warm muted surface */
+  --navbar-bg: rgba(245, 243, 240, 0.92);
+  --footer-bg: #2C2926;
+  /* Softer dark footer */
+  --cta-bg: linear-gradient(135deg, #3B7DD8 0%, #7C5CE0 100%);
+
+  /* Headline Gradient - visible on warm backgrounds */
+  --headline-gradient: linear-gradient(to bottom right, #2B5A9E, #7C5CE0);
+}
+
+/* Custom Utilities */
+.glow-text {
+  background: linear-gradient(to right, #6366F1, #3B82F6);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glow-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+
+/* Force Dark Mode */
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--background);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text);
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 3.5rem;
+  /* 56px */
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: 2.25rem;
+  /* 36px */
+}
+
+h3 {
+  font-size: 1.25rem;
+  /* 20px */
+}
+
+p {
+  color: var(--muted);
+  font-size: 1rem;
+  /* 16px */
+  line-height: 1.6;
+}
+
+.small-meta {
+  font-size: 0.875rem;
+  /* 14px */
+  color: var(--muted);
+}
+
+/* Layout Utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  /* 24px mobile default */
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 4rem;
+    /* 64px desktop */
+  }
+}
+
+.section {
+  padding: 7.5rem 0;
+  /* 120px */
+}
+
+/* Section Divider - Subtle shadow between sections */
+.section-divider {
+  position: relative;
+}
+
+.section-divider::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1200px;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      var(--border) 20%,
+      var(--border) 80%,
+      transparent 100%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* UI Components */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  /* 24px */
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  /* Soft layered shadow */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.6);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+/* Grid System */
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+  /* 24px */
+}
+
+@media (min-width: 640px) {
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Utility Helpers */
+.text-center {
+  text-align: center;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.space-y-4>*+* {
+  margin-top: 1rem;
+}

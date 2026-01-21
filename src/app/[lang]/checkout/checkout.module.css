@@ -1,0 +1,410 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 4rem 4rem;
+    }
+}
+
+/* Progress Steps */
+.progressContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.step.active {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.stepIcon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--section);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.active .stepIcon {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.stepSeparator {
+    color: var(--border);
+}
+
+.header {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 900px) {
+    .layout {
+        grid-template-columns: 1.5fr 1fr;
+        gap: 3rem;
+    }
+}
+
+.formSection {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+}
+
+/* Trust Block inside form */
+.trustBlock {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.trustItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text);
+    font-weight: 500;
+}
+
+.trustIcon {
+    color: #10b981;
+    /* Green */
+}
+
+.inputGroup {
+    margin-bottom: 1.5rem;
+}
+
+.label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.input {
+    width: 100%;
+    background: var(--section);
+    border: 1px solid var(--border);
+    padding: 0.875rem 1rem;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.noteIcon {
+    color: var(--primary);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.noteText {
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.summary {
+    position: relative;
+}
+
+@media (min-width: 900px) {
+    .summary {
+        position: sticky;
+        top: 100px;
+    }
+}
+
+.orderSummary {
+    background: var(--section);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.summaryItems {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Updated Summary Item */
+.summaryItem {
+    display: flex;
+    gap: 1rem;
+    background: var(--card);
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.itemImage {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: var(--section);
+    flex-shrink: 0;
+}
+
+.itemDetails {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.itemName {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.3;
+}
+
+.itemPlan {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+}
+
+.itemPriceBlock {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.itemPrice {
+    font-weight: 700;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.oldPrice {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.savingsBadge {
+    font-size: 0.75rem;
+    color: #10b981;
+    font-weight: 600;
+}
+
+.totals {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+
+.totalRow.final {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text);
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    margin-top: 0.5rem;
+}
+
+/* Trust Checks near Total */
+.trustChecks {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.checkItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.checkIcon {
+    color: #10b981;
+}
+
+.submitBtn {
+    width: 100%;
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.submitBtn:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.submitBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.supportReassurance {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.whatsappLink {
+    color: #25D366;
+    /* WhatsApp Green */
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.whatsappLink:hover {
+    text-decoration: underline;
+}
+
+.error {
+    color: #ef4444;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 6px;
+}
+
+/* Micro Footer */
+.microFooter {
+    margin-top: 4rem;
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.footerText {
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.avatars {
+    display: flex;
+    margin-left: 10px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--card);
+    background: var(--section);
+    margin-left: -10px;
+}
+
+.avatar:first-child {
+    margin-left: 0;
+}

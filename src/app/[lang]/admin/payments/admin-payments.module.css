@@ -1,0 +1,425 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.headerLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.titleRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.titleIcon {
+    color: var(--primary);
+}
+
+.title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text);
+    margin: 0;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Filter Controls */
+.filterControls {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--card);
+    padding: 0.35rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.filterBtn {
+    padding: 0.6rem 1.25rem;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.15s;
+}
+
+.filterBtn:hover {
+    color: var(--text);
+}
+
+.filterBtn.active {
+    background: var(--primary);
+    color: white;
+}
+
+/* Loading & Empty States */
+.loading,
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--muted);
+    gap: 0.75rem;
+}
+
+.emptyState h2 {
+    color: var(--text);
+    font-size: 1.25rem;
+    margin: 0.5rem 0 0;
+}
+
+.emptyState p {
+    color: var(--muted);
+    margin: 0;
+}
+
+.emptyIcon {
+    color: rgb(16, 185, 129);
+    opacity: 0.6;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 1.25rem;
+}
+
+@media (max-width: 480px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Card */
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.15s;
+}
+
+.card:hover {
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid var(--border);
+}
+
+.cardHeader>div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.orderId {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.amount {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: rgb(16, 185, 129);
+}
+
+/* Status Badges */
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.statusPending {
+    background: rgba(251, 191, 36, 0.1);
+    color: rgb(251, 191, 36);
+}
+
+.statusApproved {
+    background: rgba(16, 185, 129, 0.1);
+    color: rgb(16, 185, 129);
+}
+
+.statusRejected {
+    background: rgba(239, 68, 68, 0.1);
+    color: rgb(239, 68, 68);
+}
+
+/* Card Body */
+.cardBody {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem;
+}
+
+.proofPreview {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+
+.proofPreview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s;
+}
+
+.proofPreview:hover img {
+    transform: scale(1.05);
+}
+
+.noImage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--muted);
+    font-size: 0.75rem;
+}
+
+.proofDetails {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.proofDetails p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.proofDetails strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* Card Actions */
+.cardActions {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.viewBtn,
+.approveBtn,
+.rejectBtn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
+}
+
+.viewBtn {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.viewBtn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.approveBtn {
+    background: rgba(16, 185, 129, 0.1);
+    color: rgb(16, 185, 129);
+}
+
+.approveBtn:hover:not(:disabled) {
+    background: rgba(16, 185, 129, 0.2);
+}
+
+.rejectBtn {
+    background: rgba(239, 68, 68, 0.1);
+    color: rgb(239, 68, 68);
+}
+
+.rejectBtn:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.approveBtn:disabled,
+.rejectBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Modal */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--card);
+}
+
+.modalHeader h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+}
+
+.closeBtn {
+    display: flex;
+    padding: 0.5rem;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s;
+}
+
+.closeBtn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+}
+
+.modalBody {
+    padding: 1.5rem;
+}
+
+.modalDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.modalDetails p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.modalDetails strong {
+    color: var(--text);
+}
+
+.modalImage {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.modalImage img {
+    width: 100%;
+    display: block;
+}
+
+.modalActions {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.modalActions .approveBtn,
+.modalActions .rejectBtn {
+    flex: 1;
+    padding: 0.75rem;
+}

@@ -1,0 +1,30 @@
+.switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.btn:hover {
+    color: var(--primary);
+}
+
+.active {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.divider {
+    opacity: 0.5;
+}

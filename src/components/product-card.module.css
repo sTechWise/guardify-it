@@ -1,0 +1,241 @@
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    box-shadow: var(--shadow-md);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary);
+}
+
+.imageContainer {
+    position: relative;
+    width: 100%;
+    display: block;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: var(--surface-subtle);
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .image {
+    transform: scale(1.05);
+}
+
+.badges {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.discountBadge {
+    background: var(--danger);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.deliveryBadge {
+    background: rgba(16, 185, 129, 0.9);
+    /* Success color with opacity */
+    backdrop-filter: blur(4px);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+}
+
+.actionOverlay {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.2s ease;
+}
+
+.card:hover .actionOverlay {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.iconBtn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: #1e293b;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.iconBtn:hover {
+    background: white;
+    transform: scale(1.1);
+}
+
+.iconBtnActive {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+}
+
+.iconBtnActive:hover {
+    background: rgb(239, 68, 68);
+}
+
+.content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.75rem;
+}
+
+.title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+    margin-bottom: 0.25rem;
+    text-decoration: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: color 0.2s;
+}
+
+.title:hover {
+    color: var(--primary);
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: #fbbf24;
+    /* Amber-400 */
+}
+
+.reviewCount {
+    color: var(--muted);
+    font-size: 0.75rem;
+    margin-left: 0.25rem;
+}
+
+.priceContainer {
+    margin-top: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+}
+
+
+
+.priceWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.salePrice {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.regularPrice {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-decoration: line-through;
+    opacity: 0.8;
+}
+
+.savingsLabel {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #10b981;
+    /* Emerald-500 */
+    margin-top: 0.1rem;
+}
+
+.buttonGroup {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: auto;
+}
+
+.buyBtn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    text-align: center;
+}
+
+.buyBtn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.viewDetailsBtn {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.viewDetailsBtn:hover {
+    background: var(--surface-subtle);
+    border-color: var(--muted);
+}
