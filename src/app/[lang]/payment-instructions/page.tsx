@@ -80,9 +80,9 @@ function PaymentInstructionsContent() {
     if (loading) return <div className={styles.container}>{dict.loading_order_details}</div>
 
     const paymentMethods = [
-        { name: 'bKash', number: '01700000000', color: '#d1396a', type: dict.personal },
-        { name: 'Nagad', number: '01700000000', color: '#e2432d', type: dict.personal },
-        { name: 'Rocket', number: '01700000000', color: '#8c3494', type: dict.personal },
+        { name: 'bKash', number: '01997118118', color: '#d1396a', type: dict.personal },
+        { name: 'Nagad', number: '01997118118', color: '#e2432d', type: dict.personal },
+        { name: 'Rocket', number: '01997118118', color: '#8c3494', type: dict.personal },
     ]
 
     return (
