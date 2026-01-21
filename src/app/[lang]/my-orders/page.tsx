@@ -4,9 +4,9 @@ import styles from './my-orders.module.css'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
 import { Package, ShoppingBag, Upload, Eye, LogIn, Loader2, CheckCircle, X, Image as ImageIcon, ShieldCheck } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
+import { useClientDictionary } from '@/hooks/useClientDictionary'
 
 interface PaymentProof {
     id: string
@@ -28,8 +28,7 @@ interface Order {
 
 export default function MyOrdersPage() {
     const { user, loading: authLoading } = useAuth()
-    const params = useParams()
-    const lang = params.lang as string || 'en'
+    const { dict, lang } = useClientDictionary()
     const supabase = createClient()
 
     const [orders, setOrders] = useState<Order[]>([])
@@ -91,13 +90,13 @@ export default function MyOrdersPage() {
 
     const getStatusBadge = (status: string) => {
         const statusMap: Record<string, { label: string; className: string }> = {
-            'pending_payment': { label: 'Pending Payment', className: styles.statusPending },
-            'payment_submitted': { label: 'Payment Submitted', className: styles.statusSubmitted },
-            'paid': { label: 'Payment Verified', className: styles.statusApproved },
-            'payment_failed': { label: 'Payment Rejected', className: styles.statusRejected },
-            'approved': { label: 'Verified', className: styles.statusApproved },
-            'rejected': { label: 'Rejected', className: styles.statusRejected },
-            'completed': { label: 'Completed', className: styles.statusApproved },
+            'pending_payment': { label: dict.pending_payment_status, className: styles.statusPending },
+            'payment_submitted': { label: dict.payment_submitted, className: styles.statusSubmitted },
+            'paid': { label: dict.payment_verified, className: styles.statusApproved },
+            'payment_failed': { label: dict.payment_rejected, className: styles.statusRejected },
+            'approved': { label: dict.verified, className: styles.statusApproved },
+            'rejected': { label: dict.rejected, className: styles.statusRejected },
+            'completed': { label: dict.completed, className: styles.statusApproved },
         }
         return statusMap[status] || { label: status.replace('_', ' '), className: styles.statusPending }
     }
@@ -124,7 +123,7 @@ export default function MyOrdersPage() {
             <div className={styles.container}>
                 <div className={styles.loading}>
                     <Loader2 size={24} className={styles.spinner} />
-                    Loading orders...
+                    {dict.loading_orders}
                 </div>
             </div>
         )
@@ -135,14 +134,13 @@ export default function MyOrdersPage() {
             <main className={styles.container}>
                 <div className={styles.emptyState}>
                     <LogIn size={64} className={styles.emptyIcon} />
-                    <h2 className={styles.emptyTitle}>Sign in to view orders</h2>
+                    <h2 className={styles.emptyTitle}>{dict.sign_in_to_view}</h2>
                     <p className={styles.emptyText}>
-                        Please sign in or create an account to view your orders.
-                        If you checked out as a guest, your orders will appear after signing up with the same email.
+                        {dict.sign_in_to_view_desc}
                     </p>
                     <Link href={`/${lang}/login`} className={styles.shopBtn}>
                         <LogIn size={20} />
-                        Sign In / Sign Up
+                        {dict.sign_in_signup}
                     </Link>
                 </div>
             </main>
@@ -153,13 +151,13 @@ export default function MyOrdersPage() {
         <main className={styles.container}>
             <div className={styles.header}>
                 <div>
-                    <h1 className={styles.title}>My Orders</h1>
-                    <p className={styles.subtitle}>Track and manage all your orders</p>
+                    <h1 className={styles.title}>{dict.my_orders}</h1>
+                    <p className={styles.subtitle}>{dict.track_manage_orders}</p>
                 </div>
                 {isAdmin && (
                     <span className={styles.adminBadge}>
                         <ShieldCheck size={16} />
-                        Admin View
+                        {dict.admin_view}
                     </span>
                 )}
             </div>
@@ -167,11 +165,11 @@ export default function MyOrdersPage() {
             {orders.length === 0 ? (
                 <div className={styles.emptyState}>
                     <Package size={64} className={styles.emptyIcon} />
-                    <h2 className={styles.emptyTitle}>No orders yet</h2>
-                    <p className={styles.emptyText}>Start shopping to see your orders here</p>
+                    <h2 className={styles.emptyTitle}>{dict.no_orders_yet}</h2>
+                    <p className={styles.emptyText}>{dict.start_shopping}</p>
                     <Link href={`/${lang}/products`} className={styles.shopBtn}>
                         <ShoppingBag size={20} />
-                        Browse Products
+                        {dict.browse_products}
                     </Link>
                 </div>
             ) : (
@@ -179,11 +177,11 @@ export default function MyOrdersPage() {
                     <table className={styles.table}>
                         <thead>
                             <tr>
-                                <th>Order ID</th>
-                                <th>Date</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th>{dict.order_id}</th>
+                                <th>{dict.date}</th>
+                                <th>{dict.amount}</th>
+                                <th>{dict.status}</th>
+                                <th>{dict.actions}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -196,7 +194,7 @@ export default function MyOrdersPage() {
 
                                 return (
                                     <tr key={order.id} className={!isOwn && isAdmin ? styles.customerOrder : ''}>
-                                        <td data-label="Order ID">
+                                        <td data-label={dict.order_id}>
                                             <div className={styles.orderIdCell}>
                                                 <span className={styles.orderId}>
                                                     #{order.id.slice(0, 8).toUpperCase()}
@@ -204,35 +202,35 @@ export default function MyOrdersPage() {
                                                 {/* Ownership badge */}
                                                 {isAdmin && (
                                                     isOwn ? (
-                                                        <span className={styles.ownerBadge}>Your Order</span>
+                                                        <span className={styles.ownerBadge}>{dict.your_order}</span>
                                                     ) : (
-                                                        <span className={styles.customerBadge}>Customer</span>
+                                                        <span className={styles.customerBadge}>{dict.customer}</span>
                                                     )
                                                 )}
                                             </div>
                                         </td>
-                                        <td data-label="Date">
-                                            {new Date(order.created_at).toLocaleDateString('en-US', {
+                                        <td data-label={dict.date}>
+                                            {new Date(order.created_at).toLocaleDateString(lang === 'bn' ? 'bn-BD' : 'en-US', {
                                                 year: 'numeric',
                                                 month: 'short',
                                                 day: 'numeric'
                                             })}
                                         </td>
-                                        <td data-label="Amount">
+                                        <td data-label={dict.amount}>
                                             <span className={styles.amount}>৳{order.total_amount.toLocaleString()}</span>
                                         </td>
-                                        <td data-label="Status">
+                                        <td data-label={dict.status}>
                                             <span className={`${styles.statusBadge} ${status.className}`}>
                                                 {status.label}
                                             </span>
                                         </td>
-                                        <td data-label="Actions">
+                                        <td data-label={dict.actions}>
                                             <div className={styles.actions}>
                                                 {/* Upload Proof - only for own orders */}
                                                 {showUploadBtn && (
                                                     <Link href={`/${lang}/upload-proof?order_id=${order.id}`} className={styles.actionBtn}>
                                                         <Upload size={16} />
-                                                        Upload Proof
+                                                        {dict.upload_proof}
                                                     </Link>
                                                 )}
 
@@ -240,7 +238,7 @@ export default function MyOrdersPage() {
                                                 {proofExists && (
                                                     <span className={styles.proofBadge}>
                                                         <CheckCircle size={14} />
-                                                        Proof Uploaded
+                                                        {dict.proof_uploaded}
                                                     </span>
                                                 )}
 
@@ -251,13 +249,13 @@ export default function MyOrdersPage() {
                                                         onClick={() => setSelectedProof(proof)}
                                                     >
                                                         <Eye size={16} />
-                                                        View
+                                                        {dict.view}
                                                     </button>
                                                 )}
 
                                                 {/* Admin: Link to admin panel for customer orders */}
                                                 {isAdmin && !isOwn && !proofExists && order.status === 'pending_payment' && (
-                                                    <span className={styles.waitingBadge}>Awaiting Payment</span>
+                                                    <span className={styles.waitingBadge}>{dict.awaiting_payment}</span>
                                                 )}
                                             </div>
                                         </td>
@@ -274,7 +272,7 @@ export default function MyOrdersPage() {
                 <div className={styles.modalOverlay} onClick={() => setSelectedProof(null)}>
                     <div className={styles.modal} onClick={e => e.stopPropagation()}>
                         <div className={styles.modalHeader}>
-                            <h2>Payment Proof</h2>
+                            <h2>{dict.payment_proof}</h2>
                             <button
                                 className={styles.closeBtn}
                                 onClick={() => setSelectedProof(null)}
@@ -284,22 +282,22 @@ export default function MyOrdersPage() {
                         </div>
                         <div className={styles.modalBody}>
                             <div className={styles.proofDetails}>
-                                <p><strong>Transaction ID:</strong> {selectedProof.transaction_id}</p>
-                                <p><strong>Submitted:</strong> {new Date(selectedProof.submitted_at).toLocaleString()}</p>
-                                <p><strong>Status:</strong> {selectedProof.status}</p>
+                                <p><strong>{dict.transaction_id}:</strong> {selectedProof.transaction_id}</p>
+                                <p><strong>{dict.submitted}:</strong> {new Date(selectedProof.submitted_at).toLocaleString(lang === 'bn' ? 'bn-BD' : 'en-US')}</p>
+                                <p><strong>{dict.status}:</strong> {selectedProof.status}</p>
                             </div>
                             {selectedProof.screenshot_url ? (
                                 <div className={styles.proofImageWrapper}>
                                     <img
                                         src={selectedProof.screenshot_url}
-                                        alt="Payment Proof"
+                                        alt={dict.payment_proof}
                                         className={styles.proofImage}
                                     />
                                 </div>
                             ) : (
                                 <div className={styles.noProofImage}>
                                     <ImageIcon size={48} />
-                                    <p>No screenshot available</p>
+                                    <p>{dict.no_screenshot}</p>
                                 </div>
                             )}
                         </div>

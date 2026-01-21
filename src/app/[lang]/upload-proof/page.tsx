@@ -1,17 +1,17 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { useRouter, useSearchParams, useParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import styles from './upload-proof.module.css'
 import { UploadCloud, FileText, CheckCircle, AlertCircle, Loader2, Lock } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
+import { useClientDictionary } from '@/hooks/useClientDictionary'
 
 function UploadProofContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const params = useParams()
-    const lang = params.lang as string || 'en'
+    const { dict, lang } = useClientDictionary()
     const orderId = searchParams.get('order_id')
 
     const { user, loading: authLoading } = useAuth()
@@ -43,7 +43,7 @@ function UploadProofContent() {
 
                 if (error) {
                     console.error('[Upload Proof] RPC Error:', error)
-                    setError('Could not fetch order details. Please try again.')
+                    setError(dict.could_not_fetch_order)
                     return
                 }
 
@@ -54,7 +54,7 @@ function UploadProofContent() {
                 }
             } catch (err: any) {
                 console.error('[Upload Proof] Error fetching order:', err)
-                setError('Could not fetch order details. Please try again.')
+                setError(dict.could_not_fetch_order)
             } finally {
                 setLoading(false)
             }
@@ -70,13 +70,13 @@ function UploadProofContent() {
 
             // Validate Type
             if (!['image/jpeg', 'image/png', 'image/jpg'].includes(selectedFile.type)) {
-                setError('Only JPG and PNG files are allowed.')
+                setError(dict.only_jpg_png)
                 return
             }
 
             // Validate Size (e.g., 5MB)
             if (selectedFile.size > 5 * 1024 * 1024) {
-                setError('File size must be less than 5MB.')
+                setError(dict.file_size_limit)
                 return
             }
 
@@ -91,12 +91,12 @@ function UploadProofContent() {
         e.preventDefault()
 
         if (!orderId || !file || !trxId) {
-            setError('Please fill in all required fields.')
+            setError(dict.fill_required_fields)
             return
         }
 
         if (!orderEmail) {
-            setError('Could not determine order email. Please refresh and try again.')
+            setError(dict.could_not_determine_email)
             return
         }
 
@@ -159,7 +159,7 @@ function UploadProofContent() {
     }
 
     if (loading || authLoading) {
-        return <div className={styles.container}><div className={styles.loading}>Loading...</div></div>
+        return <div className={styles.container}><div className={styles.loading}>{dict.loading}</div></div>
     }
 
     if (!orderId) {
@@ -167,7 +167,7 @@ function UploadProofContent() {
             <div className={styles.container}>
                 <div className={styles.error}>
                     <AlertCircle size={24} />
-                    <p>No Order ID provided. Please go back to your orders or checkout page.</p>
+                    <p>{dict.no_order_id}</p>
                 </div>
             </div>
         )
@@ -178,7 +178,7 @@ function UploadProofContent() {
             <div className={styles.container}>
                 <div className={styles.error}>
                     <AlertCircle size={24} />
-                    <p>Could not fetch order details. Please check the order ID and try again.</p>
+                    <p>{dict.could_not_fetch_order}</p>
                 </div>
             </div>
         )
@@ -187,8 +187,8 @@ function UploadProofContent() {
     return (
         <main className={styles.container}>
             <div className={styles.header}>
-                <h1 className={styles.title}>Upload Payment Proof</h1>
-                <p className={styles.subtitle}>Complete this step to activate your subscription quickly.</p>
+                <h1 className={styles.title}>{dict.upload_proof_title}</h1>
+                <p className={styles.subtitle}>{dict.upload_proof_subtitle}</p>
             </div>
 
             <div className={styles.card}>
@@ -196,7 +196,7 @@ function UploadProofContent() {
 
                     {/* Order ID (Read Only) */}
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Order ID</label>
+                        <label className={styles.label}>{dict.order_id}</label>
                         <input
                             type="text"
                             value={orderId}
@@ -209,8 +209,8 @@ function UploadProofContent() {
                     <div className={styles.inputGroup}>
                         <label className={styles.label}>
                             <Lock size={14} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
-                            Email Address
-                            <span className={styles.emailBadge}> (from order - cannot be changed)</span>
+                            {dict.email_from_order}
+                            <span className={styles.emailBadge}> {dict.email_locked_badge}</span>
                         </label>
                         <input
                             type="email"
@@ -219,26 +219,26 @@ function UploadProofContent() {
                             className={`${styles.input} ${styles.readOnly}`}
                         />
                         <p className={styles.hint}>
-                            This email is linked to your order and cannot be changed for security reasons.
+                            {dict.email_locked_hint}
                         </p>
                     </div>
 
                     {/* Transaction ID */}
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Transaction ID *</label>
+                        <label className={styles.label}>{dict.transaction_id_label}</label>
                         <input
                             type="text"
                             value={trxId}
                             onChange={(e) => setTrxId(e.target.value)}
                             className={styles.input}
-                            placeholder="e.g. 9H7G6F5D"
+                            placeholder={dict.transaction_id_placeholder}
                             required
                         />
                     </div>
 
                     {/* File Upload */}
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Payment Screenshot * (JPG/PNG)</label>
+                        <label className={styles.label}>{dict.payment_screenshot_label}</label>
                         <div className={styles.fileInputWrapper}>
                             <input
                                 type="file"
@@ -255,7 +255,7 @@ function UploadProofContent() {
                             ) : (
                                 <div className={styles.uploadPlaceholder}>
                                     <UploadCloud size={32} className={styles.uploadIcon} />
-                                    <span>Click to upload image</span>
+                                    <span>{dict.click_to_upload}</span>
                                 </div>
                             )}
                         </div>
@@ -277,11 +277,11 @@ function UploadProofContent() {
                     >
                         {submitting ? (
                             <>
-                                <Loader2 size={20} className="animate-spin" /> Uploading...
+                                <Loader2 size={20} className="animate-spin" /> {dict.uploading}
                             </>
                         ) : (
                             <>
-                                <CheckCircle size={20} /> Submit Proof for Verification
+                                <CheckCircle size={20} /> {dict.submit_proof_btn}
                             </>
                         )}
                     </button>

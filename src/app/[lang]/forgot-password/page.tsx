@@ -3,13 +3,12 @@
 import styles from './forgot-password.module.css'
 import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { Mail, ArrowLeft, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { useClientDictionary } from '@/hooks/useClientDictionary'
 
 export default function ForgotPasswordPage() {
-    const params = useParams()
-    const lang = params.lang as string || 'en'
+    const { dict, lang } = useClientDictionary()
     const supabase = createClient()
 
     const [email, setEmail] = useState('')
@@ -32,7 +31,7 @@ export default function ForgotPasswordPage() {
             setSuccess(true)
         } catch (err: any) {
             console.error('Password reset error:', err)
-            setError(err.message || 'Failed to send reset email. Please try again.')
+            setError(err.message || dict.failed_reset_email)
         } finally {
             setLoading(false)
         }
@@ -44,17 +43,17 @@ export default function ForgotPasswordPage() {
                 <div className={styles.card}>
                     <div className={styles.successState}>
                         <CheckCircle size={56} className={styles.successIcon} />
-                        <h2>Check Your Email</h2>
+                        <h2>{dict.check_your_email}</h2>
                         <p>
-                            We've sent a password reset link to <strong>{email}</strong>.
+                            {dict.reset_link_sent} <strong>{email}</strong>.
                             <br />
-                            Click the link in the email to set a new password.
+                            {dict.click_link_instruction}
                         </p>
                         <p className={styles.hint}>
-                            Didn't receive the email? Check your spam folder or try again.
+                            {dict.check_spam}
                         </p>
                         <Link href={`/${lang}/login`} className={styles.backLink}>
-                            <ArrowLeft size={16} /> Back to Login
+                            <ArrowLeft size={16} /> {dict.back_to_login}
                         </Link>
                     </div>
                 </div>
@@ -69,8 +68,8 @@ export default function ForgotPasswordPage() {
                     <div className={styles.iconWrapper}>
                         <Mail size={28} />
                     </div>
-                    <h1>Forgot Password?</h1>
-                    <p>No worries! Enter your email and we'll send you a reset link.</p>
+                    <h1>{dict.forgot_password_title}</h1>
+                    <p>{dict.forgot_password_subtitle}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className={styles.form}>
@@ -82,14 +81,14 @@ export default function ForgotPasswordPage() {
                     )}
 
                     <div className={styles.inputGroup}>
-                        <label>Email Address</label>
+                        <label>{dict.email_address}</label>
                         <div className={styles.inputWrapper}>
                             <Mail size={18} className={styles.inputIcon} />
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder="you@example.com"
+                                placeholder={dict.email_placeholder}
                                 required
                             />
                         </div>
@@ -103,16 +102,16 @@ export default function ForgotPasswordPage() {
                         {loading ? (
                             <>
                                 <Loader2 size={18} className={styles.spinner} />
-                                Sending...
+                                {dict.sending}
                             </>
                         ) : (
-                            'Send Reset Link'
+                            dict.send_reset_link
                         )}
                     </button>
                 </form>
 
                 <Link href={`/${lang}/login`} className={styles.backLink}>
-                    <ArrowLeft size={16} /> Back to Login
+                    <ArrowLeft size={16} /> {dict.back_to_login}
                 </Link>
             </div>
         </main>

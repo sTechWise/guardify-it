@@ -5,13 +5,12 @@ import Link from 'next/link'
 import { useEffect, useState, Suspense } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { CheckCircle, Copy, AlertCircle, CreditCard, ArrowRight } from 'lucide-react'
-
-import { useRouter, useSearchParams, useParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useClientDictionary } from '@/hooks/useClientDictionary'
 
 function PaymentInstructionsContent() {
     const searchParams = useSearchParams()
-    const params = useParams()
-    const lang = params.lang as string || 'en'
+    const { dict, lang } = useClientDictionary()
     const orderId = searchParams.get('order_id')
 
     const [order, setOrder] = useState<any>(null)
@@ -23,15 +22,30 @@ function PaymentInstructionsContent() {
         async function fetchOrder() {
             let data = null
 
-            // 1. Try fetching by ID from URL (Most reliable)
+            // 1. Try fetching by ID from URL with RPC (Guest friendly)
             if (orderId) {
-                const { data: orderData } = await supabase
+                // Try direct select first (works if logged in or public)
+                const { data: directData, error: directError } = await supabase
                     .from('orders')
                     .select('*')
                     .eq('id', orderId)
                     .single()
 
-                if (orderData) data = orderData
+                if (directData) {
+                    data = directData
+                } else if (directError) {
+                    // Fallback to RPC for guest access (bypasses RLS safely if configured)
+                    console.log('Direct fetch failed, trying RPC...', directError.message)
+                    const { data: rpcData, error: rpcError } = await supabase
+                        .rpc('get_order_summary', { p_order_id: orderId })
+                        .single()
+
+                    if (rpcData) {
+                        data = rpcData
+                    } else if (rpcError) {
+                        console.error('RPC fetch failed:', rpcError)
+                    }
+                }
             }
 
             // 2. Fallback to latest order for user (if logged in)
@@ -63,12 +77,12 @@ function PaymentInstructionsContent() {
         setTimeout(() => setCopied(null), 2000)
     }
 
-    if (loading) return <div className={styles.container}>Loading order details...</div>
+    if (loading) return <div className={styles.container}>{dict.loading_order_details}</div>
 
     const paymentMethods = [
-        { name: 'bKash', number: '01700000000', color: '#d1396a', type: 'Personal' },
-        { name: 'Nagad', number: '01700000000', color: '#e2432d', type: 'Personal' },
-        { name: 'Rocket', number: '01700000000', color: '#8c3494', type: 'Personal' },
+        { name: 'bKash', number: '01700000000', color: '#d1396a', type: dict.personal },
+        { name: 'Nagad', number: '01700000000', color: '#e2432d', type: dict.personal },
+        { name: 'Rocket', number: '01700000000', color: '#8c3494', type: dict.personal },
     ]
 
     return (
@@ -77,8 +91,8 @@ function PaymentInstructionsContent() {
             <div className={styles.successBanner}>
                 <CheckCircle size={48} className={styles.successIcon} />
                 <div>
-                    <h1 className={styles.title}>Order Placed Successfully!</h1>
-                    <p className={styles.subtitle}>Your order has been confirmed. Complete payment to activate your subscriptions.</p>
+                    <h1 className={styles.title}>{dict.order_placed_success}</h1>
+                    <p className={styles.subtitle}>{dict.order_confirmed_desc}</p>
                 </div>
             </div>
 
@@ -86,22 +100,28 @@ function PaymentInstructionsContent() {
                 {/* Order Info Card */}
                 {order && (
                     <div className={styles.orderCard}>
-                        <h2 className={styles.cardTitle}>Order Details</h2>
+                        <h2 className={styles.cardTitle}>{dict.order_details}</h2>
                         <div className={styles.orderInfo}>
                             <div className={styles.infoRow}>
-                                <span className={styles.infoLabel}>Order ID</span>
+                                <span className={styles.infoLabel}>{dict.order_id}</span>
                                 <span className={styles.infoValue}>{order.id.slice(0, 8).toUpperCase()}</span>
                             </div>
                             <div className={styles.infoRow}>
-                                <span className={styles.infoLabel}>Order Date</span>
-                                <span className={styles.infoValue}>{new Date(order.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                <span className={styles.infoLabel}>{dict.order_date}</span>
+                                <span className={styles.infoValue}>
+                                    {new Date(order.created_at).toLocaleDateString(lang === 'bn' ? 'bn-BD' : 'en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    })}
+                                </span>
                             </div>
                             <div className={styles.infoRow}>
-                                <span className={styles.infoLabel}>Status</span>
-                                <span className={styles.statusPending}>Pending Payment</span>
+                                <span className={styles.infoLabel}>{dict.status}</span>
+                                <span className={styles.statusPending}>{dict.pending_payment}</span>
                             </div>
                             <div className={styles.totalRow}>
-                                <span>Total Amount</span>
+                                <span>{dict.total_amount}</span>
                                 <span className={styles.totalAmount}>৳{order.total_amount.toLocaleString()}</span>
                             </div>
                         </div>
@@ -112,10 +132,10 @@ function PaymentInstructionsContent() {
                 <div className={styles.paymentSection}>
                     <div className={styles.sectionHeader}>
                         <CreditCard size={24} />
-                        <h2 className={styles.sectionTitle}>Payment Methods</h2>
+                        <h2 className={styles.sectionTitle}>{dict.payment_methods}</h2>
                     </div>
                     <p className={styles.instructions}>
-                        Send the exact amount to any of the following mobile banking numbers using <strong>"Send Money"</strong> option.
+                        {dict.send_money_instruction}
                     </p>
 
                     <div className={styles.methodsGrid}>
@@ -131,7 +151,7 @@ function PaymentInstructionsContent() {
                                         onClick={() => copyToClipboard(method.number, method.name)}
                                         className={styles.copyBtn}
                                     >
-                                        {copied === method.name ? 'Copied!' : <Copy size={16} />}
+                                        {copied === method.name ? dict.copied : <Copy size={16} />}
                                     </button>
                                 </div>
                             </div>
@@ -140,13 +160,13 @@ function PaymentInstructionsContent() {
 
                     {/* Steps */}
                     <div className={styles.steps}>
-                        <h3 className={styles.stepsTitle}>How to Complete Payment</h3>
+                        <h3 className={styles.stepsTitle}>{dict.how_to_complete}</h3>
                         <ol className={styles.stepsList}>
-                            <li>Open your mobile banking app (bKash/Nagad/Rocket)</li>
-                            <li>Select <strong>"Send Money"</strong> option</li>
-                            <li>Enter the number from above and exact amount: <strong>৳{order?.total_amount.toLocaleString()}</strong></li>
-                            <li>Complete the transaction and save the transaction ID</li>
-                            <li>Upload payment proof below to activate your order</li>
+                            <li>{dict.step_1_open}</li>
+                            <li>{dict.step_2_select}</li>
+                            <li>{dict.step_3_enter} <strong>৳{order?.total_amount.toLocaleString()}</strong></li>
+                            <li>{dict.step_4_complete}</li>
+                            <li>{dict.step_5_upload}</li>
                         </ol>
                     </div>
 
@@ -154,7 +174,7 @@ function PaymentInstructionsContent() {
                     <div className={styles.alertBox}>
                         <AlertCircle size={20} className={styles.alertIcon} />
                         <div>
-                            <strong>Important:</strong> Please upload your payment screenshot or transaction ID within 24 hours. Orders without payment proof will be automatically cancelled.
+                            <strong>{dict.important_note}</strong> {dict.upload_within_24h}
                         </div>
                     </div>
                 </div>
@@ -164,7 +184,7 @@ function PaymentInstructionsContent() {
                     href={orderId || order?.id ? `/${lang}/upload-proof?order_id=${orderId || order?.id}` : `/${lang}/my-orders`}
                     className={styles.uploadBtn}
                 >
-                    Upload Payment Proof <ArrowRight size={20} />
+                    {dict.upload_payment_proof} <ArrowRight size={20} />
                 </Link>
             </div>
         </main>
@@ -172,10 +192,11 @@ function PaymentInstructionsContent() {
 }
 
 export default function PaymentInstructionsPage() {
+    const { dict } = useClientDictionary()
+
     return (
-        <Suspense fallback={<div className={styles.container}>Loading...</div>}>
+        <Suspense fallback={<div className={styles.container}>{dict?.loading || 'Loading...'}</div>}>
             <PaymentInstructionsContent />
         </Suspense>
     )
 }
-

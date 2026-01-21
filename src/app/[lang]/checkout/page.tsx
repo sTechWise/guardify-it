@@ -5,17 +5,17 @@ import { createClient } from '@/utils/supabase/client'
 import styles from './checkout.module.css'
 import { useState, useEffect } from 'react'
 import { createOrder } from '@/actions/createOrder'
-import { useRouter, useParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useToast } from '@/context/ToastContext'
 import { Info, ShoppingBag, CheckCircle, ShieldCheck, MessageCircle, Clock, ChevronRight, Check } from 'lucide-react'
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
+import { useClientDictionary } from '@/hooks/useClientDictionary'
 
 export default function CheckoutPage() {
     const { cart, clearCart } = useCart()
     const router = useRouter()
-    const params = useParams()
-    const lang = params.lang as string || 'en'
+    const { dict, lang } = useClientDictionary()
     const { showToast } = useToast()
     const { user } = useAuth()
     const supabase = createClient()
@@ -65,15 +65,22 @@ export default function CheckoutPage() {
             let userId = session?.user?.id || null
 
             if (!session) {
-                // Guest Checkout Flow - try to create guest user
+                // Guest Checkout Flow - try to create guest user or get existing user ID
                 console.log('[Checkout] No session, attempting guest checkout for:', orderEmail)
 
                 try {
+                    // Use AbortController for timeout
+                    const controller = new AbortController()
+                    const timeoutId = setTimeout(() => controller.abort(), 15000) // 15 second timeout
+
                     const res = await fetch('/api/guest-checkout', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: orderEmail })
+                        body: JSON.stringify({ email: orderEmail }),
+                        signal: controller.signal
                     })
+
+                    clearTimeout(timeoutId)
 
                     const data = await res.json()
 
@@ -83,20 +90,20 @@ export default function CheckoutPage() {
                             console.log('[Checkout] User exists, proceeding without linking to account')
                             // Continue without setting session - order will be created with email only
                         } else {
-                            throw new Error(data.error || 'Checkout failed')
+                            console.error('[Checkout] Guest checkout API error:', data.error)
+                            // Continue anyway - we can still create order with email only
                         }
-                    } else if (data.session) {
-                        // New user created, set session
-                        const { error: sessionError } = await supabase.auth.setSession(data.session)
-                        if (sessionError) {
-                            console.error('[Checkout] Session error:', sessionError)
-                            // Continue anyway - order can still be created
-                        } else {
-                            userId = data.session.user?.id || null
-                        }
+                    } else if (data.userId) {
+                        // New user created, we have their ID
+                        userId = data.userId
+                        console.log('[Checkout] Guest user created with ID:', userId)
                     }
                 } catch (guestError: any) {
-                    console.error('[Checkout] Guest checkout error:', guestError)
+                    if (guestError.name === 'AbortError') {
+                        console.error('[Checkout] Guest checkout timed out')
+                    } else {
+                        console.error('[Checkout] Guest checkout error:', guestError)
+                    }
                     // Continue anyway - we can still create order with email only
                 }
             }
@@ -125,8 +132,7 @@ export default function CheckoutPage() {
             console.error('[Checkout] Error:', err)
             setError(err.message || 'Something went wrong. Please try again.')
             showToast(err.message || 'Checkout failed', 'error')
-        } finally {
-            setLoading(false)
+            setLoading(false) // Ensure loading is reset on error
         }
     }
 
@@ -140,28 +146,28 @@ export default function CheckoutPage() {
             <div className={styles.progressContainer}>
                 <div className={styles.step}>
                     <div className={styles.stepIcon}><Check size={14} /></div>
-                    <span>Cart</span>
+                    <span>{dict.step_cart}</span>
                 </div>
                 <ChevronRight size={16} className={styles.stepSeparator} />
                 <div className={`${styles.step} ${styles.active}`}>
                     <div className={styles.stepIcon}>2</div>
-                    <span>Details</span>
+                    <span>{dict.step_details}</span>
                 </div>
                 <ChevronRight size={16} className={styles.stepSeparator} />
                 <div className={styles.step}>
                     <div className={styles.stepIcon}>3</div>
-                    <span>Payment</span>
+                    <span>{dict.step_payment}</span>
                 </div>
                 <ChevronRight size={16} className={styles.stepSeparator} />
                 <div className={styles.step}>
                     <div className={styles.stepIcon}>4</div>
-                    <span>Access</span>
+                    <span>{dict.step_access}</span>
                 </div>
             </div>
 
             <div className={styles.header}>
-                <h1 className={styles.title}>Secure Checkout</h1>
-                <p className={styles.subtitle}>Complete your order to get instant access</p>
+                <h1 className={styles.title}>{dict.secure_checkout_title}</h1>
+                <p className={styles.subtitle}>{dict.complete_order_subtitle}</p>
             </div>
 
             <form onSubmit={handlePlaceOrder}>
@@ -169,30 +175,30 @@ export default function CheckoutPage() {
                     {/* Left Column - Form */}
                     <div className={styles.formSection}>
                         <div className={styles.card}>
-                            <h2 className={styles.sectionTitle}>Contact Information</h2>
+                            <h2 className={styles.sectionTitle}>{dict.contact_information}</h2>
 
                             {/* 2. Trust Block above Email */}
                             <div className={styles.trustBlock}>
                                 <div className={styles.trustItem}>
-                                    <ShieldCheck size={16} className={styles.trustIcon} /> DBID Verified Business
+                                    <ShieldCheck size={16} className={styles.trustIcon} /> {dict.dbid_verified_business}
                                 </div>
                                 <div className={styles.trustItem}>
-                                    <CheckCircle size={16} className={styles.trustIcon} /> 100% Genuine
+                                    <CheckCircle size={16} className={styles.trustIcon} /> {dict.genuine_100}
                                 </div>
                                 <div className={styles.trustItem}>
-                                    <MessageCircle size={16} className={styles.trustIcon} /> 24/7 WhatsApp Support
+                                    <MessageCircle size={16} className={styles.trustIcon} /> {dict.whatsapp_support}
                                 </div>
                             </div>
 
                             <div className={styles.inputGroup}>
-                                <label className={styles.label}>Email Address *</label>
+                                <label className={styles.label}>{dict.email_required}</label>
                                 <input
                                     type="email"
                                     required
                                     className={styles.input}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="you@example.com"
+                                    placeholder={dict.email_placeholder}
                                 />
                             </div>
 
@@ -200,7 +206,7 @@ export default function CheckoutPage() {
                             <div className={styles.note}>
                                 <Info size={20} className={styles.noteIcon} />
                                 <p className={styles.noteText}>
-                                    <strong>No account required.</strong> We automatically create one after purchase so you can track orders and re-download anytime.
+                                    <strong>{dict.no_account_note}</strong> {dict.account_auto_create}
                                 </p>
                             </div>
                         </div>
@@ -211,7 +217,7 @@ export default function CheckoutPage() {
                         <div className={styles.orderSummary}>
                             <h2 className={styles.sectionTitle}>
                                 <ShoppingBag size={20} style={{ display: 'inline', marginRight: '0.5rem' }} />
-                                Order Summary
+                                {dict.order_summary}
                             </h2>
 
                             {/* 4. Improved Order Summary Items */}
@@ -227,7 +233,7 @@ export default function CheckoutPage() {
                                         <div className={styles.itemDetails}>
                                             <div className={styles.itemName}>{item.title}</div>
                                             {item.subscription_type && (
-                                                <div className={styles.itemPlan}>{item.subscription_type} Plan</div>
+                                                <div className={styles.itemPlan}>{item.subscription_type} {dict.plan}</div>
                                             )}
                                         </div>
 
@@ -238,7 +244,7 @@ export default function CheckoutPage() {
                                                     <div className={styles.itemPrice}>৳{item.sale_price.toLocaleString()}</div>
                                                     <div className={styles.oldPrice}>৳{item.price.toLocaleString()}</div>
                                                     <div className={styles.savingsBadge}>
-                                                        Save ৳{(item.price - item.sale_price).toLocaleString()}
+                                                        {dict.save_amount} ৳{(item.price - item.sale_price).toLocaleString()}
                                                     </div>
                                                 </>
                                             ) : (
@@ -251,24 +257,24 @@ export default function CheckoutPage() {
 
                             <div className={styles.totals}>
                                 <div className={styles.totalRow}>
-                                    <span>Subtotal</span>
+                                    <span>{dict.subtotal}</span>
                                     <span>৳{subtotal.toLocaleString()}</span>
                                 </div>
                                 <div className={`${styles.totalRow} ${styles.final}`}>
-                                    <span>Total</span>
+                                    <span>{dict.total}</span>
                                     <span>৳{total.toLocaleString()}</span>
                                 </div>
 
                                 {/* 6. Trust Reinforcement near Total */}
                                 <div className={styles.trustChecks}>
                                     <div className={styles.checkItem}>
-                                        <CheckCircle size={14} className={styles.checkIcon} /> 30-day warranty included
+                                        <CheckCircle size={14} className={styles.checkIcon} /> {dict.warranty_30_days}
                                     </div>
                                     <div className={styles.checkItem}>
-                                        <Clock size={14} className={styles.checkIcon} /> Instant activation
+                                        <Clock size={14} className={styles.checkIcon} /> {dict.instant_activation_text}
                                     </div>
                                     <div className={styles.checkItem}>
-                                        <MessageCircle size={14} className={styles.checkIcon} /> Friendly Bangladeshi support team
+                                        <MessageCircle size={14} className={styles.checkIcon} /> {dict.friendly_support}
                                     </div>
                                 </div>
                             </div>
@@ -280,12 +286,12 @@ export default function CheckoutPage() {
                                 className={styles.submitBtn}
                                 disabled={loading}
                             >
-                                {loading ? 'Processing...' : 'Continue to Payment'} <ChevronRight size={18} />
+                                {loading ? dict.processing : dict.continue_to_payment} <ChevronRight size={18} />
                             </button>
 
                             {/* 7. Support Reassurance */}
                             <p className={styles.supportReassurance}>
-                                Need help before paying? <a href="#" target="_blank" className={styles.whatsappLink}>Chat with us on WhatsApp</a> — instant reply.
+                                {dict.help_before_paying} <a href="#" target="_blank" className={styles.whatsappLink}>{dict.chat_whatsapp}</a> — {dict.instant_reply}.
                             </p>
                         </div>
                     </div>
@@ -300,7 +306,7 @@ export default function CheckoutPage() {
                     ))}
                 </div>
                 <p className={styles.footerText}>
-                    Thousands of customers in Bangladesh trust Guardify IT for genuine subscriptions.
+                    {dict.trust_footer}
                 </p>
             </div>
         </main>
