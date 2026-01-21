@@ -2,13 +2,13 @@
 
 import styles from './payment.module.css'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { CheckCircle, Copy, AlertCircle, CreditCard, ArrowRight } from 'lucide-react'
 
 import { useRouter, useSearchParams, useParams } from 'next/navigation'
 
-export default function PaymentInstructionsPage() {
+function PaymentInstructionsContent() {
     const searchParams = useSearchParams()
     const params = useParams()
     const lang = params.lang as string || 'en'
@@ -170,3 +170,12 @@ export default function PaymentInstructionsPage() {
         </main>
     )
 }
+
+export default function PaymentInstructionsPage() {
+    return (
+        <Suspense fallback={<div className={styles.container}>Loading...</div>}>
+            <PaymentInstructionsContent />
+        </Suspense>
+    )
+}
+

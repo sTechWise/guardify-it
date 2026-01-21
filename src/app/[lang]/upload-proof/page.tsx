@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams, useParams } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import styles from './upload-proof.module.css'
 import { UploadCloud, FileText, CheckCircle, AlertCircle, Loader2, Lock } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 
-export default function UploadProofPage() {
+function UploadProofContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const params = useParams()
@@ -288,5 +288,13 @@ export default function UploadProofPage() {
                 </form>
             </div>
         </main>
+    )
+}
+
+export default function UploadProofPage() {
+    return (
+        <Suspense fallback={<div className={styles.container}><div className={styles.loading}>Loading...</div></div>}>
+            <UploadProofContent />
+        </Suspense>
     )
 }
