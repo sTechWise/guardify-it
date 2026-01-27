@@ -13,18 +13,29 @@ export async function GET(request: Request, { params }: { params: Promise<{ lang
     const refreshToken = searchParams.get('refresh_token')
     const tokenType = searchParams.get('token_type')
 
+
+    // Special handling for Recovery Flow (Password Reset)
+    // We forward the request to the client-side page WITH the code/params.
+    // This allows the client-side Supabase SDK to handle the exchange reliably.
+    if (type === 'recovery' || next.includes('reset-password')) {
+        const resetPath = next.includes('reset-password') ? next : `/${lang}/reset-password`
+        const targetUrl = new URL(resetPath, origin)
+
+        // Copy all search params (code, token_hash, type, etc.)
+        searchParams.forEach((value, key) => {
+            targetUrl.searchParams.set(key, value)
+        })
+
+        console.log('[Auth Callback Lang] Forwarding recovery to client:', targetUrl.toString())
+        return NextResponse.redirect(targetUrl)
+    }
+
+    // Standard Auth Flow
     if (code) {
         const supabase = await createClient()
         const { error } = await supabase.auth.exchangeCodeForSession(code)
 
         if (!error) {
-            // If this is a password recovery, redirect to reset-password page
-            if (type === 'recovery') {
-                const resetPath = next.includes('reset-password') ? next : `/${lang}/reset-password`
-                console.log('[Auth Callback Lang] Recovery flow, redirecting to:', resetPath)
-                return NextResponse.redirect(`${origin}${resetPath}`)
-            }
-
             // Otherwise, redirect to the intended destination
             return NextResponse.redirect(`${origin}${next}`)
         } else {
@@ -41,9 +52,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ lang
         return NextResponse.redirect(resetUrl.toString())
     }
 
-    // If no code is present, it might be an implicit flow (hash fragment).
-    // Redirect to reset-password page so the client can parse the hash.
-    const isRecovery = type === 'recovery' || next.includes('reset-password')
-    const target = isRecovery ? `/${lang}/reset-password` : `/${lang}/login?error=auth_callback_error`
-    return NextResponse.redirect(`${origin}${target}`)
+    // Return to login with error if code exchange failed
+    return NextResponse.redirect(`${origin}/${lang}/login?error=auth_callback_error`)
 }

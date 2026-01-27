@@ -10,23 +10,30 @@ export async function GET(request: Request) {
     // Extract language from the next parameter (e.g., '/en/my-orders' -> 'en')
     const langMatch = next.match(/^\/([a-z]{2})\//)
     const lang = langMatch ? langMatch[1] : 'en'
-    const isRecovery = type === 'recovery' || next.includes('reset-password')
 
+    // Special handling for Recovery Flow (Password Reset)
+    // We forward the request to the client-side page WITH the code/params.
+    // This allows the client-side Supabase SDK to handle the exchange reliably.
+    if (type === 'recovery' || next.includes('reset-password')) {
+        const resetPath = next.includes('reset-password') ? next : `/${lang}/reset-password`
+        const targetUrl = new URL(resetPath, origin)
+
+        // Copy all search params (code, token_hash, type, etc.)
+        searchParams.forEach((value, key) => {
+            targetUrl.searchParams.set(key, value)
+        })
+
+        console.log('[Auth Callback] Forwarding recovery to client:', targetUrl.toString())
+        return NextResponse.redirect(targetUrl)
+    }
+
+    // Standard Auth Flow (Login/Signup)
     if (code) {
         const supabase = await createClient()
         const { error } = await supabase.auth.exchangeCodeForSession(code)
 
         if (!error) {
-            // If this is a password recovery, redirect to the next param (reset-password page)
-            if (type === 'recovery') {
-                // Use next param if it contains reset-password, otherwise construct it
-                const resetPath = next.includes('reset-password') ? next : `/${lang}/reset-password`
-                console.log('[Auth Callback] Recovery flow, redirecting to:', resetPath)
-                return NextResponse.redirect(`${origin}${resetPath}`)
-            }
-
-            // Otherwise, redirect to the intended destination
-            // The auth trigger will automatically link guest orders
+            // Otherwise, redirect to the intended destination (Login/Home)
             return NextResponse.redirect(`${origin}${next}`)
         } else {
             console.error('[Auth Callback] Error exchanging code:', error)
@@ -34,9 +41,6 @@ export async function GET(request: Request) {
     }
 
     // If no code is present, it might be an implicit flow (hash fragment).
-    // Redirect to reset-password page so the client can parse the hash.
-    // The browser will preserve the hash fragment across the redirect.
-    const target = isRecovery ? `/${lang}/reset-password` : `/${lang}/login?error=auth_callback_error`
-    return NextResponse.redirect(`${origin}${target}`)
+    // Redirect to login with error
+    return NextResponse.redirect(`${origin}/${lang}/login?error=auth_callback_error`)
 }
-
