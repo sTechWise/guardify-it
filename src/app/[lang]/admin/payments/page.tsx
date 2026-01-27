@@ -193,13 +193,9 @@ export default function AdminPaymentsPage() {
                                 </div>
 
                                 <div className={styles.cardBody}>
-                                    <div className={styles.proofPreview}>
+                                    <div className={styles.proofPreview} onClick={() => setSelectedProof(proof)} style={{ cursor: 'pointer' }}>
                                         {proof.screenshot_url ? (
-                                            <img
-                                                src={proof.screenshot_url}
-                                                alt="Payment proof"
-                                                onClick={() => setSelectedProof(proof)}
-                                            />
+                                            <PaymentProofImage url={proof.screenshot_url} />
                                         ) : (
                                             <div className={styles.noImage}>No screenshot</div>
                                         )}
@@ -267,7 +263,7 @@ export default function AdminPaymentsPage() {
                             </div>
                             {selectedProof.screenshot_url && (
                                 <div className={styles.modalImage}>
-                                    <img src={selectedProof.screenshot_url} alt="Payment proof" />
+                                    <PaymentProofImage url={selectedProof.screenshot_url} />
                                 </div>
                             )}
                         </div>
@@ -275,5 +271,98 @@ export default function AdminPaymentsPage() {
                 </div>
             )}
         </div>
+    )
+}
+
+function PaymentProofImage({ url }: { url: string }) {
+    const [signedUrl, setSignedUrl] = useState<string | null>(null)
+    const [error, setError] = useState(false)
+    const supabase = createClient()
+
+    useEffect(() => {
+        async function getSignedUrl() {
+            try {
+                // Return explicitly if it's already a blob or http url (though for us it's usually storage path)
+                if (url.startsWith('blob:') || url.startsWith('data:')) {
+                    setSignedUrl(url)
+                    return
+                }
+
+                // If it's a full public URL, try to extract path
+                let path = url
+                if (url.includes('payment-proofs/')) {
+                    path = url.split('payment-proofs/')[1]
+                }
+
+                // Clean path just in case
+                if (!path) {
+                    setError(true)
+                    return
+                }
+
+                const { data, error } = await supabase
+                    .storage
+                    .from('payment-proofs')
+                    .createSignedUrl(path, 3600) // 1 hour expiry
+
+                if (error || !data) {
+                    console.error('Error signing URL:', error)
+                    setError(true)
+                } else {
+                    setSignedUrl(data.signedUrl)
+                }
+            } catch (err) {
+                console.error('Error generating signed URL:', err)
+                setError(true)
+            }
+        }
+
+        getSignedUrl()
+    }, [url])
+
+    if (error) {
+        return (
+            <div style={{
+                width: '100%',
+                height: '100%',
+                minHeight: '150px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(255, 255, 255, 0.05)',
+                color: '#ef4444',
+                flexDirection: 'column',
+                gap: '8px',
+                borderRadius: '8px'
+            }}>
+                <AlertCircle size={24} />
+                <span style={{ fontSize: '12px' }}>Failed to load</span>
+            </div>
+        )
+    }
+
+    if (!signedUrl) {
+        return (
+            <div style={{
+                width: '100%',
+                height: '100%',
+                minHeight: '150px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(255, 255, 255, 0.05)',
+                borderRadius: '8px'
+            }}>
+                <Loader2 size={24} className={styles.spinner} />
+            </div>
+        )
+    }
+
+    return (
+        <img
+            src={signedUrl}
+            alt="Payment Proof"
+            style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '8px' }}
+        />
     )
 }
