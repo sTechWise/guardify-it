@@ -11,7 +11,7 @@
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 3rem 2.5rem;
+    padding: 2rem 1.5rem;
     max-width: 480px;
     width: 100%;
     box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.5);

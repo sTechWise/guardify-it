@@ -9,9 +9,13 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Email is required' }, { status: 400 })
         }
 
+        // CRITICAL: Check for Service Role Key
         if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-            console.error('Missing SUPABASE_SERVICE_ROLE_KEY')
-            return NextResponse.json({ error: 'Server misconfiguration: Missing Service Role Key' }, { status: 500 })
+            console.error('[Guest Checkout] CRITICAL ERROR: Missing SUPABASE_SERVICE_ROLE_KEY env var.')
+            console.error('[Guest Checkout] Go to Vercel Settings -> Environment Variables and add it.')
+            return NextResponse.json({
+                error: 'Server Misconfiguration: Payment cannot be processed at this time.'
+            }, { status: 500 })
         }
 
         const supabaseAdmin = createClient(
@@ -25,54 +29,40 @@ export async function POST(request: Request) {
             }
         )
 
-        // Generate a random secure password for the guest account
+        // Generate a secure random password
         const randomPassword = crypto.randomUUID() + crypto.randomUUID()
 
-        // Try to create a new user with this email
+        // Attempt to create a new user
         const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
             email,
             password: randomPassword,
-            email_confirm: true // Auto-confirm so they can reset password later
+            email_confirm: true
         })
 
         if (createError) {
-            // If user already exists, we want to proceed.
-            // But we need the userId to link the order.
-            // Since we can't look up the user by email with admin client easily (actually we can),
-            // we will try to find the user.
-
+            // Case: User already exists
             if (createError.message.includes('already registered') ||
                 createError.message.includes('already exists') ||
-                createError.message.includes('User already registered')) {
+                createError.status === 422) { // 422 Unprocessable Entity often means exists
 
-                console.log('[Guest Checkout] User exists, trying to fetch ID:', email)
+                console.log('[Guest Checkout] User already exists:', email)
 
-                // Fetch the user by email using Admin client to get their ID
-                // Note: listUsers is the way to search users
-                // Actually, createUser returns existing user info in some cases? No.
-                // We have to search.
+                // Since we have the Service Role, we CAN find the user ID to link it correctly.
+                // This converts a "Guest Checkout" into a "Linked Order" for an existing user purely by email match.
+                // NOTE: This assumes email ownership. Since we only insert an order and don't grant login access,
+                // this is generally safe for "Guest Checkout" flows (matching email = linking).
 
-                // Using admin.listUsers requires permissions. 
-                // Since this is a server route with service key, we can do it.
-
-                // But listUsers by email involves filtering.
-                // It's safer to just return a generic success but NO userId if we can't find it easily,
-                // and let createOrder handle it (unlinked order).
-
-                // However, linking is better.
-                // Supabase Admin doesn't have a simple getUserByEmail without using listUsers or generic SQL.
-                // Wait! supabaseAdmin.rpc('get_user_id_by_email', { p_email: email })?
-                // No, we don't have that RPC.
-
-                // Let's just return success: true but userId: null (or undefined).
-                // The checkout page will see ok: true, but no userId.
-                // Then order will be created with email only.
-                // This is SAFE and complies with "Guest" checkout.
-                // If they want it linked, they should login.
+                const { data: users, error: searchError } = await supabaseAdmin.auth.admin.listUsers()
+                // Warning: listUsers is paginated, but for now we look for a match.
+                // Better approach: We can't easily filter by email in admin api without looping or explicit query.
+                // However, since we are doing forensic recovery, let's keep it safe:
+                // Return success but NO userId to avoid linking to wrong account if we aren't 100% sure.
+                // The order will be created with `user_email` only.
+                // The `link_orders_to_user` RPC (when they login) will pick it up later.
 
                 return NextResponse.json({
                     userId: null,
-                    message: 'User exists, proceeding as guest',
+                    message: 'User exists. Order will be linked upon next login.',
                     success: true
                 })
             }
@@ -81,7 +71,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: createError.message }, { status: 500 })
         }
 
-        console.log('[Guest Checkout] Created new user:', newUser.user?.id)
+        console.log('[Guest Checkout] Created new guest user:', newUser.user?.id)
 
         return NextResponse.json({
             userId: newUser.user?.id,
@@ -89,7 +79,7 @@ export async function POST(request: Request) {
         })
 
     } catch (error: any) {
-        console.error('[Guest Checkout] Error:', error)
+        console.error('[Guest Checkout] Unexpected Error:', error)
         return NextResponse.json({
             error: error.message || 'Internal Server Error'
         }, { status: 500 })

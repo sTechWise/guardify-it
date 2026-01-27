@@ -78,10 +78,7 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
     console.log(`[createOrder] Total calculated: ${calculatedTotal}. Inserting order...`)
 
     // 3. Create Order
-    // Note: We try to save 'items' as jsonb if the column exists. 
-    // If 'items' column is missing in DB, this might throw. 
-    // However, not saving items is a worse logic bug. 
-    // We'll assume the schema handles it or ignores extra fields if configured (but strict by default).
+    // Note: 'items' column is now ensured by REPAIR_SCHEMA.sql
     const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert({
@@ -89,34 +86,13 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
             user_email: userEmail,
             total_amount: calculatedTotal,
             status: 'pending_payment',
-            items: validatedItems // Adding items field for completeness
+            items: validatedItems
         })
         .select()
         .single()
 
     if (orderError) {
         console.error('Order creation failed:', orderError)
-        // Fallback: If 'items' column doesn't exist, try excluding it
-        if (orderError.message.includes('items') || orderError.code === '42703' || orderError.message.includes('column "items" of relation "orders" does not exist')) {
-            console.log('[createOrder] Retrying without items column (Schema mismatch)...')
-            const { data: retryOrder, error: retryError } = await supabase
-                .from('orders')
-                .insert({
-                    user_id: userId || null,
-                    user_email: userEmail,
-                    total_amount: calculatedTotal,
-                    status: 'pending_payment'
-                })
-                .select()
-                .single()
-
-            if (retryError) {
-                console.error('[createOrder] Retry failed:', retryError)
-                throw new Error(`Failed to create order: ${retryError.message}`)
-            }
-            return retryOrder
-        }
-
         throw new Error(`Failed to create order: ${orderError.message}`)
     }
 

@@ -140,11 +140,7 @@ export default function AuthForm({ lang, dict }: AuthFormProps) {
                     </div>
                 )}
 
-                {successMessage && (
-                    <div className={styles.successMessage}>
-                        {successMessage}
-                    </div>
-                )}
+
 
                 <form onSubmit={handleSubmit} className={styles.form}>
                     {!isLogin && (
