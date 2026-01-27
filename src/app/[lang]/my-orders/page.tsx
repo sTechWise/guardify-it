@@ -88,7 +88,8 @@ export default function MyOrdersPage() {
         }
     }
 
-    const getStatusBadge = (status: string) => {
+    const getStatusBadge = (status: string | null) => {
+        if (!status) return { label: dict.pending_payment_status, className: styles.statusPending }
         const statusMap: Record<string, { label: string; className: string }> = {
             'pending_payment': { label: dict.pending_payment_status, className: styles.statusPending },
             'payment_submitted': { label: dict.payment_submitted, className: styles.statusSubmitted },

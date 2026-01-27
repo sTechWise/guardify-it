@@ -35,7 +35,6 @@ function PaymentInstructionsContent() {
                     data = directData
                 } else if (directError) {
                     // Fallback to RPC for guest access (bypasses RLS safely if configured)
-                    console.log('Direct fetch failed, trying RPC...', directError.message)
                     const { data: rpcData, error: rpcError } = await supabase
                         .rpc('get_order_summary', { p_order_id: orderId })
                         .single()
@@ -128,64 +127,87 @@ function PaymentInstructionsContent() {
                     </div>
                 )}
 
-                {/* Payment Instructions */}
-                <div className={styles.paymentSection}>
-                    <div className={styles.sectionHeader}>
-                        <CreditCard size={24} />
-                        <h2 className={styles.sectionTitle}>{dict.payment_methods}</h2>
+                {/* Contextual Status or Instructions */}
+                {(order?.status === 'payment_submitted' || order?.status === 'paid' || order?.status === 'approved') ? (
+                    <div className={styles.paymentSection}>
+                        <div className={styles.sectionHeader}>
+                            <CheckCircle size={24} color="#10B981" />
+                            <h2 className={styles.sectionTitle}>{dict.payment_submitted}</h2>
+                        </div>
+                        <div className={styles.alertBox} style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', borderLeftColor: '#10B981' }}>
+                            <CheckCircle size={20} className={styles.alertIcon} color="#10B981" />
+                            <div>
+                                <strong>{dict.payment_under_review_title || 'Payment Under Review'}</strong>
+                                <p>{dict.payment_under_review_desc || 'We have received your payment proof. You will receive an email once it is verified.'}</p>
+                            </div>
+                        </div>
+                        {/* Go Home Button */}
+                        <Link href={`/${lang}/`} className={styles.uploadBtn} style={{ marginTop: '20px' }}>
+                            {dict.back_to_home || 'Back to Home'} <ArrowRight size={20} />
+                        </Link>
                     </div>
-                    <p className={styles.instructions}>
-                        {dict.send_money_instruction}
-                    </p>
+                ) : (
+                    <>
+                        {/* Payment Instructions */}
+                        <div className={styles.paymentSection}>
+                            <div className={styles.sectionHeader}>
+                                <CreditCard size={24} />
+                                <h2 className={styles.sectionTitle}>{dict.payment_methods}</h2>
+                            </div>
+                            <p className={styles.instructions}>
+                                {dict.send_money_instruction}
+                            </p>
 
-                    <div className={styles.methodsGrid}>
-                        {paymentMethods.map((method) => (
-                            <div key={method.name} className={styles.methodCard}>
-                                <div className={styles.methodHeader}>
-                                    <span className={styles.methodName} style={{ color: method.color }}>{method.name}</span>
-                                    <span className={styles.methodType}>{method.type}</span>
-                                </div>
-                                <div className={styles.numberRow}>
-                                    <span className={styles.number}>{method.number}</span>
-                                    <button
-                                        onClick={() => copyToClipboard(method.number, method.name)}
-                                        className={styles.copyBtn}
-                                    >
-                                        {copied === method.name ? dict.copied : <Copy size={16} />}
-                                    </button>
+                            <div className={styles.methodsGrid}>
+                                {paymentMethods.map((method) => (
+                                    <div key={method.name} className={styles.methodCard}>
+                                        <div className={styles.methodHeader}>
+                                            <span className={styles.methodName} style={{ color: method.color }}>{method.name}</span>
+                                            <span className={styles.methodType}>{method.type}</span>
+                                        </div>
+                                        <div className={styles.numberRow}>
+                                            <span className={styles.number}>{method.number}</span>
+                                            <button
+                                                onClick={() => copyToClipboard(method.number, method.name)}
+                                                className={styles.copyBtn}
+                                            >
+                                                {copied === method.name ? dict.copied : <Copy size={16} />}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Steps */}
+                            <div className={styles.steps}>
+                                <h3 className={styles.stepsTitle}>{dict.how_to_complete}</h3>
+                                <ol className={styles.stepsList}>
+                                    <li>{dict.step_1_open}</li>
+                                    <li>{dict.step_2_select}</li>
+                                    <li>{dict.step_3_enter} <strong>৳{order?.total_amount?.toLocaleString() || '...'}</strong></li>
+                                    <li>{dict.step_4_complete}</li>
+                                    <li>{dict.step_5_upload}</li>
+                                </ol>
+                            </div>
+
+                            {/* Important Note */}
+                            <div className={styles.alertBox}>
+                                <AlertCircle size={20} className={styles.alertIcon} />
+                                <div>
+                                    <strong>{dict.important_note}</strong> {dict.upload_within_24h}
                                 </div>
                             </div>
-                        ))}
-                    </div>
-
-                    {/* Steps */}
-                    <div className={styles.steps}>
-                        <h3 className={styles.stepsTitle}>{dict.how_to_complete}</h3>
-                        <ol className={styles.stepsList}>
-                            <li>{dict.step_1_open}</li>
-                            <li>{dict.step_2_select}</li>
-                            <li>{dict.step_3_enter} <strong>৳{order?.total_amount.toLocaleString()}</strong></li>
-                            <li>{dict.step_4_complete}</li>
-                            <li>{dict.step_5_upload}</li>
-                        </ol>
-                    </div>
-
-                    {/* Important Note */}
-                    <div className={styles.alertBox}>
-                        <AlertCircle size={20} className={styles.alertIcon} />
-                        <div>
-                            <strong>{dict.important_note}</strong> {dict.upload_within_24h}
                         </div>
-                    </div>
-                </div>
 
-                {/* Upload Button */}
-                <Link
-                    href={orderId || order?.id ? `/${lang}/upload-proof?order_id=${orderId || order?.id}` : `/${lang}/my-orders`}
-                    className={styles.uploadBtn}
-                >
-                    {dict.upload_payment_proof} <ArrowRight size={20} />
-                </Link>
+                        {/* Upload Button */}
+                        <Link
+                            href={orderId || order?.id ? `/${lang}/upload-proof?order_id=${orderId || order?.id}` : `/${lang}/my-orders`}
+                            className={styles.uploadBtn}
+                        >
+                            {dict.upload_payment_proof} <ArrowRight size={20} />
+                        </Link>
+                    </>
+                )}
             </div>
         </main>
     )

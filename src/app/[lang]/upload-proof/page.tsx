@@ -49,7 +49,6 @@ function UploadProofContent() {
 
                 if (data) {
                     const email = (data as { user_email: string }).user_email
-                    console.log('[Upload Proof] Order email:', email)
                     setOrderEmail(email)
                 }
             } catch (err: any) {
@@ -104,13 +103,6 @@ function UploadProofContent() {
         // The RLS policy checks: orders.user_email = payment_proofs.user_email
         const finalEmail = orderEmail
 
-        console.log('[Upload Proof] Submitting with:', {
-            order_id: orderId,
-            user_email: finalEmail,
-            transaction_id: trxId,
-            auth_user: user?.email || 'not authenticated'
-        })
-
         setSubmitting(true)
         setError(null)
 
@@ -148,7 +140,13 @@ function UploadProofContent() {
             }
 
             // D. Success Redirect to My Orders (proof is now linked)
-            router.push(`/${lang}/my-orders`)
+            // D. Success Redirect
+            // If user is logged in, my-orders. If guest, back to payment instructions (which will show status)
+            if (user) {
+                router.push(`/${lang}/my-orders`)
+            } else {
+                router.push(`/${lang}/payment-instructions?order_id=${orderId}`)
+            }
 
         } catch (err: any) {
             console.error('[Upload Proof] Submit error:', err)

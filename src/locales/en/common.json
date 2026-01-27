@@ -217,5 +217,8 @@
     "contact_subtitle": "Have questions? We're here to help!",
     "your_name": "Your Name",
     "your_message": "Your Message",
-    "send_message": "Send Message"
+    "send_message": "Send Message",
+    "payment_under_review_title": "Payment Under Review",
+    "payment_under_review_desc": "We have received your payment proof. You will receive an email once it is verified.",
+    "back_to_home": "Back to Home"
 }
