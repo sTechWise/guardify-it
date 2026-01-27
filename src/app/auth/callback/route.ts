@@ -10,6 +10,7 @@ export async function GET(request: Request) {
     // Extract language from the next parameter (e.g., '/en/my-orders' -> 'en')
     const langMatch = next.match(/^\/([a-z]{2})\//)
     const lang = langMatch ? langMatch[1] : 'en'
+    const isRecovery = type === 'recovery' || next.includes('reset-password')
 
     if (code) {
         const supabase = await createClient()
@@ -32,7 +33,10 @@ export async function GET(request: Request) {
         }
     }
 
-    // Return to login with error if code exchange failed
-    return NextResponse.redirect(`${origin}/${lang}/login?error=auth_callback_error`)
+    // If no code is present, it might be an implicit flow (hash fragment).
+    // Redirect to reset-password page so the client can parse the hash.
+    // The browser will preserve the hash fragment across the redirect.
+    const target = isRecovery ? `/${lang}/reset-password` : `/${lang}/login?error=auth_callback_error`
+    return NextResponse.redirect(`${origin}${target}`)
 }
 

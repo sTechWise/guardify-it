@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import styles from './auth-form.module.css'
 import { Mail, Lock, User, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
@@ -15,6 +15,7 @@ interface AuthFormProps {
 
 export default function AuthForm({ lang, dict }: AuthFormProps) {
     const router = useRouter()
+    const searchParams = useSearchParams()
     const { signIn, signUp, linkGuestOrders } = useAuth()
     const supabase = createClient()
 
@@ -28,6 +29,20 @@ export default function AuthForm({ lang, dict }: AuthFormProps) {
         password: '',
         name: ''
     })
+
+    // Safety Net: If user lands here with recovery intent (server redirect fail), send them to reset-password
+    useEffect(() => {
+        const type = searchParams.get('type')
+        // Check hash for implicit flow tokens
+        const hasHashRecovery = typeof window !== 'undefined' &&
+            window.location.hash &&
+            window.location.hash.includes('type=recovery')
+
+        if (type === 'recovery' || hasHashRecovery) {
+            console.log('[AuthForm] Detected recovery flow, redirecting to reset-password...')
+            router.replace(`/${lang}/reset-password${window.location.search}${window.location.hash}`)
+        }
+    }, [searchParams, lang, router])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()

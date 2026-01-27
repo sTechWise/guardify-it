@@ -41,6 +41,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ lang
         return NextResponse.redirect(resetUrl.toString())
     }
 
-    // Return to login with error if code exchange failed
-    return NextResponse.redirect(`${origin}/${lang}/login?error=auth_callback_error`)
+    // If no code is present, it might be an implicit flow (hash fragment).
+    // Redirect to reset-password page so the client can parse the hash.
+    const isRecovery = type === 'recovery' || next.includes('reset-password')
+    const target = isRecovery ? `/${lang}/reset-password` : `/${lang}/login?error=auth_callback_error`
+    return NextResponse.redirect(`${origin}${target}`)
 }
