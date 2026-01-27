@@ -288,13 +288,7 @@ export default function MyOrdersPage() {
                                 <p><strong>{dict.status}:</strong> {selectedProof.status}</p>
                             </div>
                             {selectedProof.screenshot_url ? (
-                                <div className={styles.proofImageWrapper}>
-                                    <img
-                                        src={selectedProof.screenshot_url}
-                                        alt={dict.payment_proof}
-                                        className={styles.proofImage}
-                                    />
-                                </div>
+                                <PaymentProofImage url={selectedProof.screenshot_url} />
                             ) : (
                                 <div className={styles.noProofImage}>
                                     <ImageIcon size={48} />
@@ -306,5 +300,54 @@ export default function MyOrdersPage() {
                 </div>
             )}
         </main>
+    )
+}
+
+function PaymentProofImage({ url }: { url: string }) {
+    const [signedUrl, setSignedUrl] = useState<string | null>(null)
+    const [loading, setLoading] = useState(true)
+    const supabase = createClient()
+
+    useEffect(() => {
+        async function getSignedUrl() {
+            try {
+                // Extract path from public URL
+                // Format: .../storage/v1/object/public/payment-proofs/filename.ext
+                const parts = url.split('/payment-proofs/')
+                if (parts.length < 2) {
+                    setSignedUrl(url) // Fallback
+                    return
+                }
+                const path = parts[1]
+
+                const { data, error } = await supabase.storage
+                    .from('payment-proofs')
+                    .createSignedUrl(path, 3600) // 1 hour expiry
+
+                if (data?.signedUrl) {
+                    setSignedUrl(data.signedUrl)
+                } else {
+                    console.error('Error signing URL:', error)
+                    setSignedUrl(url)
+                }
+            } catch (e) {
+                setSignedUrl(url)
+            } finally {
+                setLoading(false)
+            }
+        }
+        getSignedUrl()
+    }, [url])
+
+    if (loading) return <div className="p-4 flex justify-center"><Loader2 className="animate-spin" /></div>
+
+    return (
+        <div className={styles.proofImageWrapper}>
+            <img
+                src={signedUrl || url}
+                alt="Payment Proof"
+                className={styles.proofImage}
+            />
+        </div>
     )
 }
