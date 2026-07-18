@@ -6,10 +6,7 @@ import { ToastProvider } from "@/context/ToastContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { ThemeProvider } from "@/context/ThemeContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import AuthRedirectHandler from "@/components/AuthRedirectHandler";
+import LayoutShell from "@/components/LayoutShell";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -101,19 +98,9 @@ export default async function RootLayout({
             <AuthProvider>
               <CartProvider>
                 <WishlistProvider>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      minHeight: "100vh",
-                    }}
-                  >
-                    <AuthRedirectHandler />
-                    <Navbar dict={dict} />
-                    <main style={{ flex: 1 }}>{children}</main>
-                    <Footer />
-                    <WhatsAppButton />
-                  </div>
+                  <LayoutShell dict={dict}>
+                    {children}
+                  </LayoutShell>
                 </WishlistProvider>
               </CartProvider>
             </AuthProvider>

@@ -53,18 +53,24 @@ export default function AdminProductsPage() {
         setTogglingId(product.id)
         const newStatus = product.status === 'active' ? 'inactive' : 'active'
 
-        const { error } = await supabase
-            .from('products')
-            .update({ status: newStatus })
-            .eq('id', product.id)
+        try {
+            const { error } = await supabase
+                .from('products')
+                .update({ status: newStatus })
+                .eq('id', product.id)
 
-        if (error) {
-            showToast('Failed to update status', 'error')
-        } else {
-            showToast(`Product ${newStatus === 'active' ? 'activated' : 'deactivated'}`, 'success')
-            setProducts(prev => prev.map(p =>
-                p.id === product.id ? { ...p, status: newStatus } : p
-            ))
+            if (error) {
+                console.error('Toggle status error:', error)
+                showToast(`Failed to update status: ${error.message}`, 'error')
+            } else {
+                showToast(`Product ${newStatus === 'active' ? 'activated' : 'deactivated'}`, 'success')
+                setProducts(prev => prev.map(p =>
+                    p.id === product.id ? { ...p, status: newStatus } : p
+                ))
+            }
+        } catch (err) {
+            console.error('Toggle status exception:', err)
+            showToast('Failed to update status. Check console for details.', 'error')
         }
         setTogglingId(null)
     }
@@ -176,9 +182,11 @@ export default function AdminProductsPage() {
                                         <td>
                                             <div className={styles.toggleWrapper}>
                                                 <button
+                                                    type="button"
                                                     className={`${styles.toggle} ${product.status === 'active' ? styles.active : ''}`}
                                                     onClick={() => handleToggleStatus(product)}
                                                     disabled={isToggling}
+                                                    aria-label={product.status === 'active' ? 'Deactivate product' : 'Activate product'}
                                                     title={product.status === 'active' ? 'Click to deactivate' : 'Click to activate'}
                                                 />
                                                 <span className={`${styles.statusBadge} ${status.className}`}>
