@@ -1,13 +1,16 @@
+/* ── GUARDIFY IT — Homepage Layout v3.0 ── */
+
 .main {
     min-height: 100vh;
 }
 
+/* ─── Section Spacing ─── */
 .section {
-    padding: var(--space-2xl) 0;
+    padding: 4.5rem 0;
     position: relative;
 }
 
-/* Subtle shadow divider between sections */
+/* ─── Section Dividers — Gradient Line ─── */
 .sectionDivider {
     position: relative;
 }
@@ -18,69 +21,80 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
-    max-width: 1100px;
+    width: 80%;
+    max-width: 800px;
     height: 1px;
     background: linear-gradient(90deg,
-            transparent 0%,
-            var(--border) 15%,
-            var(--border) 85%,
-            transparent 100%);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+        transparent 0%,
+        rgba(27, 77, 255, 0.15) 20%,
+        rgba(27, 77, 255, 0.25) 50%,
+        rgba(27, 77, 255, 0.15) 80%,
+        transparent 100%);
 }
 
+/* ─── Section Header ─── */
 .sectionHeader {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: var(--space-xl);
+    margin-bottom: 2.5rem;
+    gap: 1rem;
 }
 
 .sectionSubtitle {
-    color: var(--guardian-blue-light);
-    font-size: 0.875rem;
-    font-weight: 600;
+    color: var(--guardian-blue);
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
     display: block;
     margin-bottom: 0.5rem;
 }
 
 .sectionTitle {
-    font-size: 2rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
     font-weight: 800;
     color: var(--text);
     margin: 0;
+    letter-spacing: -0.02em;
+    position: relative;
 }
 
+/* ─── View All Link ─── */
 .viewAll {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: var(--guardian-blue);
-    font-weight: 600;
-    transition: color 0.2s;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    transition: all 0.2s ease;
 }
 
 .viewAll:hover {
     color: var(--guardian-blue-hover);
-    text-decoration: underline;
+    gap: 0.75rem;
 }
 
+/* ─── Product Grid ─── */
 .productGrid {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 1fr;
     gap: 1.5rem;
 }
 
-@media (min-width: 640px) {
-    .productGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+@media (min-width: 500px) {
+    .productGrid { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (min-width: 1024px) {
-    .productGrid {
-        grid-template-columns: repeat(4, 1fr);
-    }
+@media (min-width: 900px) {
+    .productGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1200px) {
+    .productGrid { grid-template-columns: repeat(4, 1fr); }
 }

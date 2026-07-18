@@ -1,34 +1,62 @@
-/* ── GUARDIFY IT — Auth Form v2.0 ── */
+/* ── GUARDIFY IT — Auth Form v3.0 REAL REDESIGN ── */
 
 .container {
-    min-height: 80vh;
+    min-height: 85vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-xl);
+    padding: 2rem 1rem;
     background: var(--background);
+    position: relative;
+}
+
+/* Decorative background orb */
+.container::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(27, 77, 255, 0.06) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 .card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
-    padding: var(--space-2xl) var(--space-xl);
-    max-width: 460px;
+    padding: 2.5rem 2rem;
+    max-width: 440px;
     width: 100%;
     box-shadow: var(--shadow-xl);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Blue gradient top border */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--guardian-blue), var(--guardian-blue-light));
 }
 
 .header {
     text-align: center;
-    margin-bottom: var(--space-2xl);
+    margin-bottom: 2rem;
 }
 
 .title {
     font-family: var(--font-display);
     font-size: 1.75rem;
     color: var(--text);
-    margin-bottom: var(--space-sm);
+    margin-bottom: 0.5rem;
     font-weight: 800;
     letter-spacing: -0.02em;
 }
@@ -36,12 +64,13 @@
 .subtitle {
     color: var(--muted);
     font-size: 0.9375rem;
+    line-height: 1.5;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.125rem;
 }
 
 .inputGroup {
@@ -51,7 +80,7 @@
 }
 
 .label {
-    color: var(--text);
+    color: var(--text-secondary);
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 0.8125rem;
@@ -59,6 +88,8 @@
     align-items: center;
     gap: 0.5rem;
 }
+
+.label svg { color: var(--muted); }
 
 .input {
     width: 100%;
@@ -69,27 +100,20 @@
     color: var(--text);
     font-family: var(--font-body);
     font-size: 0.9375rem;
-    transition: all var(--duration-fast) ease;
+    transition: all 0.2s ease;
     outline: none;
 }
 
 .input:focus {
     border-color: var(--guardian-blue);
     background: var(--background);
-    box-shadow: 0 0 0 3px rgba(27, 77, 255, 0.12);
+    box-shadow: 0 0 0 3px rgba(27, 77, 255, 0.1);
 }
 
-.input::placeholder {
-    color: var(--muted);
-}
+.input::placeholder { color: var(--muted); }
 
-.passwordWrapper {
-    position: relative;
-}
-
-.passwordWrapper .input {
-    padding-right: 3rem;
-}
+.passwordWrapper { position: relative; }
+.passwordWrapper .input { padding-right: 3rem; }
 
 .togglePassword {
     position: absolute;
@@ -104,23 +128,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color var(--duration-fast) ease;
+    transition: color 0.2s;
 }
 
-.togglePassword:hover {
-    color: var(--text);
-}
+.togglePassword:hover { color: var(--text); }
 
 .forgotPassword {
     text-align: right;
-    margin-top: -0.5rem;
+    margin-top: -0.375rem;
 }
 
 .forgotPassword a {
     color: var(--guardian-blue-light);
     font-size: 0.8125rem;
     font-weight: 500;
-    transition: color var(--duration-fast) ease;
+    transition: color 0.2s;
 }
 
 .forgotPassword a:hover {
@@ -130,7 +152,7 @@
 
 .submitButton {
     width: 100%;
-    padding: 0.8125rem;
+    padding: 0.875rem;
     background: var(--guardian-blue);
     color: white;
     border: none;
@@ -139,108 +161,14 @@
     font-weight: 700;
     font-size: 0.9375rem;
     cursor: pointer;
-    transition: all var(--duration-normal) var(--ease-out);
-    margin-top: var(--space-sm);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    margin-top: 0.5rem;
 }
 
 .submitButton:hover {
     background: var(--guardian-blue-hover);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-glow-blue);
-}
-
-.divider {
-    position: relative;
-    text-align: center;
-    margin: var(--space-xl) 0 var(--space-lg);
-}
-
-.divider::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: var(--border);
-}
-
-.divider span {
-    position: relative;
-    background: var(--card);
-    padding: 0 0.875rem;
-    color: var(--muted);
-    font-size: 0.8125rem;
-}
-
-.toggle {
-    text-align: center;
-}
-
-.toggle p {
-    color: var(--muted);
-    font-size: 0.8125rem;
-}
-
-.toggleButton {
-    background: none;
-    border: none;
-    color: var(--guardian-blue-light);
-    font-weight: 600;
-    cursor: pointer;
-    margin-left: 0.375rem;
-    transition: color var(--duration-fast) ease;
-    font-family: var(--font-display);
-}
-
-.toggleButton:hover {
-    color: var(--guardian-blue);
-    text-decoration: underline;
-}
-
-.guestCheckout {
-    margin-top: var(--space-lg);
-    padding-top: var(--space-lg);
-    border-top: 1px solid var(--border);
-    text-align: center;
-}
-
-.guestText {
-    color: var(--muted);
-    font-size: 0.8125rem;
-}
-
-.guestText a {
-    color: var(--guardian-blue-light);
-    font-weight: 600;
-    transition: color var(--duration-fast) ease;
-}
-
-.guestText a:hover {
-    color: var(--guardian-blue);
-    text-decoration: underline;
-}
-
-.errorMessage {
-    background: rgba(255, 71, 87, 0.08);
-    border: 1px solid rgba(255, 71, 87, 0.2);
-    color: var(--danger);
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius-md);
-    font-size: 0.8125rem;
-    margin-bottom: var(--space-md);
-    font-weight: 500;
-}
-
-.successMessage {
-    background: var(--volt-green-soft);
-    border: 1px solid rgba(0, 230, 118, 0.2);
-    color: var(--volt-green);
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius-md);
-    font-size: 0.8125rem;
-    margin-bottom: var(--space-md);
-    font-weight: 500;
+    box-shadow: 0 6px 24px rgba(27, 77, 255, 0.35);
 }
 
 .submitButton:disabled {
@@ -264,27 +192,95 @@
     to { transform: rotate(360deg); }
 }
 
+.divider {
+    position: relative;
+    text-align: center;
+    margin: 1.75rem 0 1.25rem;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border);
+}
+
+.divider span {
+    position: relative;
+    background: var(--card);
+    padding: 0 1rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+
+.toggle { text-align: center; }
+.toggle p { color: var(--muted); font-size: 0.8125rem; }
+
+.toggleButton {
+    background: none;
+    border: none;
+    color: var(--guardian-blue-light);
+    font-family: var(--font-display);
+    font-weight: 700;
+    cursor: pointer;
+    margin-left: 0.375rem;
+    transition: color 0.2s;
+}
+
+.toggleButton:hover { color: var(--guardian-blue); text-decoration: underline; }
+
+.toggleButton:disabled,
+.togglePassword:disabled,
 .input:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-.togglePassword:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+.guestCheckout {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
 }
 
-.toggleButton:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+.guestText { color: var(--muted); font-size: 0.8125rem; }
+.guestText a { color: var(--guardian-blue-light); font-weight: 600; transition: color 0.2s; }
+.guestText a:hover { color: var(--guardian-blue); text-decoration: underline; }
+
+.errorMessage {
+    background: rgba(255, 71, 87, 0.08);
+    border: 1px solid rgba(255, 71, 87, 0.2);
+    border-left: 3px solid var(--danger);
+    color: var(--danger);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.successMessage {
+    background: var(--volt-green-soft);
+    border: 1px solid rgba(0, 230, 118, 0.2);
+    border-left: 3px solid var(--volt-green);
+    color: var(--volt-green);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
 }
 
 .guestInfoBox {
-    background: rgba(27, 77, 255, 0.06);
-    border: 1px solid rgba(27, 77, 255, 0.15);
+    background: rgba(27, 77, 255, 0.05);
+    border: 1px solid rgba(27, 77, 255, 0.12);
     border-radius: var(--radius-md);
-    padding: 0.875rem 1.125rem;
-    margin-bottom: var(--space-lg);
+    padding: 0.875rem 1rem;
+    margin-bottom: 1rem;
 }
 
 .guestInfoBox strong {
@@ -292,7 +288,7 @@
     font-family: var(--font-display);
     font-size: 0.875rem;
     display: block;
-    margin-bottom: var(--space-sm);
+    margin-bottom: 0.375rem;
 }
 
 .guestInfoBox p {
@@ -300,4 +296,9 @@
     font-size: 0.8125rem;
     line-height: 1.6;
     margin: 0;
+}
+
+@media (max-width: 480px) {
+    .card { padding: 2rem 1.25rem; margin: 0 0.5rem; }
+    .title { font-size: 1.5rem; }
 }
