@@ -26,7 +26,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ lang
             targetUrl.searchParams.set(key, value)
         })
 
-        console.log('[Auth Callback Lang] Forwarding recovery to client:', targetUrl.toString())
+
         return NextResponse.redirect(targetUrl)
     }
 
@@ -48,7 +48,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ lang
         // Redirect to reset password with tokens in hash
         const resetUrl = new URL(`${origin}/${lang}/reset-password`)
         resetUrl.hash = `access_token=${accessToken}&refresh_token=${refreshToken || ''}&type=recovery`
-        console.log('[Auth Callback Lang] Token recovery, redirecting to:', resetUrl.toString())
+
         return NextResponse.redirect(resetUrl.toString())
     }
 

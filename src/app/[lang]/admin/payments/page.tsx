@@ -73,14 +73,14 @@ export default function AdminPaymentsPage() {
     }
 
     async function handleApproveReject(proofId: string, orderId: string, newStatus: 'approved' | 'rejected') {
-        console.log('handleApproveReject called:', { proofId, orderId, newStatus })
+
 
         setProcessingId(proofId)
         showToast(`Processing ${newStatus}...`, 'info')
 
         try {
             // Update payment proof status directly
-            console.log('Updating payment proof...')
+
             const { error: proofError } = await supabase
                 .from('payment_proofs')
                 .update({ status: newStatus })
@@ -90,11 +90,11 @@ export default function AdminPaymentsPage() {
                 console.error('Proof error:', proofError)
                 throw new Error(`Failed to update proof: ${proofError.message}`)
             }
-            console.log('Payment proof updated successfully')
+
 
             // Update order status based on approval
             const newOrderStatus = newStatus === 'approved' ? 'paid' : 'payment_failed'
-            console.log('Updating order to:', newOrderStatus)
+
             const { error: orderError } = await supabase
                 .from('orders')
                 .update({ status: newOrderStatus })
@@ -104,7 +104,7 @@ export default function AdminPaymentsPage() {
                 console.error('Order error:', orderError)
                 throw new Error(`Failed to update order: ${orderError.message}`)
             }
-            console.log('Order updated successfully')
+
 
             showToast(
                 `Payment ${newStatus === 'approved' ? 'approved' : 'rejected'} successfully`,

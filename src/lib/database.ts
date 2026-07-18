@@ -1,38 +1,5 @@
 import { supabase } from './supabase'
-
-// Type definitions
-export interface Category {
-    id: string
-    name: string
-    name_bengali: string
-    slug: string
-    icon?: string
-    description?: string
-    product_count: number
-    created_at: string
-    updated_at: string
-}
-
-export interface Product {
-    id: string
-    title: string
-    title_bengali?: string
-    description?: string
-    description_bengali?: string
-    category_id: string
-    price: number
-    sale_price?: number
-    currency: string
-    image_url?: string
-    rating: number
-    review_count: number
-    stock_status: 'in_stock' | 'out_of_stock'
-    badge?: string
-    is_featured: boolean
-    is_new: boolean
-    created_at: string
-    updated_at: string
-}
+import type { Product, Category } from '@/types'
 
 // Fetch all categories
 export async function getCategories() {

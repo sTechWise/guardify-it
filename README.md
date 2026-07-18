@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Guardify IT
+
+**Premium Digital Subscription Marketplace for Bangladesh**
+
+A full-stack e-commerce platform for purchasing digital subscriptions, AI tools, automation scripts, and security solutions — with local mobile banking payment integration (bKash, Nagad, Rocket).
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Framework** | Next.js 16.1.3 (App Router) |
+| **UI** | React 19.2.3, CSS Modules, Lucide React |
+| **Backend** | Supabase (PostgreSQL, Auth, Storage) |
+| **i18n** | Custom route-based (English + Bengali) |
+| **Deployment** | Vercel |
+
+## Features
+
+### Customer-Facing
+- 🛒 Product catalog with category filtering and search
+- 💳 Guest checkout + registered user checkout
+- 📱 bKash/Nagad/Rocket payment proof upload
+- ❤️ Wishlist (synced via Supabase)
+- 📦 Order tracking with status updates
+- 🌐 Bilingual UI (English / বাংলা)
+- 🌙 Dark/Light theme toggle
+- 💬 WhatsApp support button
+
+### Admin Panel
+- 📊 Dashboard with order/revenue metrics
+- 📦 Product CRUD (with image upload)
+- 📂 Category management
+- 📋 Order management
+- ✅ Payment verification (approve/reject)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Supabase project ([supabase.com](https://supabase.com))
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/sTechWise/guardify-it.git
+   cd guardify-it
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**
+   Create `.env.local` with:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+   ```
+
+4. **Set up database**
+   Run `schema.sql` in the Supabase SQL Editor to create all tables, policies, functions, and storage buckets.
+
+5. **Seed data (optional)**
+   Run `seed.sql` in the Supabase SQL Editor to populate sample categories and products.
+
+6. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+7. Open [http://localhost:3000](http://localhost:3000)
+
+## Project Structure
+
+```
+src/
+├── actions/          # Server actions (createOrder)
+├── app/
+│   ├── api/          # API routes (contact, guest-checkout)
+│   ├── auth/         # Auth callback
+│   └── [lang]/       # i18n routes
+│       ├── admin/    # Admin panel (dashboard, products, orders, payments, categories)
+│       ├── products/ # Product catalog + detail pages
+│       ├── cart/     # Shopping cart
+│       ├── checkout/ # Checkout flow
+│       └── ...       # About, FAQ, Contact, Terms, Privacy, etc.
+├── components/       # 22 React components with CSS Modules
+├── context/          # Auth, Cart, Theme, Toast, Wishlist providers
+├── hooks/            # Custom hooks (useClientDictionary)
+├── lib/              # Database queries, dictionary loader, Supabase client
+├── locales/          # en/bn translation JSON files
+├── types/            # TypeScript type definitions
+└── utils/            # Supabase client/server/middleware utilities
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Database
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+See [`schema.sql`](./schema.sql) for the complete database schema including:
+- 6 tables: `categories`, `products`, `orders`, `payment_proofs`, `user_roles`, `wishlists`
+- Row Level Security (RLS) policies
+- 8 PostgreSQL functions (admin checks, payment processing, guest order linking)
+- 2 storage buckets (`product-images`, `payment-proofs`)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Order Lifecycle
 
-## Learn More
+```
+pending_payment → payment_submitted → paid → completed
+                                    → payment_failed
+                                    → cancelled
+```
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Private — © sTechWise

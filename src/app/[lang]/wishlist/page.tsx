@@ -22,8 +22,8 @@ export default function WishlistPage() {
             title: item.title,
             price: item.price,
             sale_price: item.sale_price ?? undefined,
-            image_url: item.image_url ?? null,
-            subscription_type: item.subscription_type ?? null,
+            image_url: item.image_url ?? undefined,
+            subscription_type: item.subscription_type ?? undefined,
             quantity: 1
         })
         showToast('Added to cart!', 'success')

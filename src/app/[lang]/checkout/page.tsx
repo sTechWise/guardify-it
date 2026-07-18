@@ -62,7 +62,7 @@ export default function CheckoutPage() {
         e.preventDefault()
         setLoading(true)
         setError(null)
-        console.log('[Checkout] Starting process...')
+
 
         // Global Timeout
         const timeout = setTimeout(() => {
@@ -82,7 +82,7 @@ export default function CheckoutPage() {
 
             // If not logged in, try guest flow
             if (!userId) {
-                console.log('[Checkout] Guest flow for:', orderEmail)
+
                 try {
                     const res = await fetch('/api/guest-checkout', {
                         method: 'POST',
@@ -100,7 +100,7 @@ export default function CheckoutPage() {
                 }
             }
 
-            console.log('[Checkout] Creating order for:', userId || 'Guest')
+
 
             // 2. Create Order
             const newOrder = await createOrder(
@@ -295,7 +295,7 @@ export default function CheckoutPage() {
 
                             {/* 7. Support Reassurance */}
                             <p className={styles.supportReassurance}>
-                                {dict.help_before_paying} <a href="#" target="_blank" className={styles.whatsappLink}>{dict.chat_whatsapp}</a> — {dict.instant_reply}.
+                                {dict.help_before_paying} <a href="https://wa.me/8801997118118" target="_blank" className={styles.whatsappLink}>{dict.chat_whatsapp}</a> — {dict.instant_reply}.
                             </p>
                         </div>
                     </div>

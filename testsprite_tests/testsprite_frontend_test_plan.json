@@ -1,0 +1,538 @@
+[
+  {
+    "id": "TC001",
+    "title": "Browse Product Catalog",
+    "description": "Verify that users can browse the product catalog and filter products by category correctly.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the product catalog page."
+      },
+      {
+        "type": "action",
+        "description": "Apply filters by different product categories."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that the product list updates correctly to show only products from the selected category."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that product names, images, and prices are displayed correctly."
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "View Product Details",
+    "description": "Verify that navigating to a product’s detail page shows accurate information including pricing and warranty.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "From the product catalog, select a product."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify detailed product information is displayed including price, warranty, and description."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the Add to Cart button is present and clickable."
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Add and Remove Items from Shopping Cart",
+    "description": "Verify that items can be added to and removed from the shopping cart and subtotal updates correctly.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Add multiple products with varying quantities to the shopping cart."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that cart updates with correct product names, quantities, and prices."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the subtotal calculation is correct based on items and quantities."
+      },
+      {
+        "type": "action",
+        "description": "Remove an item from the cart."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart updates accordingly and subtotal recalculates."
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Guest Checkout with Valid Email",
+    "description": "Verify that guest checkout works with a valid email without requiring account registration.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Add product(s) to the shopping cart."
+      },
+      {
+        "type": "action",
+        "description": "Proceed to checkout and select Guest Checkout option."
+      },
+      {
+        "type": "action",
+        "description": "Enter a valid email address."
+      },
+      {
+        "type": "action",
+        "description": "Submit the guest checkout request."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the guest session is created or linked and order proceeds to payment instructions."
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Guest Checkout with Missing Email",
+    "description": "Verify that guest checkout fails when no email is provided.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Add product(s) to the shopping cart."
+      },
+      {
+        "type": "action",
+        "description": "Proceed to checkout and select Guest Checkout option."
+      },
+      {
+        "type": "action",
+        "description": "Leave email field empty."
+      },
+      {
+        "type": "action",
+        "description": "Submit the guest checkout request."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the system returns validation error indicating that email is required."
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "User Signup with Valid Information",
+    "description": "Verify registered users can sign up with valid credentials.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the user signup page."
+      },
+      {
+        "type": "action",
+        "description": "Enter valid user details including email and password."
+      },
+      {
+        "type": "action",
+        "description": "Submit the signup form."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that user account is created and user is redirected to login or dashboard."
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "User Login with Valid Credentials",
+    "description": "Verify registered users can login successfully with correct credentials.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the login page."
+      },
+      {
+        "type": "action",
+        "description": "Input correct registered email and password."
+      },
+      {
+        "type": "action",
+        "description": "Click the login button."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user is logged in and redirected to their dashboard or home page."
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "User Login with Incorrect Credentials",
+    "description": "Verify user login fails with invalid credentials and appropriate error messages are shown.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the login page."
+      },
+      {
+        "type": "action",
+        "description": "Input incorrect email or password."
+      },
+      {
+        "type": "action",
+        "description": "Click the login button."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login attempt is rejected with relevant error message."
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Password Reset Flow",
+    "description": "Verify that users can request password reset and reset password successfully.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the forgot password page."
+      },
+      {
+        "type": "action",
+        "description": "Enter registered email address."
+      },
+      {
+        "type": "action",
+        "description": "Submit password reset request."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the system sends reset instructions or token."
+      },
+      {
+        "type": "action",
+        "description": "Access reset-password page with valid token."
+      },
+      {
+        "type": "action",
+        "description": "Enter a new password and confirm."
+      },
+      {
+        "type": "action",
+        "description": "Submit new password."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that password is successfully updated and user can login with the new password."
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "My Orders View for Registered User",
+    "description": "Verify that logged-in users can view their order history with accurate statuses and payment verification.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a registered user with orders."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to 'My Orders' page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify list of all orders is displayed with correct order statuses and payment verification information."
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Upload Payment Proof for an Order",
+    "description": "Verify that users can upload payment proof screenshots linked to their orders successfully.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as registered user or proceed as guest with an order requiring payment proof upload."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the upload payment proof page for that order."
+      },
+      {
+        "type": "action",
+        "description": "Upload a valid payment proof image file."
+      },
+      {
+        "type": "action",
+        "description": "Submit the payment proof upload."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the upload is successful and a confirmation message is shown."
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Admin Payment Proof Verification",
+    "description": "Verify that the admin dashboard allows reviewing, verifying, or rejecting payment proofs with status updates.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login to the admin dashboard."
+      },
+      {
+        "type": "action",
+        "description": "Access the list of new payment proof submissions."
+      },
+      {
+        "type": "action",
+        "description": "Review an uploaded payment proof."
+      },
+      {
+        "type": "action",
+        "description": "Verify and approve the payment proof or reject with comments."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the order status updates accordingly and notification is sent to the customer."
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Wishlist Functionality",
+    "description": "Verify that users can add products to wishlist, view, and remove them correctly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as registered user."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to a product and add it to wishlist."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product appears in the wishlist page."
+      },
+      {
+        "type": "action",
+        "description": "Remove the product from the wishlist."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product is removed from the wishlist list."
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Multi-language Toggle",
+    "description": "Verify that toggling between English and Bengali locales changes the interface text accordingly.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "From any page, select the language toggle control."
+      },
+      {
+        "type": "action",
+        "description": "Switch the language to Bengali."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that all interface text updates to Bengali accurately."
+      },
+      {
+        "type": "action",
+        "description": "Switch the language back to English."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the interface text changes back to English."
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Contact Form Submission Success",
+    "description": "Verify that users can submit the contact form with all required fields and receive success confirmation.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the contact form page."
+      },
+      {
+        "type": "action",
+        "description": "Fill in name, email, subject, and message fields with valid data."
+      },
+      {
+        "type": "action",
+        "description": "Submit the contact form."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that a success message confirming message sent is displayed."
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Contact Form Validation Error",
+    "description": "Verify that submitting the contact form with missing required fields returns appropriate validation errors.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the contact form page."
+      },
+      {
+        "type": "action",
+        "description": "Submit the form without filling any fields."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify error messages appear indicating all required fields must be filled."
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Payment Workflow Using Local Mobile Banking",
+    "description": "Verify the complete order payment workflow via local mobile payment methods (bKash, Nagad, Rocket).",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Add items to the shopping cart and proceed to checkout."
+      },
+      {
+        "type": "action",
+        "description": "Select a local mobile payment method."
+      },
+      {
+        "type": "action",
+        "description": "Complete the payment following the instructions."
+      },
+      {
+        "type": "action",
+        "description": "Upload payment proof if required."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the payment transitions order to pending verification and updates on payment verification."
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Mobile and Desktop Responsive UI",
+    "description": "Verify that all main pages (homepage, product listing, checkout, user pages) display correctly on various screen sizes.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Access the website on desktop resolution."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify layout and elements are displayed correctly without overlap or truncation."
+      },
+      {
+        "type": "action",
+        "description": "Access the website on mobile resolution."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the layout adapts correctly with responsive navigation, readable text, and accessible controls."
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "API Contact Form Endpoint Validation",
+    "description": "Verify the API endpoint for contact form submission returns proper status codes and error messages.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send POST request to /api/contact with all required fields correctly filled."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response status 200 and success message."
+      },
+      {
+        "type": "action",
+        "description": "Send POST request to /api/contact with missing required fields."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response status 400 with appropriate error details."
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "API Guest Checkout Endpoint Validation",
+    "description": "Verify the guest checkout API endpoint creates or links guest users appropriately and handles errors.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send POST request to /api/guest-checkout with a valid email."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response status 200 and confirmation of guest user creation or linking."
+      },
+      {
+        "type": "action",
+        "description": "Send POST request to /api/guest-checkout with missing email parameter."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response status 400 with error indicating email is required."
+      }
+    ]
+  }
+]

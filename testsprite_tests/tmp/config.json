@@ -1,0 +1,19 @@
+{
+  "status": "commited",
+  "type": "backend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "backendAuthType": "basic token",
+  "backendUsername": "eoneniw@gmail.com",
+  "backendPassword": "Z2j3g8k!xR:i.S7",
+  "executionArgs": {
+    "projectName": "guardify-app",
+    "projectPath": "c:/Users/rubaya/Desktop/Guardify-IT/guardify-app",
+    "testIds": [],
+    "additionalInstruction": "",
+    "envs": {
+      "API_KEY": "sk-user-F7l_2Yp8ORpaC1q_SvBnx1WLkbqDqM0XOiz5Im-k5D_Xgcrnv3mdympDgf5JK1R3O5xtdZOtJpi6jRWkQhWc2kWCDtC4nBFV0UKSyMcOJgXR8U7RSmstne6ktIG_BC3ZP4o"
+    }
+  },
+  "serverPort": 60789
+}

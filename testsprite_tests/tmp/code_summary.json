@@ -1,0 +1,208 @@
+{
+    "tech_stack": [
+        "TypeScript",
+        "Next.js 16",
+        "React 19",
+        "Supabase",
+        "CSS Modules"
+    ],
+    "features": [
+        {
+            "name": "Contact Form API",
+            "description": "API endpoint to handle contact form submissions with email integration",
+            "files": [
+                "src/app/api/contact/route.ts"
+            ],
+            "api_doc": {
+                "openapi": "3.0.0",
+                "paths": {
+                    "/api/contact": {
+                        "post": {
+                            "summary": "Submit contact form",
+                            "requestBody": {
+                                "required": true,
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "required": [
+                                                "name",
+                                                "email",
+                                                "subject",
+                                                "message"
+                                            ],
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "subject": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "responses": {
+                                "200": {
+                                    "description": "Message sent successfully"
+                                },
+                                "400": {
+                                    "description": "Missing required fields"
+                                },
+                                "500": {
+                                    "description": "Failed to send message"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "Guest Checkout API",
+            "description": "API endpoint to create or link guest user accounts for checkout without requiring registration",
+            "files": [
+                "src/app/api/guest-checkout/route.ts"
+            ],
+            "api_doc": {
+                "openapi": "3.0.0",
+                "paths": {
+                    "/api/guest-checkout": {
+                        "post": {
+                            "summary": "Create guest checkout session",
+                            "requestBody": {
+                                "required": true,
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "required": [
+                                                "email"
+                                            ],
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "responses": {
+                                "200": {
+                                    "description": "Guest user created or linked"
+                                },
+                                "400": {
+                                    "description": "Email required"
+                                },
+                                "500": {
+                                    "description": "Server misconfiguration or error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "Homepage",
+            "description": "Main landing page with hero section, flash deals, category grid, and product showcases",
+            "files": [
+                "src/app/[lang]/page.tsx",
+                "src/app/[lang]/layout.tsx"
+            ]
+        },
+        {
+            "name": "Product Listing",
+            "description": "Browse and filter all available products",
+            "files": [
+                "src/app/[lang]/products/page.tsx"
+            ]
+        },
+        {
+            "name": "Product Details",
+            "description": "View individual product details, pricing, and add to cart",
+            "files": [
+                "src/app/[lang]/products/[id]/page.tsx"
+            ]
+        },
+        {
+            "name": "Shopping Cart",
+            "description": "View and manage items in shopping cart",
+            "files": [
+                "src/app/[lang]/cart/page.tsx",
+                "src/components/CartModal.tsx"
+            ]
+        },
+        {
+            "name": "Checkout Flow",
+            "description": "Complete purchase with payment options",
+            "files": [
+                "src/app/[lang]/checkout/page.tsx"
+            ]
+        },
+        {
+            "name": "User Authentication",
+            "description": "Login, signup, password reset flows with Supabase Auth",
+            "files": [
+                "src/app/[lang]/login/page.tsx",
+                "src/app/[lang]/forgot-password/page.tsx",
+                "src/app/[lang]/reset-password/page.tsx",
+                "src/components/AuthForm.tsx"
+            ]
+        },
+        {
+            "name": "My Orders",
+            "description": "View order history and order status",
+            "files": [
+                "src/app/[lang]/my-orders/page.tsx"
+            ]
+        },
+        {
+            "name": "Wishlist",
+            "description": "Save and manage favorite products",
+            "files": [
+                "src/app/[lang]/wishlist/page.tsx"
+            ]
+        },
+        {
+            "name": "Admin Dashboard",
+            "description": "Admin panel for managing products, orders, and verification",
+            "files": [
+                "src/app/[lang]/admin/page.tsx",
+                "src/components/AdminLayout.tsx"
+            ]
+        },
+        {
+            "name": "Upload Payment Proof",
+            "description": "Upload payment proof for manual payment verification",
+            "files": [
+                "src/app/[lang]/upload-proof/page.tsx"
+            ]
+        },
+        {
+            "name": "Navigation",
+            "description": "Main navigation bar with search, cart, and user menu",
+            "files": [
+                "src/components/Navbar.tsx"
+            ]
+        },
+        {
+            "name": "Internationalization",
+            "description": "Multi-language support with English and Bengali",
+            "files": [
+                "src/i18n-config.ts",
+                "src/lib/dictionary.ts",
+                "src/locales/en.json",
+                "src/locales/bn.json"
+            ]
+        }
+    ]
+}

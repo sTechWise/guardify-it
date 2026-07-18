@@ -66,7 +66,7 @@ export default function ShopClient({ products: initialProducts, categories, lang
             switch (sortOption) {
                 case 'price_asc': return (a.sale_price || a.price) - (b.sale_price || b.price)
                 case 'price_desc': return (b.sale_price || b.price) - (a.sale_price || a.price)
-                case 'newest': return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+                case 'newest': return new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime()
                 case 'popularity':
                 default:
                     // Fallback to review count or rating

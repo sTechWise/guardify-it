@@ -118,21 +118,21 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                     const urlParts = formData.image_url.split('/product-images/')
                     if (urlParts.length > 1) {
                         const oldFilePath = urlParts[1] // e.g., "products/filename.ext"
-                        console.log('Deleting old image:', oldFilePath)
+
 
                         const { error: deleteError } = await supabase.storage
                             .from('product-images')
                             .remove([oldFilePath])
 
                         if (deleteError) {
-                            console.warn('Could not delete old image:', deleteError)
+
                             // Continue anyway - upload new image even if delete fails
                         } else {
-                            console.log('Old image deleted successfully')
+
                         }
                     }
                 } catch (delErr) {
-                    console.warn('Error deleting old image:', delErr)
+
                     // Continue with upload
                 }
             }

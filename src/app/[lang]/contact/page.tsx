@@ -50,9 +50,7 @@ export default function ContactPage() {
             setFormData({ name: '', email: '', subject: '', message: '' })
         } catch (err: any) {
             console.error('Contact form error:', err)
-            // For now, show success anyway since API might not exist
-            // setError(err.message || 'Failed to send message. Please try again.')
-            setSuccess(true) // Temporary - remove when API is ready
+            setError(err.message || 'Failed to send message. Please try again.')
         } finally {
             setLoading(false)
         }
@@ -62,8 +60,8 @@ export default function ContactPage() {
         {
             icon: <MessageCircle size={24} />,
             title: isBn ? 'হোয়াটসঅ্যাপ' : 'WhatsApp',
-            value: '+880 1997-118018',
-            link: 'https://wa.me/8801997118018'
+            value: '+880 1997-118118',
+            link: 'https://wa.me/8801997118118'
         },
         {
             icon: <Mail size={24} />,
@@ -240,7 +238,7 @@ export default function ContactPage() {
                             }
                         </p>
                         <a
-                            href="https://wa.me/8801997118018"
+                            href="https://wa.me/8801997118118"
                             target="_blank"
                             rel="noopener noreferrer"
                             className={styles.whatsappBtn}

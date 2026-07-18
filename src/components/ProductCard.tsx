@@ -59,7 +59,7 @@ export default function ProductCard({
             price,
             sale_price: salePrice,
             image_url: image,
-            subscription_type: subscriptionType || null,
+            subscription_type: subscriptionType || undefined,
             quantity: 1,
         });
         showToast(isBn ? "কার্টে যোগ করা হয়েছে" : "Added to cart", "success");

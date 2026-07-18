@@ -60,7 +60,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
 
         // Detect logout: previous user existed, now user is null
         if (previousUser && !user && isLoaded) {
-            console.log('[Wishlist] User logged out, clearing wishlist')
+
             setWishlist([])
             localStorage.removeItem(STORAGE_KEY)
         }

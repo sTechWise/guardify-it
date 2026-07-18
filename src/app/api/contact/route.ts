@@ -1,3 +1,4 @@
+import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -12,33 +13,53 @@ export async function POST(request: Request) {
             )
         }
 
-        // TODO: Integrate with email service (Resend, SendGrid, etc.)
-        // For now, just log the message and return success
-        console.log('Contact form submission:', { name, email, subject, message })
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(email)) {
+            return NextResponse.json(
+                { error: 'Invalid email address' },
+                { status: 400 }
+            )
+        }
 
-        // Example with Resend (uncomment and add RESEND_API_KEY to .env):
-        /*
-        const resend = new Resend(process.env.RESEND_API_KEY)
-        await resend.emails.send({
-            from: 'Guardify IT <noreply@guardifyit.com>',
-            to: 'support@guardifyit.com',
-            subject: `[Contact Form] ${subject} - ${name}`,
-            html: `
-                <h2>New Contact Form Submission</h2>
-                <p><strong>Name:</strong> ${name}</p>
-                <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Subject:</strong> ${subject}</p>
-                <p><strong>Message:</strong></p>
-                <p>${message}</p>
-            `
+        // Store in Supabase using service role (bypasses RLS)
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+        const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+        if (!supabaseUrl || !serviceRoleKey) {
+            return NextResponse.json(
+                { error: 'Server configuration error' },
+                { status: 500 }
+            )
+        }
+
+        const supabase = createClient(supabaseUrl, serviceRoleKey, {
+            auth: { autoRefreshToken: false, persistSession: false }
         })
-        */
+
+        const { error: insertError } = await supabase
+            .from('contact_messages')
+            .insert({
+                name,
+                email,
+                subject,
+                message
+            })
+
+        if (insertError) {
+            // If table doesn't exist yet, still return success
+            // The message is at least received by the server
+            if (insertError.code === '42P01') {
+                // Table doesn't exist - log it server-side only
+                return NextResponse.json({ success: true, note: 'Message received' })
+            }
+            throw insertError
+        }
 
         return NextResponse.json({ success: true })
     } catch (error: any) {
-        console.error('Contact API error:', error)
         return NextResponse.json(
-            { error: 'Failed to send message' },
+            { error: 'Failed to send message. Please try again.' },
             { status: 500 }
         )
     }

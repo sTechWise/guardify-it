@@ -45,21 +45,10 @@ export async function POST(request: Request) {
                 createError.message.includes('already exists') ||
                 createError.status === 422) { // 422 Unprocessable Entity often means exists
 
-                console.log('[Guest Checkout] User already exists:', email)
 
-                // Since we have the Service Role, we CAN find the user ID to link it correctly.
-                // This converts a "Guest Checkout" into a "Linked Order" for an existing user purely by email match.
-                // NOTE: This assumes email ownership. Since we only insert an order and don't grant login access,
-                // this is generally safe for "Guest Checkout" flows (matching email = linking).
 
-                const { data: users, error: searchError } = await supabaseAdmin.auth.admin.listUsers()
-                // Warning: listUsers is paginated, but for now we look for a match.
-                // Better approach: We can't easily filter by email in admin api without looping or explicit query.
-                // However, since we are doing forensic recovery, let's keep it safe:
-                // Return success but NO userId to avoid linking to wrong account if we aren't 100% sure.
-                // The order will be created with `user_email` only.
-                // The `link_orders_to_user` RPC (when they login) will pick it up later.
-
+                // Order will be linked to user account when they next sign in
+                // via the link_orders_to_user RPC
                 return NextResponse.json({
                     userId: null,
                     message: 'User exists. Order will be linked upon next login.',
@@ -71,7 +60,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: createError.message }, { status: 500 })
         }
 
-        console.log('[Guest Checkout] Created new guest user:', newUser.user?.id)
+
 
         return NextResponse.json({
             userId: newUser.user?.id,

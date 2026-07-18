@@ -23,7 +23,7 @@ export async function GET(request: Request) {
             targetUrl.searchParams.set(key, value)
         })
 
-        console.log('[Auth Callback] Forwarding recovery to client:', targetUrl.toString())
+
         return NextResponse.redirect(targetUrl)
     }
 
