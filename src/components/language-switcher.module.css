@@ -17,11 +17,11 @@
 }
 
 .btn:hover {
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .active {
-    color: var(--primary);
+    color: var(--guardian-blue);
     font-weight: 700;
 }
 

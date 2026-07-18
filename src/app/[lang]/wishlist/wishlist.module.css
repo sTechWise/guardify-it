@@ -5,7 +5,7 @@
 }
 
 .header {
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-2xl);
 }
 
 .headerContent {
@@ -48,14 +48,14 @@
 .card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: all 0.3s;
+    transition: all var(--duration-normal) var(--ease-out);
 }
 
 .card:hover {
     transform: translateY(-4px);
-    border-color: var(--primary);
+    border-color: var(--guardian-blue);
 }
 
 .imageWrapper {
@@ -79,7 +79,7 @@
     background: rgba(0, 0, 0, 0.8);
     color: white;
     padding: 0.5rem 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-weight: 600;
 }
 
@@ -98,7 +98,7 @@
 }
 
 .productTitle:hover {
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .pricing {
@@ -123,7 +123,7 @@
 
 .discount {
     font-size: 0.875rem;
-    color: #10b981;
+    color: var(--volt-green);
     font-weight: 600;
     background: rgba(16, 185, 129, 0.1);
     padding: 0.25rem 0.5rem;
@@ -142,17 +142,17 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.75rem 1rem;
-    background: var(--primary);
+    background: var(--guardian-blue);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--duration-fast) ease;
 }
 
 .addToCart:hover:not(:disabled) {
-    background: var(--primary-hover);
+    background: var(--guardian-blue-hover);
     transform: translateY(-1px);
 }
 
@@ -165,19 +165,19 @@
 .removeButton {
     padding: 0.75rem;
     background: var(--section);
-    color: #ef4444;
+    color: var(--danger);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
+    transition: all var(--duration-fast) ease;
 }
 
 .removeButton:hover {
-    background: rgba(239, 68, 68, 0.1);
-    border-color: #ef4444;
+    background: rgba(255, 71, 87, 0.1);
+    border-color: var(--danger);
 }
 
 /* Empty State */
@@ -197,7 +197,7 @@
 
 .emptyContent svg {
     color: var(--muted);
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
 }
 
 .emptyTitle {
@@ -210,6 +210,6 @@
 .emptyText {
     color: var(--muted);
     font-size: 1.125rem;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
     line-height: 1.6;
 }

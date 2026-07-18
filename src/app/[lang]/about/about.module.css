@@ -3,7 +3,7 @@
 }
 
 .hero {
-    padding: 5rem 0 3rem 0;
+    padding: var(--space-4xl) 0 3rem 0;
     text-align: center;
     background: linear-gradient(135deg, var(--section) 0%, var(--background) 100%);
 }
@@ -34,7 +34,7 @@
 .sectionTitle {
     font-size: 2.5rem;
     color: var(--text);
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
     font-weight: 700;
     text-align: center;
 }
@@ -59,7 +59,7 @@
 .statsGrid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 2rem;
+    gap: var(--space-xl);
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -81,19 +81,19 @@
     padding: 2rem;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: all 0.3s;
+    border-radius: var(--radius-lg);
+    transition: all var(--duration-normal) var(--ease-out);
 }
 
 .stat:hover {
     transform: translateY(-5px);
-    border-color: var(--primary);
+    border-color: var(--guardian-blue);
 }
 
 .statNumber {
     font-size: 3rem;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
+    background: linear-gradient(135deg, var(--guardian-blue), var(--guardian-blue-light));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -109,7 +109,7 @@
 .featuresGrid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 2rem;
+    gap: var(--space-xl);
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -123,21 +123,21 @@
 .featureCard {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 2rem;
-    transition: all 0.3s;
+    transition: all var(--duration-normal) var(--ease-out);
 }
 
 .featureCard:hover {
     transform: translateY(-5px);
-    border-color: var(--primary);
+    border-color: var(--guardian-blue);
 }
 
 .iconWrapper {
     width: 64px;
     height: 64px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    border-radius: 12px;
+    background: linear-gradient(135deg, var(--guardian-blue), var(--guardian-blue-light));
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -160,7 +160,7 @@
 .missionVision {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 2rem;
+    gap: var(--space-xl);
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -174,7 +174,7 @@
 .mvCard {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 2.5rem;
 }
 
@@ -192,7 +192,7 @@
 }
 
 .cta {
-    padding: 5rem 0;
+    padding: var(--space-4xl) 0;
     text-align: center;
     background: linear-gradient(135deg, var(--section) 0%, var(--background) 100%);
 }
@@ -207,5 +207,5 @@
 .cta p {
     font-size: 1.125rem;
     color: var(--muted);
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
 }

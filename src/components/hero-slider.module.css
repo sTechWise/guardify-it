@@ -35,11 +35,11 @@
 
 .badge {
     display: inline-block;
-    background: rgba(59, 130, 246, 0.2);
+    background: rgba(27, 77, 255, 0.2);
     color: #60a5fa;
-    border: 1px solid rgba(59, 130, 246, 0.4);
+    border: 1px solid rgba(27, 77, 255, 0.4);
     padding: 0.5rem 1rem;
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
@@ -98,7 +98,7 @@
 }
 
 .dotActive {
-    background: var(--primary);
+    background: var(--guardian-blue);
     transform: scale(1.2);
 }
 

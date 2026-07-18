@@ -1,5 +1,5 @@
 .container {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
     padding: 6rem 2rem;
     text-align: center;
@@ -14,14 +14,14 @@
 
 .subtitle {
     color: #6b7280;
-    margin-bottom: 4rem;
+    margin-bottom: var(--space-3xl);
     font-size: 1.125rem;
 }
 
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    gap: var(--space-xl);
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -29,7 +29,7 @@
 .card {
     background: white;
     padding: 2.5rem;
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     border: 1px solid #e5e7eb;
     position: relative;
     transition: transform 0.2s, box-shadow 0.2s;
@@ -43,7 +43,7 @@
 }
 
 .popular {
-    border-color: #2563eb;
+    border-color: var(--guardian-blue);
     border-width: 2px;
 }
 
@@ -52,10 +52,10 @@
     top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    background: #2563eb;
+    background: var(--guardian-blue);
     color: white;
     padding: 0.25rem 1rem;
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     font-size: 0.875rem;
     font-weight: 600;
 }
@@ -71,7 +71,7 @@
     font-size: 3rem;
     font-weight: 800;
     color: #111827;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
 }
 
 .period {
@@ -83,7 +83,7 @@
 .features {
     list-style: none;
     padding: 0;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
     text-align: left;
     flex-grow: 1;
 }
@@ -97,21 +97,21 @@
 }
 
 .check {
-    color: #10b981;
+    color: var(--volt-green);
 }
 
 .btn {
     display: block;
     width: 100%;
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-weight: 600;
     text-decoration: none;
     transition: background 0.2s;
 }
 
 .primaryBtn {
-    background: #2563eb;
+    background: var(--guardian-blue);
     color: white;
 }
 

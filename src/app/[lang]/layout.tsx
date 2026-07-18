@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "../globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { ToastProvider } from "@/context/ToastContext";
@@ -11,21 +11,64 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import AuthRedirectHandler from "@/components/AuthRedirectHandler";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Guardify IT - Premium Digital Subscription Marketplace",
-  description: "DBID-verified digital subscription platform for authentic software and online services.",
+  title: {
+    default: "Guardify IT — Premium Digital Security Subscriptions",
+    template: "%s | Guardify IT",
+  },
+  description:
+    "Bangladesh's trusted marketplace for genuine antivirus, VPN, and Windows licenses. Affordable digital protection delivered instantly.",
+  keywords: [
+    "antivirus Bangladesh",
+    "VPN subscription",
+    "Windows license",
+    "digital security",
+    "Guardify IT",
+    "software subscription",
+    "genuine license",
+  ],
+  metadataBase: new URL("https://guardifyit.com"),
+  openGraph: {
+    title: "Guardify IT — Premium Digital Security Subscriptions",
+    description:
+      "Bangladesh's trusted marketplace for genuine antivirus, VPN, and Windows licenses.",
+    type: "website",
+    locale: "en_US",
+    siteName: "Guardify IT",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Guardify IT — Premium Digital Security Subscriptions",
+    description:
+      "Bangladesh's trusted marketplace for genuine antivirus, VPN, and Windows licenses.",
+  },
   icons: {
-    icon: '/logo-v3.png',
+    icon: "/logo-v3.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -44,23 +87,30 @@ export default async function RootLayout({
   params: Promise<{ lang: string }>;
 }>) {
   const { lang } = await params;
-  const validLang = (lang === 'bn' ? 'bn' : 'en') as Locale;
+  const validLang = (lang === "bn" ? "bn" : "en") as Locale;
   const dict = await getDictionary(validLang);
 
   return (
     <html lang={lang} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+      <body
+        className={`${outfit.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}
+        suppressHydrationWarning
+      >
         <ThemeProvider>
           <ToastProvider>
             <AuthProvider>
               <CartProvider>
                 <WishlistProvider>
-                  <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      minHeight: "100vh",
+                    }}
+                  >
                     <AuthRedirectHandler />
                     <Navbar dict={dict} />
-                    <main style={{ flex: 1 }}>
-                      {children}
-                    </main>
+                    <main style={{ flex: 1 }}>{children}</main>
                     <Footer />
                     <WhatsAppButton />
                   </div>

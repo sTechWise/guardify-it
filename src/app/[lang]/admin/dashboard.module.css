@@ -1,7 +1,7 @@
 .dashboard {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-xl);
 }
 
 /* Header */
@@ -63,7 +63,7 @@
     gap: 1.25rem;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1280px) {
     .statsGrid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -78,7 +78,7 @@
 .statCard {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 1.5rem;
     display: flex;
     align-items: flex-start;
@@ -87,20 +87,20 @@
 }
 
 .statCard:hover {
-    border-color: rgba(59, 130, 246, 0.3);
+    border-color: rgba(27, 77, 255, 0.3);
 }
 
 .statIcon {
     width: 48px;
     height: 48px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .statIcon.orders {
-    background: rgba(59, 130, 246, 0.1);
+    background: rgba(27, 77, 255, 0.1);
     color: rgb(59, 130, 246);
 }
 
@@ -170,7 +170,7 @@
 
 .viewAll {
     font-size: 0.85rem;
-    color: var(--primary);
+    color: var(--guardian-blue);
     text-decoration: none;
     transition: opacity 0.15s;
 }
@@ -195,7 +195,7 @@
 .actionCard {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 1.25rem;
     display: flex;
     align-items: center;
@@ -205,16 +205,16 @@
 }
 
 .actionCard:hover {
-    border-color: var(--primary);
+    border-color: var(--guardian-blue);
     transform: translateY(-2px);
 }
 
 .actionIcon {
     width: 44px;
     height: 44px;
-    border-radius: 10px;
-    background: rgba(59, 130, 246, 0.1);
-    color: var(--primary);
+    border-radius: var(--radius-md);
+    background: rgba(27, 77, 255, 0.1);
+    color: var(--guardian-blue);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -240,7 +240,7 @@
 .tableWrapper {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
 }
 
@@ -274,7 +274,7 @@
 }
 
 .table tbody tr:hover {
-    background: rgba(59, 130, 246, 0.03);
+    background: rgba(27, 77, 255, 0.03);
 }
 
 .table td {
@@ -287,7 +287,7 @@
     font-family: var(--font-geist-mono), monospace;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .statusBadge {

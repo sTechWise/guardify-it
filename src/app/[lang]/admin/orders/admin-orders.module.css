@@ -11,7 +11,7 @@
     align-items: flex-start;
     flex-wrap: wrap;
     gap: 1.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
 }
 
 .headerLeft {
@@ -27,7 +27,7 @@
 }
 
 .titleIcon {
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .title {
@@ -49,7 +49,7 @@
     gap: 0.5rem;
     background: var(--card);
     padding: 0.35rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     border: 1px solid var(--border);
 }
 
@@ -70,7 +70,7 @@
 }
 
 .filterBtn.active {
-    background: var(--primary);
+    background: var(--guardian-blue);
     color: white;
 }
 
@@ -81,11 +81,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4rem 2rem;
+    padding: var(--space-3xl) var(--space-lg);
     text-align: center;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
 }
 
 .loadingState p,
@@ -107,7 +107,7 @@
 
 .spinner {
     animation: spin 1s linear infinite;
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 @keyframes spin {
@@ -124,7 +124,7 @@
 .tableWrapper {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
 }
 
@@ -158,7 +158,7 @@
 }
 
 .table tbody tr:hover {
-    background: rgba(59, 130, 246, 0.03);
+    background: rgba(27, 77, 255, 0.03);
 }
 
 .table td {
@@ -171,7 +171,7 @@
     font-family: var(--font-geist-mono), monospace;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .email {
@@ -208,7 +208,7 @@
 }
 
 .statusSubmitted {
-    background: rgba(59, 130, 246, 0.1);
+    background: rgba(27, 77, 255, 0.1);
     color: rgb(59, 130, 246);
 }
 
@@ -218,7 +218,7 @@
 }
 
 .statusFailed {
-    background: rgba(239, 68, 68, 0.1);
+    background: rgba(255, 71, 87, 0.1);
     color: rgb(239, 68, 68);
 }
 
@@ -256,8 +256,8 @@
 }
 
 .viewBtn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
+    border-color: var(--guardian-blue);
+    color: var(--guardian-blue);
 }
 
 .approveBtn {
@@ -275,12 +275,12 @@
 }
 
 .rejectBtn {
-    background: rgba(239, 68, 68, 0.1);
+    background: rgba(255, 71, 87, 0.1);
     color: rgb(239, 68, 68);
 }
 
 .rejectBtn:hover:not(:disabled) {
-    background: rgba(239, 68, 68, 0.2);
+    background: rgba(255, 71, 87, 0.2);
 }
 
 .rejectBtn:disabled {
@@ -318,7 +318,7 @@
 .modal {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     max-width: 600px;
     width: 100%;
     max-height: 90vh;
@@ -378,7 +378,7 @@
 
 .proofImageWrapper {
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     overflow: hidden;
 }
 
@@ -397,7 +397,7 @@
     color: var(--muted);
     gap: 1rem;
     background: rgba(255, 255, 255, 0.02);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
 }
 
 .modalActions {

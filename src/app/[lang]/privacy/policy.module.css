@@ -1,12 +1,12 @@
 .container {
-    padding: 5rem 0;
+    padding: var(--space-4xl) 0;
     background: var(--background);
     min-height: 80vh;
 }
 
 .header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: var(--space-3xl);
 }
 
 .header svg {
@@ -31,7 +31,7 @@
 }
 
 .section {
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-2xl);
 }
 
 .section h2 {

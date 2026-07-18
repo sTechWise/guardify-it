@@ -1,7 +1,7 @@
 .shopContainer {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-xl);
     max-width: 1400px;
     margin: 0 auto;
     padding: 2rem 1rem;
@@ -19,7 +19,7 @@
     width: 100%;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 1.5rem;
     height: fit-content;
     display: none;
@@ -45,7 +45,7 @@
     padding: 1rem;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--text);
     font-weight: 600;
     cursor: pointer;
@@ -73,7 +73,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
 }
 
 .sidebarHeader h3 {
@@ -96,7 +96,7 @@
 }
 
 .filterSection {
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
     padding-bottom: 2rem;
     border-bottom: 1px solid var(--border);
 }
@@ -141,7 +141,7 @@
     border: 1px solid var(--border);
     background: var(--background);
     cursor: pointer;
-    accent-color: var(--primary);
+    accent-color: var(--guardian-blue);
 }
 
 .rangeInputs {
@@ -170,10 +170,10 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 1rem;
 }
 
@@ -203,21 +203,21 @@
     padding: 0.75rem 1rem 0.75rem 3rem;
     background: var(--background);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--text);
     font-size: 0.95rem;
 }
 
 .searchInput:focus {
     outline: none;
-    border-color: var(--primary);
+    border-color: var(--guardian-blue);
 }
 
 .sortSelect {
     padding: 0.75rem 2rem 0.75rem 1rem;
     background: var(--background);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--text);
     font-size: 0.95rem;
     cursor: pointer;
@@ -248,7 +248,7 @@
     height: 400px;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     animation: pulse 1.5s infinite;
 }
 
@@ -268,10 +268,10 @@
 
 .emptyState {
     text-align: center;
-    padding: 4rem 2rem;
+    padding: var(--space-3xl) var(--space-lg);
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
 }
 
 .emptyState h3 {
@@ -288,15 +288,15 @@
 
 .resetBtn {
     padding: 0.75rem 1.5rem;
-    background: var(--primary);
+    background: var(--guardian-blue);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
 }
 
 .resetBtn:hover {
-    background: var(--primary-hover);
+    background: var(--guardian-blue-hover);
 }

@@ -6,7 +6,7 @@
 
 @media (min-width: 768px) {
     .container {
-        padding: 4rem 2rem;
+        padding: var(--space-3xl) var(--space-lg);
     }
 }
 
@@ -15,15 +15,15 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(27, 77, 255, 0.1) 100%);
     border: 1px solid rgba(16, 185, 129, 0.3);
     padding: 2rem;
-    border-radius: 12px;
-    margin-bottom: 3rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-2xl);
 }
 
 .successIcon {
-    color: #10b981;
+    color: var(--volt-green);
     flex-shrink: 0;
     animation: popIn 0.5s ease-out;
 }
@@ -59,14 +59,14 @@
 .content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-xl);
 }
 
 /* Order Card */
 .orderCard {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 2rem;
 }
 
@@ -118,7 +118,7 @@
 }
 
 .totalAmount {
-    color: var(--primary);
+    color: var(--guardian-blue);
     font-size: 1.5rem;
 }
 
@@ -126,7 +126,7 @@
 .paymentSection {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 2rem;
 }
 
@@ -135,7 +135,7 @@
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 1rem;
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .sectionTitle {
@@ -145,7 +145,7 @@
 }
 
 .instructions {
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
     color: var(--muted);
     font-size: 1rem;
     line-height: 1.6;
@@ -161,14 +161,14 @@
 .methodCard {
     background: var(--section);
     padding: 1.5rem;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     border: 1px solid var(--border);
-    transition: all 0.2s;
+    transition: all var(--duration-fast) ease;
 }
 
 .methodCard:hover {
     transform: translateY(-2px);
-    border-color: var(--primary);
+    border-color: var(--guardian-blue);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -216,7 +216,7 @@
     padding: 0.5rem;
     border-radius: 6px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--duration-fast) ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -225,16 +225,16 @@
 }
 
 .copyBtn:hover {
-    background: var(--primary);
+    background: var(--guardian-blue);
     color: white;
-    border-color: var(--primary);
+    border-color: var(--guardian-blue);
 }
 
 /* Steps */
 .steps {
     background: var(--section);
     padding: 1.5rem;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     margin-bottom: 1.5rem;
 }
 
@@ -270,7 +270,7 @@
     background: rgba(234, 179, 8, 0.1);
     border: 1px solid rgba(234, 179, 8, 0.3);
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--text);
     font-size: 0.95rem;
     line-height: 1.6;
@@ -288,12 +288,12 @@
     align-items: center;
     gap: 0.5rem;
     padding: 1rem 2rem;
-    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    background: var(--guardian-blue);
     color: white;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-weight: 600;
-    transition: all 0.2s;
+    transition: all var(--duration-fast) ease;
     font-size: 1.1rem;
     align-self: flex-start;
 }
@@ -301,5 +301,5 @@
 .uploadBtn:hover {
     opacity: 0.9;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 8px 20px rgba(27, 77, 255, 0.3);
 }

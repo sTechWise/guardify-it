@@ -1,7 +1,7 @@
 .notice {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
-    border: 1px solid var(--primary);
-    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(27, 77, 255, 0.1), rgba(147, 51, 234, 0.1));
+    border: 1px solid var(--guardian-blue);
+    border-radius: var(--radius-lg);
     padding: 1.5rem;
     display: flex;
     gap: 1rem;
@@ -11,7 +11,7 @@
 .iconWrapper {
     width: 48px;
     height: 48px;
-    background: var(--primary);
+    background: var(--guardian-blue);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -40,7 +40,7 @@
 }
 
 .bengali {
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .description {
@@ -54,7 +54,7 @@
 }
 
 .bengaliDesc {
-    color: var(--primary);
+    color: var(--guardian-blue);
     font-size: 0.9375rem;
     line-height: 1.6;
     margin: 0;

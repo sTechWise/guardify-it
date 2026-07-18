@@ -37,7 +37,7 @@
 .logoIcon {
     width: 36px;
     height: 36px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
+    background: linear-gradient(135deg, var(--guardian-blue), var(--guardian-blue-light));
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -52,7 +52,7 @@
 }
 
 .logoText span {
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 /* Navigation */
@@ -98,9 +98,9 @@
 }
 
 .navItem.active {
-    color: var(--primary);
-    background: rgba(59, 130, 246, 0.08);
-    border-right: 3px solid var(--primary);
+    color: var(--guardian-blue);
+    background: rgba(27, 77, 255, 0.08);
+    border-right: 3px solid var(--guardian-blue);
 }
 
 .navItemIcon {
@@ -180,7 +180,7 @@
 }
 
 .subNavItem.active {
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .subNavItem::before {
@@ -194,7 +194,7 @@
 
 .subNavItem.active::before {
     opacity: 1;
-    background: var(--primary);
+    background: var(--guardian-blue);
 }
 
 /* Sidebar Footer */
@@ -213,7 +213,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
+    background: linear-gradient(135deg, var(--guardian-blue), var(--guardian-blue-light));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -238,7 +238,7 @@
 
 .userRole {
     font-size: 0.75rem;
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .logoutBtn {
@@ -278,7 +278,7 @@
     z-index: 101;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 0.6rem;
     color: var(--text);
     cursor: pointer;

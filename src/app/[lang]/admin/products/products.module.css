@@ -11,7 +11,7 @@
     align-items: flex-start;
     flex-wrap: wrap;
     gap: 1.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
 }
 
 .headerLeft {
@@ -27,7 +27,7 @@
 }
 
 .titleIcon {
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .title {
@@ -48,9 +48,9 @@
     align-items: center;
     gap: 0.4rem;
     padding: 0.5rem 1rem;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.15));
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(27, 77, 255, 0.15));
     border: 1px solid rgba(139, 92, 246, 0.3);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: rgb(139, 92, 246);
     font-size: 0.85rem;
     font-weight: 600;
@@ -62,9 +62,9 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.65rem 1.25rem;
-    background: linear-gradient(135deg, var(--primary), #2563eb);
+    background: linear-gradient(135deg, var(--guardian-blue), var(--guardian-blue));
     color: white;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-size: 0.9rem;
     font-weight: 600;
     text-decoration: none;
@@ -73,7 +73,7 @@
 
 .addBtn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.35);
+    box-shadow: 0 4px 16px rgba(27, 77, 255, 0.35);
 }
 
 /* Loading & Empty States */
@@ -83,11 +83,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4rem 2rem;
+    padding: var(--space-3xl) var(--space-lg);
     text-align: center;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
 }
 
 .loadingState p,
@@ -109,7 +109,7 @@
 
 .spinner {
     animation: spin 1s linear infinite;
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 @keyframes spin {
@@ -121,7 +121,7 @@
 .tableWrapper {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
 }
 
@@ -155,7 +155,7 @@
 }
 
 .table tbody tr:hover {
-    background: rgba(59, 130, 246, 0.03);
+    background: rgba(27, 77, 255, 0.03);
 }
 
 .table td {
@@ -173,7 +173,7 @@
     width: 48px;
     height: 48px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     border: 1px solid var(--border);
 }
 
@@ -184,7 +184,7 @@
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--muted);
 }
 
@@ -261,17 +261,17 @@
 }
 
 .editBtn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
+    border-color: var(--guardian-blue);
+    color: var(--guardian-blue);
 }
 
 .deleteBtn {
-    background: rgba(239, 68, 68, 0.1);
+    background: rgba(255, 71, 87, 0.1);
     color: rgb(239, 68, 68);
 }
 
 .deleteBtn:hover {
-    background: rgba(239, 68, 68, 0.2);
+    background: rgba(255, 71, 87, 0.2);
 }
 
 /* Toggle Switch */
@@ -287,9 +287,9 @@
     height: 24px;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--duration-fast) ease;
 }
 
 .toggle::after {

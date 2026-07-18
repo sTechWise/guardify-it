@@ -7,13 +7,13 @@
 
 @media (min-width: 768px) {
     .container {
-        padding: 4rem 2rem;
+        padding: var(--space-3xl) var(--space-lg);
     }
 }
 
 .header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-2xl);
 }
 
 .title {
@@ -31,9 +31,9 @@
 .card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 2rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow-md);
 }
 
 .form {
@@ -59,16 +59,16 @@
     background: var(--section);
     border: 1px solid var(--border);
     padding: 0.875rem 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--text);
     font-size: 1rem;
-    transition: all 0.2s;
+    transition: all var(--duration-fast) ease;
 }
 
 .input:focus {
     outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    border-color: var(--guardian-blue);
+    box-shadow: 0 0 0 2px rgba(27, 77, 255, 0.2);
 }
 
 .input.readOnly {
@@ -83,19 +83,19 @@
     width: 100%;
     height: 120px;
     border: 2px dashed var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background: var(--section);
-    transition: all 0.2s;
+    transition: all var(--duration-fast) ease;
     cursor: pointer;
 }
 
 .fileInputWrapper:hover {
-    border-color: var(--primary);
-    background: rgba(59, 130, 246, 0.05);
+    border-color: var(--guardian-blue);
+    background: rgba(27, 77, 255, 0.05);
 }
 
 .fileInput {
@@ -118,13 +118,13 @@
 }
 
 .uploadIcon {
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .preview {
     margin-top: 1rem;
     position: relative;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     overflow: hidden;
     border: 1px solid var(--border);
 }
@@ -138,15 +138,15 @@
 
 .submitBtn {
     width: 100%;
-    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    background: var(--guardian-blue);
     color: white;
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-size: 1.1rem;
     font-weight: 600;
     border: none;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--duration-fast) ease;
     margin-top: 1rem;
     display: flex;
     align-items: center;
@@ -165,11 +165,11 @@
 }
 
 .error {
-    color: #ef4444;
+    color: var(--danger);
     font-size: 0.9rem;
     padding: 0.75rem;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.2);
+    background: rgba(255, 71, 87, 0.1);
+    border: 1px solid rgba(255, 71, 87, 0.2);
     border-radius: 6px;
 }
 
@@ -184,8 +184,8 @@
 }
 
 .successIcon {
-    color: #10b981;
-    margin-bottom: 2rem;
+    color: var(--volt-green);
+    margin-bottom: var(--space-xl);
     animation: bounce 1s infinite;
 }
 
@@ -198,21 +198,21 @@
     background: var(--section);
     color: var(--text);
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-weight: 600;
-    transition: all 0.2s;
+    transition: all var(--duration-fast) ease;
     border: 1px solid var(--border);
 }
 
 .homeBtn:hover {
     background: var(--card);
-    border-color: var(--primary);
+    border-color: var(--guardian-blue);
 }
 
 .emailBadge {
     font-size: 0.75rem;
     font-weight: 500;
-    color: #10b981;
+    color: var(--volt-green);
     margin-left: 0.25rem;
 }
 

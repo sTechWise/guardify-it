@@ -3,7 +3,7 @@
 }
 
 .section {
-    padding: 3rem 0;
+    padding: var(--space-2xl) 0;
     position: relative;
 }
 
@@ -33,11 +33,11 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
 }
 
 .sectionSubtitle {
-    color: var(--accent);
+    color: var(--guardian-blue-light);
     font-size: 0.875rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -57,13 +57,13 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--primary);
+    color: var(--guardian-blue);
     font-weight: 600;
     transition: color 0.2s;
 }
 
 .viewAll:hover {
-    color: var(--primary-hover);
+    color: var(--guardian-blue-hover);
     text-decoration: underline;
 }
 

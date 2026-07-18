@@ -1,15 +1,15 @@
 .container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: var(--space-3xl) var(--space-lg);
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 3rem;
+  margin-bottom: var(--space-2xl);
   text-align: center;
-  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  background: var(--guardian-blue);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -19,7 +19,7 @@
 .layout {
   display: grid;
   grid-template-columns: 240px 1fr;
-  gap: 3rem;
+  gap: var(--space-2xl);
   align-items: start;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .filterGroup {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-xl);
 }
 
 .filterList {
@@ -61,12 +61,12 @@
 }
 
 .filterItem:hover {
-  color: var(--primary);
+  color: var(--guardian-blue);
 }
 
 /* Main Grid */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
+  gap: var(--space-xl);
 }

@@ -6,7 +6,7 @@
     height: 40px;
     border: none;
     background: transparent;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     color: var(--muted);
     transition: all 0.2s ease;
@@ -14,7 +14,7 @@
 
 .toggle:hover {
     background: var(--surface-subtle);
-    color: var(--primary);
+    color: var(--guardian-blue);
 }
 
 .icon {

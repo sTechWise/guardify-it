@@ -1,5 +1,5 @@
 .container {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
     padding: 2rem 1.5rem 4rem;
 }
@@ -16,7 +16,7 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-2xl);
     font-size: 0.9rem;
     color: var(--muted);
     font-weight: 500;
@@ -29,7 +29,7 @@
 }
 
 .step.active {
-    color: var(--primary);
+    color: var(--guardian-blue);
     font-weight: 700;
 }
 
@@ -46,9 +46,9 @@
 }
 
 .active .stepIcon {
-    background: var(--primary);
+    background: var(--guardian-blue);
     color: white;
-    border-color: var(--primary);
+    border-color: var(--guardian-blue);
 }
 
 .stepSeparator {
@@ -56,7 +56,7 @@
 }
 
 .header {
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-2xl);
     text-align: center;
 }
 
@@ -75,26 +75,26 @@
 .layout {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: var(--space-xl);
 }
 
 @media (min-width: 900px) {
     .layout {
         grid-template-columns: 1.5fr 1fr;
-        gap: 3rem;
+        gap: var(--space-2xl);
     }
 }
 
 .formSection {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-xl);
 }
 
 .card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 2rem;
 }
 
@@ -125,7 +125,7 @@
 }
 
 .trustIcon {
-    color: #10b981;
+    color: var(--volt-green);
     /* Green */
 }
 
@@ -146,7 +146,7 @@
     background: var(--section);
     border: 1px solid var(--border);
     padding: 0.875rem 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--text);
     font-size: 1rem;
     transition: border-color 0.2s;
@@ -154,22 +154,22 @@
 
 .input:focus {
     outline: none;
-    border-color: var(--primary);
+    border-color: var(--guardian-blue);
 }
 
 .note {
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
-    background: rgba(59, 130, 246, 0.1);
-    border: 1px solid rgba(59, 130, 246, 0.2);
+    background: rgba(27, 77, 255, 0.1);
+    border: 1px solid rgba(27, 77, 255, 0.2);
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     margin-top: 1rem;
 }
 
 .noteIcon {
-    color: var(--primary);
+    color: var(--guardian-blue);
     flex-shrink: 0;
     margin-top: 0.1rem;
 }
@@ -194,7 +194,7 @@
 .orderSummary {
     background: var(--section);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 2rem;
 }
 
@@ -213,7 +213,7 @@
     gap: 1rem;
     background: var(--card);
     padding: 0.75rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     border: 1px solid var(--border);
 }
 
@@ -268,7 +268,7 @@
 
 .savingsBadge {
     font-size: 0.75rem;
-    color: #10b981;
+    color: var(--volt-green);
     font-weight: 600;
 }
 
@@ -313,15 +313,15 @@
 }
 
 .checkIcon {
-    color: #10b981;
+    color: var(--volt-green);
 }
 
 .submitBtn {
     width: 100%;
-    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    background: var(--guardian-blue);
     color: white;
     padding: 1rem 2rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-size: 1.125rem;
     font-weight: 600;
     border: none;
@@ -365,12 +365,12 @@
 }
 
 .error {
-    color: #ef4444;
+    color: var(--danger);
     font-size: 0.9rem;
     margin-top: 1rem;
     padding: 0.75rem;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.2);
+    background: rgba(255, 71, 87, 0.1);
+    border: 1px solid rgba(255, 71, 87, 0.2);
     border-radius: 6px;
 }
 

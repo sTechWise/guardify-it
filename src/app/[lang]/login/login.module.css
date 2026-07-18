@@ -1,55 +1,46 @@
+/* ── GUARDIFY IT — Login Page v2.0 ── */
+
 .container {
     min-height: 80vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: var(--space-xl);
     background: var(--background);
 }
 
 .card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 3rem 2.5rem;
-    max-width: 480px;
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+    max-width: 460px;
     width: 100%;
-    box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-xl);
 }
 
-.header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-}
+.header { text-align: center; margin-bottom: var(--space-2xl); }
 
 .title {
-    font-size: 2rem;
+    font-family: var(--font-display);
+    font-size: 1.75rem;
     color: var(--text);
-    margin-bottom: 0.5rem;
-    font-weight: 700;
+    margin-bottom: var(--space-sm);
+    font-weight: 800;
+    letter-spacing: -0.02em;
 }
 
-.subtitle {
-    color: var(--muted);
-    font-size: 1rem;
-}
+.subtitle { color: var(--muted); font-size: 0.9375rem; }
 
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
+.form { display: flex; flex-direction: column; gap: 1.25rem; }
 
-.inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
+.inputGroup { display: flex; flex-direction: column; gap: 0.375rem; }
 
 .label {
     color: var(--text);
+    font-family: var(--font-display);
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -57,155 +48,88 @@
 
 .input {
     width: 100%;
-    padding: 0.875rem 1rem;
-    background: var(--section);
-    border: 1px solid var(--border);
-    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    background: var(--surface-subtle);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
     color: var(--text);
-    font-size: 1rem;
-    transition: all 0.2s;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    transition: all var(--duration-fast) ease;
+    outline: none;
 }
 
 .input:focus {
-    outline: none;
-    border-color: var(--primary);
+    border-color: var(--guardian-blue);
     background: var(--background);
+    box-shadow: 0 0 0 3px rgba(27, 77, 255, 0.12);
 }
 
-.input::placeholder {
-    color: var(--muted);
-}
+.input::placeholder { color: var(--muted); }
 
-.passwordWrapper {
-    position: relative;
-}
-
-.passwordWrapper .input {
-    padding-right: 3rem;
-}
+.passwordWrapper { position: relative; }
+.passwordWrapper .input { padding-right: 3rem; }
 
 .togglePassword {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    padding: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s;
+    position: absolute; right: 0.875rem; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: var(--muted); cursor: pointer;
+    padding: 0.25rem; display: flex; align-items: center; justify-content: center;
+    transition: color var(--duration-fast) ease;
 }
 
-.togglePassword:hover {
-    color: var(--text);
-}
+.togglePassword:hover { color: var(--text); }
 
-.forgotPassword {
-    text-align: right;
-    margin-top: -0.75rem;
-}
+.forgotPassword { text-align: right; margin-top: -0.5rem; }
 
 .forgotPassword a {
-    color: var(--primary);
-    font-size: 0.875rem;
-    transition: color 0.2s;
+    color: var(--guardian-blue-light); font-size: 0.8125rem; font-weight: 500;
+    transition: color var(--duration-fast) ease;
 }
 
-.forgotPassword a:hover {
-    color: var(--primary-hover);
-    text-decoration: underline;
-}
+.forgotPassword a:hover { color: var(--guardian-blue); text-decoration: underline; }
 
 .submitButton {
-    width: 100%;
-    padding: 0.875rem;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 0.5rem;
+    width: 100%; padding: 0.8125rem;
+    background: var(--guardian-blue); color: white; border: none;
+    border-radius: var(--radius-md); font-family: var(--font-display);
+    font-weight: 700; font-size: 0.9375rem; cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out); margin-top: var(--space-sm);
 }
 
 .submitButton:hover {
-    background: var(--primary-hover);
-    transform: translateY(-1px);
+    background: var(--guardian-blue-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow-blue);
 }
 
-.divider {
-    position: relative;
-    text-align: center;
-    margin: 2rem 0 1.5rem 0;
-}
+.divider { position: relative; text-align: center; margin: var(--space-xl) 0 var(--space-lg); }
 
 .divider::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: var(--border);
+    content: ''; position: absolute; top: 50%; left: 0; right: 0;
+    height: 1px; background: var(--border);
 }
 
 .divider span {
-    position: relative;
-    background: var(--card);
-    padding: 0 1rem;
-    color: var(--muted);
-    font-size: 0.875rem;
+    position: relative; background: var(--card);
+    padding: 0 0.875rem; color: var(--muted); font-size: 0.8125rem;
 }
 
-.toggle {
-    text-align: center;
-}
-
-.toggle p {
-    color: var(--muted);
-    font-size: 0.875rem;
-}
+.toggle { text-align: center; }
+.toggle p { color: var(--muted); font-size: 0.8125rem; }
 
 .toggleButton {
-    background: none;
-    border: none;
-    color: var(--primary);
-    font-weight: 600;
-    cursor: pointer;
-    margin-left: 0.5rem;
-    transition: color 0.2s;
+    background: none; border: none; color: var(--guardian-blue-light);
+    font-weight: 600; cursor: pointer; margin-left: 0.375rem;
+    transition: color var(--duration-fast) ease; font-family: var(--font-display);
 }
 
-.toggleButton:hover {
-    color: var(--primary-hover);
-    text-decoration: underline;
-}
+.toggleButton:hover { color: var(--guardian-blue); text-decoration: underline; }
 
 .guestCheckout {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-    text-align: center;
+    margin-top: var(--space-lg); padding-top: var(--space-lg);
+    border-top: 1px solid var(--border); text-align: center;
 }
 
-.guestText {
-    color: var(--muted);
-    font-size: 0.875rem;
-}
-
-.guestText a {
-    color: var(--primary);
-    font-weight: 600;
-    transition: color 0.2s;
-}
-
-.guestText a:hover {
-    color: var(--primary-hover);
-    text-decoration: underline;
-}
+.guestText { color: var(--muted); font-size: 0.8125rem; }
+.guestText a { color: var(--guardian-blue-light); font-weight: 600; transition: color var(--duration-fast) ease; }
+.guestText a:hover { color: var(--guardian-blue); text-decoration: underline; }
