@@ -105,9 +105,9 @@ export default function Navbar({ dict }: NavbarProps) {
                         24/7 Live Support: WhatsApp +880 1997-118118
                     </Link>
                     <div className={styles.trustBadges}>
-                        <span className={styles.trustBadge}>✔ DBID Verified Business</span>
+                        <span className={styles.trustBadge}>✔ Delivery Within 10-30 Min</span>
                         <span className={styles.badgeSeparator}>|</span>
-                        <span className={styles.trustBadge}>✔ 100% Genuine Subscriptions</span>
+                        <span className={styles.trustBadge}>✔ Secure Payment via bKash/Nagad</span>
                     </div>
                 </div>
             </div>

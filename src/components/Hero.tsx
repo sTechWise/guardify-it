@@ -17,10 +17,6 @@ export default function Hero({ lang, dict, products }: HeroProps) {
             <div className={`container ${styles.container}`}>
                 {/* Left Side: Content */}
                 <div className={styles.content}>
-                    <div className={styles.badge}>
-                        <span className={styles.dot}></span>
-                        {isBn ? "প্রিমিয়াম মার্কেটপ্লেস" : "Premium Marketplace"}
-                    </div>
 
                     <h1 className={styles.headline}>
                         {isBn ? (

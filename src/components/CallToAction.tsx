@@ -16,8 +16,8 @@ export default function CallToAction({ lang, dict }: CallToActionProps) {
                 <div className={styles.content}>
                     <h2 className={styles.title}>
                         {isBn
-                            ? "বাংলাদেশের সবচেয়ে বিশ্বস্ত সাবস্ক্রিপশন মার্কেটপ্লেস"
-                            : "The Most Trusted Subscription Marketplace in Bangladesh"}
+                            ? "আপনার পছন্দের সাবস্ক্রিপশন খুঁজে নিন — সবচেয়ে কম দামে"
+                            : "Find Your Subscription — At Prices You Won't Find Elsewhere"}
                     </h2>
 
                     <Link href={`/${lang}/products`} className={styles.btn}>

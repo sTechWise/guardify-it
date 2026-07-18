@@ -12,24 +12,24 @@ export default function TrustSection({ lang, dict }: TrustSectionProps) {
     const features = [
         {
             icon: ShieldCheck,
-            title: isBn ? "১০০% অরিজিনাল সাবস্ক্রিপশন" : "100% Genuine Subscriptions",
+            title: isBn ? "অফিসিয়াল সোর্স থেকে সংগ্রহ" : "Sourced From Official Channels",
             desc: isBn
-                ? "আমাদের সকল প্রোডাক্ট ভেরিফাইড এবং অফিসিয়াল সোর্স থেকে সংগ্রহ করা।"
-                : "All our products are verified and sourced from official channels."
+                ? "প্রতিটি সাবস্ক্রিপশন সরাসরি অফিসিয়াল রিসেলার থেকে নেওয়া।"
+                : "Every subscription is purchased directly from authorized resellers."
         },
         {
             icon: Zap,
-            title: isBn ? "পেমেন্টের পর দ্রুত ডেলিভারি" : "Fast Delivery After Payment",
+            title: isBn ? "১০-৩০ মিনিটে ডেলিভারি" : "Delivered in 10-30 Minutes",
             desc: isBn
-                ? "অর্ডার কনফার্ম করার ১০-৩০ মিনিটের মধ্যে বিস্তারিত পেয়ে যাবেন।"
-                : "Receive your subscription details within 10-30 minutes of order confirmation."
+                ? "পেমেন্ট ভেরিফাই হলে আপনার লগইন ডিটেইলস WhatsApp-এ পাঠানো হবে।"
+                : "Once payment is verified, your login details are sent via WhatsApp."
         },
         {
             icon: HeartHandshake,
-            title: isBn ? "ফ্রেন্ডলি বাংলাদেশি সাপোর্ট" : "Friendly Bangladeshi Support",
+            title: isBn ? "WhatsApp-এ সরাসরি সাপোর্ট" : "Direct WhatsApp Support",
             desc: isBn
-                ? "যেকোনো সমস্যায় আমাদের ২৪/৭ সাপোর্ট টিম আপনার পাশে আছে।"
-                : "Our 24/7 support team is always here to help you with any issues."
+                ? "কোনো সমস্যা হলে সরাসরি আমাদের WhatsApp-এ মেসেজ করুন, দ্রুত সমাধান পাবেন।"
+                : "Message us directly on WhatsApp for quick help — no tickets, no waiting."
         }
     ];
 

@@ -34,34 +34,34 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Guardify IT — Premium Digital Security Subscriptions",
+    default: "Guardify IT — Affordable Digital Subscriptions in Bangladesh",
     template: "%s | Guardify IT",
   },
   description:
-    "Bangladesh's trusted marketplace for genuine antivirus, VPN, and Windows licenses. Affordable digital protection delivered instantly.",
+    "Buy ChatGPT Plus, Canva Pro, Netflix, LinkedIn Premium and more at the lowest prices in Bangladesh. Fast delivery via WhatsApp.",
   keywords: [
-    "antivirus Bangladesh",
-    "VPN subscription",
-    "Windows license",
-    "digital security",
+    "ChatGPT Plus Bangladesh",
+    "Canva Pro cheap",
+    "Netflix subscription BD",
+    "LinkedIn Premium Bangladesh",
     "Guardify IT",
-    "software subscription",
-    "genuine license",
+    "software subscription Bangladesh",
+    "Microsoft 365 cheap",
   ],
   metadataBase: new URL("https://guardifyit.com"),
   openGraph: {
-    title: "Guardify IT — Premium Digital Security Subscriptions",
+    title: "Guardify IT — Affordable Digital Subscriptions in Bangladesh",
     description:
-      "Bangladesh's trusted marketplace for genuine antivirus, VPN, and Windows licenses.",
+      "Buy ChatGPT Plus, Canva Pro, Netflix, LinkedIn Premium and more at the lowest prices in Bangladesh.",
     type: "website",
     locale: "en_US",
     siteName: "Guardify IT",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Guardify IT — Premium Digital Security Subscriptions",
+    title: "Guardify IT — Affordable Digital Subscriptions in Bangladesh",
     description:
-      "Bangladesh's trusted marketplace for genuine antivirus, VPN, and Windows licenses.",
+      "Buy ChatGPT Plus, Canva Pro, Netflix, LinkedIn Premium and more at the lowest prices in Bangladesh.",
   },
   icons: {
     icon: "/logo-v3.png",
