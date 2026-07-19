@@ -63,6 +63,13 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo-v3.png",
   },
+  alternates: {
+    canonical: "https://guardifyit.com/en",
+    languages: {
+      "en-US": "https://guardifyit.com/en",
+      "bn-BD": "https://guardifyit.com/bn",
+    },
+  },
   robots: {
     index: true,
     follow: true,
@@ -98,6 +105,42 @@ export default async function RootLayout({
             <AuthProvider>
               <CartProvider>
                 <WishlistProvider>
+                  <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                      __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "LocalBusiness",
+                        "name": "Guardify IT",
+                        "image": "https://guardifyit.com/logo-v3.png",
+                        "@id": "https://guardifyit.com/#localbusiness",
+                        "url": "https://guardifyit.com",
+                        "telephone": "+880 1997-118118",
+                        "address": {
+                          "@type": "PostalAddress",
+                          "streetAddress": "Dhaka, Bangladesh",
+                          "addressLocality": "Dhaka",
+                          "postalCode": "1200",
+                          "addressCountry": "BD"
+                        },
+                        "priceRange": "$$",
+                        "openingHoursSpecification": {
+                          "@type": "OpeningHoursSpecification",
+                          "dayOfWeek": [
+                            "Monday",
+                            "Tuesday",
+                            "Wednesday",
+                            "Thursday",
+                            "Friday",
+                            "Saturday",
+                            "Sunday"
+                          ],
+                          "opens": "00:00",
+                          "closes": "23:59"
+                        }
+                      })
+                    }}
+                  />
                   <LayoutShell dict={dict}>
                     {children}
                   </LayoutShell>

@@ -408,3 +408,84 @@
 .avatar:first-child {
     margin-left: 0;
 }
+
+/* Promo Code Section */
+.promoSection {
+    margin-top: 0.5rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.promoInputRow {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.promoInput {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.promoApplyBtn {
+    background: var(--guardian-blue);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.promoApplyBtn:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.promoApplyBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.appliedPromoRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px dashed var(--volt-green);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+}
+
+.promoBadge {
+    color: var(--volt-green);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.promoRemoveBtn {
+    background: none;
+    border: none;
+    color: var(--danger);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.promoRemoveBtn:hover {
+    text-decoration: underline;
+}
+
+.promoErrorText {
+    color: var(--danger);
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+}

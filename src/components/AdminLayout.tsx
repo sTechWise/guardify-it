@@ -74,9 +74,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     }
 
     async function handleLogout() {
-        await supabase.auth.signOut()
-        router.push(`/${lang}/login`)
-        showToast('Logged out successfully', 'success')
+        try {
+            await supabase.auth.signOut()
+        } catch (err) {
+            console.error('Logout error:', err)
+        } finally {
+            router.push(`/${lang}/login`)
+            showToast('Logged out successfully', 'success')
+        }
     }
 
     const isActive = (path: string) => pathname.includes(path)

@@ -1,0 +1,16 @@
+# Guardify IT
+
+Guardify IT is an e-commerce subscription marketplace in Bangladesh, providing access to digital tools, entertainment, productivity tools, and development subscriptions.
+
+## Services Offered
+- ChatGPT Plus Subscriptions
+- LinkedIn Premium Subscriptions
+- Canva Pro Subscriptions
+- Microsoft 365 Subscriptions
+- Streaming Subscriptions (Netflix, Spotify, etc.)
+
+## Delivery
+All digital subscriptions are delivered via WhatsApp within 10 to 30 minutes of order confirmation.
+
+## Payments
+Secure payment processing via mobile banking channels: bKash, Nagad, and Rocket.

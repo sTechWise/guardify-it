@@ -4,7 +4,7 @@ import styles from './payment.module.css'
 import Link from 'next/link'
 import { useEffect, useState, Suspense } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import { CheckCircle, Copy, AlertCircle, CreditCard, ArrowRight } from 'lucide-react'
+import { CheckCircle, Copy, AlertCircle, CreditCard, ArrowRight, MessageCircle } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useClientDictionary } from '@/hooks/useClientDictionary'
 
@@ -17,6 +17,15 @@ function PaymentInstructionsContent() {
     const [loading, setLoading] = useState(true)
     const [copied, setCopied] = useState<string | null>(null)
     const supabase = createClient()
+
+    const getWhatsAppLink = (isSubmitted: boolean) => {
+        if (!order) return 'https://wa.me/8801997118118'
+        const orderIdUpper = order.id.slice(0, 8).toUpperCase()
+        const text = isSubmitted
+            ? `Hi Guardify IT,\n\nI have submitted payment proof for my order.\nOrder ID: ${orderIdUpper}\nEmail: ${order.user_email}\nTotal: ৳${order.total_amount}\n\nPlease verify and activate my subscription.`
+            : `Hi Guardify IT,\n\nI have placed a new order.\nOrder ID: ${orderIdUpper}\nEmail: ${order.user_email}\nTotal: ৳${order.total_amount}\n\nI will send the payment details shortly.`
+        return `https://wa.me/8801997118118?text=${encodeURIComponent(text)}`
+    }
 
     useEffect(() => {
         async function fetchOrder() {
@@ -141,10 +150,20 @@ function PaymentInstructionsContent() {
                                 <p>{dict.payment_under_review_desc || 'We have received your payment proof. You will receive an email once it is verified.'}</p>
                             </div>
                         </div>
-                        {/* Go Home Button */}
-                        <Link href={`/${lang}/`} className={styles.uploadBtn} style={{ marginTop: '20px' }}>
-                            {dict.back_to_home || 'Back to Home'} <ArrowRight size={20} />
-                        </Link>
+                        {/* Go Home & WhatsApp Buttons */}
+                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '20px' }}>
+                            <Link href={`/${lang}/`} className={styles.uploadBtn}>
+                                {dict.back_to_home || 'Back to Home'} <ArrowRight size={20} />
+                            </Link>
+                            <a
+                                href={getWhatsAppLink(true)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.whatsappBtn}
+                            >
+                                <MessageCircle size={20} /> Send WhatsApp Confirmation
+                            </a>
+                        </div>
                     </div>
                 ) : (
                     <>
@@ -199,13 +218,23 @@ function PaymentInstructionsContent() {
                             </div>
                         </div>
 
-                        {/* Upload Button */}
-                        <Link
-                            href={orderId || order?.id ? `/${lang}/upload-proof?order_id=${orderId || order?.id}` : `/${lang}/my-orders`}
-                            className={styles.uploadBtn}
-                        >
-                            {dict.upload_payment_proof} <ArrowRight size={20} />
-                        </Link>
+                        {/* Upload & WhatsApp Buttons */}
+                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '2rem' }}>
+                            <Link
+                                href={orderId || order?.id ? `/${lang}/upload-proof?order_id=${orderId || order?.id}` : `/${lang}/my-orders`}
+                                className={styles.uploadBtn}
+                            >
+                                {dict.upload_payment_proof} <ArrowRight size={20} />
+                            </Link>
+                            <a
+                                href={getWhatsAppLink(false)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.whatsappBtn}
+                            >
+                                <MessageCircle size={20} /> Share Order on WhatsApp
+                            </a>
+                        </div>
                     </>
                 )}
             </div>

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import styles from './footer.module.css'
 import { Mail, Phone, MapPin, Send } from 'lucide-react'
@@ -9,6 +10,12 @@ import { useParams } from 'next/navigation'
 export default function Footer() {
     const params = useParams()
     const lang = (params?.lang as string) || 'en'
+    const [email, setEmail] = useState('')
+
+    useEffect(() => {
+        // Obfuscate to prevent static scrapers
+        setEmail('support' + '@' + 'guardify-it.com')
+    }, [])
 
     return (
         <footer className={styles.footer}>
@@ -63,7 +70,7 @@ export default function Footer() {
                         <ul className={styles.columnList}>
                             <li className={styles.columnItem}>
                                 <Mail size={16} className={styles.columnIcon} />
-                                <span>support@guardify-it.com</span>
+                                <span>{email || 'support [at] guardify-it.com'}</span>
                             </li>
                             <li className={styles.columnItem}>
                                 <Phone size={16} className={styles.columnIcon} />

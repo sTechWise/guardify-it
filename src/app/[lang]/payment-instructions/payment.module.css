@@ -303,3 +303,24 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(27, 77, 255, 0.3);
 }
+
+.whatsappBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: all var(--duration-fast) ease;
+    font-size: 1.1rem;
+    align-self: flex-start;
+}
+
+.whatsappBtn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+}

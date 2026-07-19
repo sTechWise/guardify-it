@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client'
 import styles from './checkout.module.css'
 import { useState, useEffect } from 'react'
 import { createOrder } from '@/actions/createOrder'
+import { validatePromo } from '@/actions/validatePromo'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/context/ToastContext'
 import { Info, ShoppingBag, CheckCircle, ShieldCheck, MessageCircle, Clock, ChevronRight, Check } from 'lucide-react'
@@ -26,6 +27,13 @@ export default function CheckoutPage() {
     const [error, setError] = useState<string | null>(null)
     const [mounted, setMounted] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
+
+    // Promo Code States
+    const [promoCode, setPromoCode] = useState('')
+    const [appliedPromo, setAppliedPromo] = useState<string | null>(null)
+    const [discount, setDiscount] = useState(0)
+    const [promoLoading, setPromoLoading] = useState(false)
+    const [promoError, setPromoError] = useState<string | null>(null)
 
     const handleSignOut = async () => {
         await supabase.auth.signOut()
@@ -49,7 +57,42 @@ export default function CheckoutPage() {
     }, [])
 
     const subtotal = cart.reduce((acc, item) => acc + ((item.sale_price || item.price) * item.quantity), 0)
-    const total = subtotal // No tax for now
+    const total = Math.max(0, subtotal - discount)
+
+    const handleApplyPromo = async (e: React.MouseEvent) => {
+        e.preventDefault()
+        if (!promoCode.trim()) return
+
+        setPromoLoading(true)
+        setPromoError(null)
+
+        try {
+            const res = await validatePromo(promoCode, subtotal)
+            if (res.success && res.discountAmount !== undefined) {
+                setDiscount(res.discountAmount)
+                setAppliedPromo(res.code || promoCode.trim().toUpperCase())
+                showToast('Promo code applied successfully!', 'success')
+            } else {
+                setPromoError(res.error || 'Failed to apply promo code')
+                setDiscount(0)
+                setAppliedPromo(null)
+            }
+        } catch (err) {
+            console.error('Promo error:', err)
+            setPromoError('Failed to apply promo code')
+        } finally {
+            setPromoLoading(false)
+        }
+    }
+
+    const handleRemovePromo = (e: React.MouseEvent) => {
+        e.preventDefault()
+        setPromoCode('')
+        setAppliedPromo(null)
+        setDiscount(0)
+        setPromoError(null)
+        showToast('Promo code removed', 'info')
+    }
 
     // Redirect if empty
     useEffect(() => {
@@ -109,7 +152,8 @@ export default function CheckoutPage() {
                     quantity: i.quantity
                 })),
                 orderEmail,
-                userId
+                userId,
+                appliedPromo
             )
 
             // 3. Success
@@ -264,6 +308,53 @@ export default function CheckoutPage() {
                                     <span>{dict.subtotal}</span>
                                     <span>৳{subtotal.toLocaleString()}</span>
                                 </div>
+
+                                {/* Promo Code Section */}
+                                <div className={styles.promoSection}>
+                                    {!appliedPromo ? (
+                                        <div className={styles.promoInputRow}>
+                                            <input
+                                                type="text"
+                                                placeholder={(dict as any).promo_placeholder || 'Enter Promo Code'}
+                                                value={promoCode}
+                                                onChange={(e) => setPromoCode(e.target.value)}
+                                                className={styles.promoInput}
+                                                disabled={promoLoading}
+                                                aria-label="Promo code input"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={handleApplyPromo}
+                                                className={styles.promoApplyBtn}
+                                                disabled={promoLoading || !promoCode.trim()}
+                                            >
+                                                {promoLoading ? '...' : ((dict as any).apply || 'Apply')}
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className={styles.appliedPromoRow}>
+                                            <span className={styles.promoBadge}>
+                                                🎁 {appliedPromo}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                onClick={handleRemovePromo}
+                                                className={styles.promoRemoveBtn}
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    )}
+                                    {promoError && <p className={styles.promoErrorText}>{promoError}</p>}
+                                </div>
+
+                                {discount > 0 && (
+                                    <div className={styles.totalRow} style={{ color: 'var(--volt-green)', fontWeight: '600' }}>
+                                        <span>Discount</span>
+                                        <span>- ৳{discount.toLocaleString()}</span>
+                                    </div>
+                                )}
+
                                 <div className={`${styles.totalRow} ${styles.final}`}>
                                     <span>{dict.total}</span>
                                     <span>৳{total.toLocaleString()}</span>

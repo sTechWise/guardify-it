@@ -83,11 +83,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     const signOut = async () => {
-        await supabase.auth.signOut()
-        setSession(null)
-        setUser(null)
-        setLoading(false)
-        router.refresh()
+        try {
+            await supabase.auth.signOut()
+        } catch (err) {
+            console.error('SignOut error caught:', err)
+        } finally {
+            setSession(null)
+            setUser(null)
+            setLoading(false)
+            router.refresh()
+        }
     }
 
     const linkGuestOrders = async (): Promise<void> => {

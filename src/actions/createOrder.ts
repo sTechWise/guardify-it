@@ -3,7 +3,7 @@
 import { createClient } from '@supabase/supabase-js'
 import type { OrderItem } from '@/types'
 
-export async function createOrder(items: OrderItem[], userEmail: string, userId?: string | null) {
+export async function createOrder(items: OrderItem[], userEmail: string, userId?: string | null, promoCode?: string | null) {
     if (!items || items.length === 0) {
         throw new Error('No items in order')
     }
@@ -17,7 +17,6 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
         throw new Error('Internal Server Error: Database configuration missing')
     }
 
-
     const supabase = createClient(
         supabaseUrl,
         serviceRoleKey,
@@ -30,7 +29,6 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
     )
 
     // 1. Fetch real prices from DB to prevent tampering
-
     const itemIds = items.map(i => i.id)
     const { data: dbProducts, error: productsError } = await supabase
         .from('products')
@@ -67,17 +65,55 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
         throw new Error('Invalid order total')
     }
 
+    // 3. Process Promo Code (Server-side validation)
+    let promoId: string | null = null
+    let discountAmount = 0
 
+    if (promoCode && promoCode.trim() !== '') {
+        const normalizedCode = promoCode.trim().toUpperCase()
+        const { data: promo, error: promoError } = await supabase
+            .from('promo_codes')
+            .select('*')
+            .eq('code', normalizedCode)
+            .single()
 
-    // 3. Create Order
+        if (!promoError && promo && promo.is_active) {
+            // Check expiry
+            let isExpired = false
+            if (promo.expiry_date) {
+                if (new Date(promo.expiry_date) < new Date()) {
+                    isExpired = true;
+                }
+            }
+
+            // Check usage limit
+            const limitReached = promo.usage_limit !== null && promo.usage_count >= promo.usage_limit
+
+            if (!isExpired && !limitReached) {
+                promoId = promo.id
+                if (promo.discount_type === 'percentage') {
+                    discountAmount = Math.min((calculatedTotal * promo.discount_value) / 100, calculatedTotal)
+                } else if (promo.discount_type === 'fixed') {
+                    discountAmount = Math.min(promo.discount_value, calculatedTotal)
+                }
+                discountAmount = Math.round(discountAmount)
+            }
+        }
+    }
+
+    const finalAmount = Math.max(0, calculatedTotal - discountAmount)
+
+    // 4. Create Order
     const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert({
             user_id: userId || null,
             user_email: userEmail,
-            total_amount: calculatedTotal,
+            total_amount: finalAmount,
             status: 'pending_payment',
-            items: validatedItems
+            items: validatedItems,
+            promo_code_id: promoId,
+            discount_amount: discountAmount
         })
         .select()
         .single()
@@ -87,6 +123,21 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
         throw new Error(`Failed to create order: ${orderError.message}`)
     }
 
+    // 5. If promo code was applied, increment usage count and insert tracking log
+    if (promoId && order) {
+        // Increment usage count
+        await supabase.rpc('increment_promo_usage', { p_promo_id: promoId })
+
+        // Insert usage log
+        await supabase
+            .from('promo_code_uses')
+            .insert({
+                promo_code_id: promoId,
+                order_id: order.id,
+                user_email: userEmail,
+                discount_applied: discountAmount
+            })
+    }
 
     return order
 }
