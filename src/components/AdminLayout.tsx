@@ -17,7 +17,8 @@ import {
     ChevronDown,
     LogOut,
     Menu,
-    X
+    X,
+    Percent
 } from 'lucide-react'
 
 interface AdminLayoutProps {
@@ -172,6 +173,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                         >
                             <span className={styles.navItemIcon}><CreditCard size={18} /></span>
                             Payments
+                        </Link>
+
+                        <Link
+                            href={`/${lang}/admin/promos`}
+                            className={`${styles.navItem} ${isActive('/admin/promos') ? styles.active : ''}`}
+                            onClick={() => setSidebarOpen(false)}
+                        >
+                            <span className={styles.navItemIcon}><Percent size={18} /></span>
+                            Partners &amp; Promos
                         </Link>
 
                         {/* Products (Expandable) */}
