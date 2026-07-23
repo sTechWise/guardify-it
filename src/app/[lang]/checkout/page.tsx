@@ -168,7 +168,12 @@ export default function CheckoutPage() {
         } catch (err: any) {
             clearTimeout(timeout)
             console.error('Checkout Error:', err)
-            setError(err.message || 'Checkout failed')
+            const rawMsg = err?.message || ''
+            if (rawMsg.includes('Server Components render') || rawMsg.includes('digest')) {
+                setError('Order creation failed due to database connection. Please try again or contact support on WhatsApp.')
+            } else {
+                setError(rawMsg || 'Checkout failed. Please check your network and try again.')
+            }
             setLoading(false)
         }
     }

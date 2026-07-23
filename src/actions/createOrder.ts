@@ -110,12 +110,16 @@ export async function createOrder(
 
     const finalAmount = Math.max(0, calculatedTotal - discountAmount)
 
-    // 4. Create Order
-    const { data: order, error: orderError } = await supabase
+    // 4. Create Order (Safe insert with fallback if user_phone column does not exist in DB schema)
+    let order: any = null
+    let orderError: any = null
+
+    // First attempt: try inserting with user_phone
+    const firstAttempt = await supabase
         .from('orders')
         .insert({
             user_id: userId || null,
-            user_email: userEmail || userPhone,
+            user_email: userEmail ? `${userEmail} (Phone: ${userPhone})` : userPhone,
             user_phone: userPhone,
             total_amount: finalAmount,
             status: 'pending_payment',
@@ -126,9 +130,32 @@ export async function createOrder(
         .select()
         .single()
 
-    if (orderError) {
+    if (firstAttempt.error) {
+        // If user_phone column doesn't exist in DB, fallback to insert without user_phone
+        console.warn('First insert attempt error (retrying without user_phone column):', firstAttempt.error.message)
+        const fallbackAttempt = await supabase
+            .from('orders')
+            .insert({
+                user_id: userId || null,
+                user_email: userEmail ? `${userEmail} (Phone: ${userPhone})` : userPhone,
+                total_amount: finalAmount,
+                status: 'pending_payment',
+                items: validatedItems,
+                promo_code_id: promoId,
+                discount_amount: discountAmount
+            })
+            .select()
+            .single()
+
+        order = fallbackAttempt.data
+        orderError = fallbackAttempt.error
+    } else {
+        order = firstAttempt.data
+    }
+
+    if (orderError || !order) {
         console.error('Order creation failed:', orderError)
-        throw new Error(`Failed to create order: ${orderError.message}`)
+        throw new Error(`Order creation failed: ${orderError?.message || 'Unknown database error'}`)
     }
 
     // Dispatch Instant Notification (Telegram / Logs)
