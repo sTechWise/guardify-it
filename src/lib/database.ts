@@ -26,6 +26,7 @@ export async function getProducts(filters?: {
     let query = supabase
         .from('products')
         .select('*')
+        .eq('status', 'active')
         .eq('stock_status', 'in_stock')
 
     // Apply filters

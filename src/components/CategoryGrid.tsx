@@ -42,9 +42,8 @@ export default function CategoryGrid({ lang, dict }: CategoryGridProps) {
         const fetchData = async () => {
             try {
                 const data = await getCategories();
-                // Quadruple data for scrolling buffer to simulate infinite feel
                 if (data && data.length > 0) {
-                    setCategories([...data, ...data, ...data, ...data]);
+                    setCategories(data);
                 }
             } catch (error) {
                 console.error("Failed to load categories", error);

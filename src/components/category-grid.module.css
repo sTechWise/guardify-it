@@ -22,175 +22,90 @@
     -webkit-text-fill-color: transparent;
 }
 
-/* Carousel */
 .carouselContainer {
     width: 100%;
     position: relative;
-    padding-top: 50px;
-    padding-bottom: 30px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.carouselContainer::-webkit-scrollbar {
-    display: none;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .carouselTrack {
-    display: flex;
-    gap: var(--space-xl);
-    width: max-content;
-    padding: 10px 40px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.25rem;
+    width: 100%;
 }
 
-/* Nav Buttons */
-.navButton {
-    position: absolute;
-    top: 55%;
-    transform: translateY(-50%);
-    width: 44px;
-    height: 44px;
-    background: var(--card);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-full);
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-    cursor: pointer;
-    transition: all var(--duration-normal) var(--ease-out);
-    box-shadow: var(--shadow-md);
+@media (max-width: 1200px) {
+    .carouselTrack {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
 
-.navButton:hover {
-    background: var(--guardian-blue);
-    color: white;
-    border-color: var(--guardian-blue);
-    transform: translateY(-50%) scale(1.08);
+@media (max-width: 768px) {
+    .carouselTrack {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.875rem;
+    }
 }
 
-.navButtonLeft { left: 0; }
-.navButtonRight { right: 0; }
+@media (max-width: 480px) {
+    .carouselTrack {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
 
-/* Card Wrapper */
 .cardWrapper {
     text-decoration: none;
-    padding-top: 30px;
-    flex-shrink: 0;
+    width: 100%;
 }
 
-/* Card */
 .card {
     position: relative;
-    width: 200px;
-    height: 260px;
-    border-radius: var(--radius-xl);
+    width: 100%;
+    height: 140px;
+    border-radius: var(--radius-lg);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
-    padding: var(--space-xl) var(--space-lg);
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 0.5rem;
     transition: transform var(--duration-normal) var(--ease-spring);
     box-shadow: var(--shadow-sm);
-    overflow: visible;
     border: 1px solid var(--border);
 }
 
 .cardWrapper:hover .card {
-    transform: translateY(-8px);
+    transform: translateY(-4px);
     border-color: var(--guardian-blue);
     box-shadow: var(--shadow-glow-blue);
 }
 
-/* Popover Image */
-.popoverImage {
-    position: absolute;
-    top: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    filter: none;
-}
-
 .iconCircle {
-    width: 96px;
-    height: 96px;
+    width: 52px;
+    height: 52px;
     background: var(--card);
     border-radius: var(--radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid var(--border);
-    box-shadow: var(--shadow-md);
+    border: 2px solid var(--border);
+    box-shadow: var(--shadow-sm);
     transition: all var(--duration-normal) ease;
 }
 
-.cardWrapper:hover .iconCircle {
-    border-color: var(--guardian-blue);
-    box-shadow: var(--shadow-glow-blue);
-}
-
-/* Title */
 .title {
     font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--text);
     text-align: center;
-    margin-top: auto;
-    margin-bottom: var(--space-xl);
-    z-index: 5;
-    line-height: 1.3;
+    line-height: 1.2;
+    margin: 0;
 }
 
-/* Decor */
-.bgDecor {
-    position: absolute;
-    bottom: -20%;
-    right: -50%;
-    width: 200%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(27, 77, 255, 0.06) 0%, transparent 60%);
-    border-radius: 50%;
-    pointer-events: none;
-}
-
-@media (max-width: 640px) {
-    .navButton {
-        display: none !important;
-    }
-    .carouselContainer {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        overflow-x: visible;
-    }
-    .carouselTrack {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
-        width: 100%;
-        padding: 0;
-    }
-    .cardWrapper {
-        padding-top: 0;
-        width: 100%;
-    }
-    .card {
-        width: 100%;
-        height: 130px;
-        justify-content: center;
-        padding: 1rem 0.5rem;
-    }
-    .popoverImage {
-        display: none;
-    }
-    .title {
-        font-size: 0.95rem;
-        margin-bottom: 0;
-    }
+.navButton {
+    display: none !important;
 }

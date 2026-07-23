@@ -281,6 +281,50 @@
     }
 }
 
+@media (max-width: 640px) {
+    .container {
+        gap: 1.5rem;
+    }
+    .dealTitle {
+        font-size: 1.5rem;
+    }
+    .countdown {
+        gap: 0.35rem;
+    }
+    .timeBlock {
+        min-width: 44px;
+        padding: 0.35rem 0.25rem;
+    }
+    .timeVal {
+        font-size: 1.25rem;
+    }
+    .timeLabel {
+        font-size: 0.55rem;
+    }
+    .separator {
+        font-size: 1.25rem;
+    }
+    .productCardWrapper {
+        max-width: 100%;
+    }
+    .productCard {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+        gap: 1rem;
+    }
+    .imageWrapper {
+        width: 100%;
+        height: 180px;
+    }
+    .priceRow {
+        justify-content: center;
+    }
+    .getDealBtn {
+        width: 100%;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .flashDeal::before { animation: none; }
     .productCard { animation: none; }
