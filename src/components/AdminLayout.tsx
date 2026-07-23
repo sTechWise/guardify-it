@@ -18,7 +18,8 @@ import {
     LogOut,
     Menu,
     X,
-    Percent
+    Percent,
+    Globe
 } from 'lucide-react'
 
 interface AdminLayoutProps {
@@ -108,8 +109,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         } catch (err) {
             console.error('Logout error:', err)
         } finally {
-            router.push(`/${lang}/login`)
             showToast('Logged out successfully', 'success')
+            window.location.href = `/${lang}/login`
         }
     }
 
@@ -124,7 +125,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: 'var(--muted)'
+                    color: 'var(--muted)',
+                    minHeight: '100vh'
                 }}>
                     Loading admin panel...
                 </div>
@@ -133,7 +135,28 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     }
 
     if (!isAdmin) {
-        return null
+        return (
+            <div className={styles.adminLayout}>
+                <div style={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '1rem',
+                    color: 'var(--muted)',
+                    minHeight: '100vh',
+                    padding: '2rem',
+                    textAlign: 'center'
+                }}>
+                    <h3>Access Denied or Redirecting...</h3>
+                    <p>You must be an administrator to access this area.</p>
+                    <Link href={`/${lang}`} className="btn-primary" style={{ padding: '0.75rem 1.5rem' }}>
+                        🌐 Return to Storefront
+                    </Link>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -178,6 +201,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                         >
                             <span className={styles.navItemIcon}><LayoutDashboard size={18} /></span>
                             Dashboard
+                        </Link>
+                        <Link
+                            href={`/${lang}`}
+                            className={styles.navItem}
+                            onClick={() => setSidebarOpen(false)}
+                            style={{ color: '#00F2FE' }}
+                        >
+                            <span className={styles.navItemIcon}><Globe size={18} /></span>
+                            Return to Storefront
                         </Link>
                     </div>
 
