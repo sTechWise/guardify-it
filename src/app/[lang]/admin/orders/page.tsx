@@ -191,7 +191,7 @@ export default function AdminOrdersPage() {
                         <thead>
                             <tr>
                                 <th>Order ID</th>
-                                <th>Customer</th>
+                                <th>Customer (Phone / Email)</th>
                                 <th>Amount</th>
                                 <th>Status</th>
                                 <th>Date</th>

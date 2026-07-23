@@ -7,6 +7,7 @@ import { useCart } from '@/context/CartContext'
 import { useWishlist } from '@/context/WishlistContext'
 import { useAuth } from '@/context/AuthContext'
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import styles from './mobile-nav.module.css'
 import { Locale } from '@/i18n-config'
 
@@ -23,12 +24,14 @@ export default function MobileNav() {
         setMounted(true)
     }, [])
 
+    if (!mounted) return null
+
     const isHome = pathname === `/${lang}` || pathname === '/'
     const isShop = pathname.includes('/products')
     const isWishlist = pathname.includes('/wishlist')
     const isOrders = pathname.includes('/my-orders') || pathname.includes('/login')
 
-    return (
+    const content = (
         <nav className={styles.mobileNav}>
             {/* Home Tab */}
             <Link href={`/${lang}`} className={`${styles.navItem} ${isHome ? styles.active : ''}`}>
@@ -83,4 +86,6 @@ export default function MobileNav() {
             </Link>
         </nav>
     )
+
+    return createPortal(content, document.body)
 }

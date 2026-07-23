@@ -211,7 +211,7 @@ function UploadProofContent() {
                             <span className={styles.emailBadge}> {dict.email_locked_badge}</span>
                         </label>
                         <input
-                            type="email"
+                            type="text"
                             value={orderEmail}
                             readOnly
                             className={`${styles.input} ${styles.readOnly}`}
