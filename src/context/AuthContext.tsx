@@ -25,22 +25,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const supabase = createClient()
 
     useEffect(() => {
+        let isMounted = true
+
+        // Safety fallback timer: force loading to false if getSession hangs over 3s
+        const safetyTimer = setTimeout(() => {
+            if (isMounted) {
+                setLoading((prev) => {
+                    if (prev) {
+                        console.warn('Auth getSession timed out, unblocking loading state.')
+                        return false
+                    }
+                    return prev
+                })
+            }
+        }, 3000)
+
         // Get initial session
         supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session)
-            setUser(session?.user ?? null)
-            setLoading(false)
+            if (isMounted) {
+                setSession(session)
+                setUser(session?.user ?? null)
+                setLoading(false)
+            }
         }).catch((err) => {
             console.error('Auth session check failed:', err)
-            setLoading(false)
+            if (isMounted) setLoading(false)
+        }).finally(() => {
+            clearTimeout(safetyTimer)
         })
 
         // Listen for auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             async (event, session) => {
-                setSession(session)
-                setUser(session?.user ?? null)
-                setLoading(false)
+                if (isMounted) {
+                    setSession(session)
+                    setUser(session?.user ?? null)
+                    setLoading(false)
+                }
 
                 // On sign in, link guest orders using existing function
                 if (event === 'SIGNED_IN' && session?.user) {
@@ -49,7 +70,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             }
         )
 
-        return () => subscription.unsubscribe()
+        return () => {
+            isMounted = false
+            clearTimeout(safetyTimer)
+            subscription.unsubscribe()
+        }
     }, [])
 
     const linkGuestOrdersInternal = async (): Promise<void> => {

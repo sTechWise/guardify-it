@@ -534,16 +534,17 @@ export default function AdminPromosPage() {
                                                         className={autoPromoType === 'fixed' ? styles.primaryBtn : styles.secondaryBtn}
                                                         onClick={() => setAutoPromoType('fixed')}
                                                     >
-                                                        Fixed (৳)
+                                                        Flat Rate (৳)
                                                     </button>
                                                 </div>
                                             </div>
                                             <div className={styles.formGroup}>
-                                                <label htmlFor="autoValue">Discount Value *</label>
+                                                <label htmlFor="autoValue">Discount Value ({autoPromoType === 'percentage' ? '%' : '৳'}) *</label>
                                                 <input
                                                     id="autoValue"
                                                     type="number"
-                                                    value={autoPromoValue}
+                                                    placeholder={autoPromoType === 'percentage' ? 'e.g. 10' : 'e.g. 50'}
+                                                    value={autoPromoValue || ''}
                                                     onChange={(e) => setAutoPromoValue(parseFloat(e.target.value) || 0)}
                                                     className={styles.input}
                                                     required
@@ -605,7 +606,7 @@ export default function AdminPromosPage() {
                                     </select>
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <label>Discount Type</label>
+                                    <label>Discount Type *</label>
                                     <div className={styles.inputRow}>
                                         <button
                                             type="button"
@@ -619,17 +620,22 @@ export default function AdminPromosPage() {
                                             className={promoDiscountType === 'fixed' ? styles.primaryBtn : styles.secondaryBtn}
                                             onClick={() => setPromoDiscountType('fixed')}
                                         >
-                                            Fixed (৳)
+                                            Flat Rate (৳)
                                         </button>
                                     </div>
+                                    <span style={{ fontSize: '0.8rem', color: 'var(--muted)', marginTop: '0.25rem' }}>
+                                        {promoDiscountType === 'percentage'
+                                            ? `Deducts ${promoDiscountValue || 0}% from the total checkout amount.`
+                                            : `Deducts a flat rate of ৳${promoDiscountValue || 0} from the total checkout amount.`}
+                                    </span>
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="promoDiscountValue">Discount Value *</label>
+                                    <label htmlFor="promoDiscountValue">Discount Value ({promoDiscountType === 'percentage' ? '%' : '৳'}) *</label>
                                     <input
                                         id="promoDiscountValue"
                                         type="number"
-                                        placeholder="Value"
-                                        value={promoDiscountValue}
+                                        placeholder={promoDiscountType === 'percentage' ? 'e.g. 10' : 'e.g. 50'}
+                                        value={promoDiscountValue || ''}
                                         onChange={(e) => setPromoDiscountValue(parseFloat(e.target.value) || 0)}
                                         className={styles.input}
                                         required

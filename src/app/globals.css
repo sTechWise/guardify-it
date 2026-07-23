@@ -10,9 +10,12 @@
   --font-mono: var(--font-jetbrains), 'JetBrains Mono', 'Courier New', monospace;
 }
 
-/* ── 1. COLOR TOKENS (Dark — Default) ── */
+/* ── 1. COLOR TOKENS (Dark — Default — Aligned with Logo-v3) ── */
 :root {
   /* Core Palette */
+  --guardian-cyan: #00F2FE;
+  --guardian-cyan-light: #4FACFE;
+  --guardian-cyan-soft: rgba(0, 242, 254, 0.12);
   --guardian-blue: #1B4DFF;
   --guardian-blue-hover: #1440E0;
   --guardian-blue-light: #3D6AFF;
@@ -23,19 +26,19 @@
   --sunset-coral-hover: #E55A28;
   --sunset-coral-soft: rgba(255, 107, 53, 0.12);
 
-  /* Backgrounds */
-  --background: #0A1628;
-  --section: #0D1B30;
-  --card: #111F38;
-  --card-elevated: #162847;
-  --card-hover: #1A3052;
+  /* Backgrounds (Cyber-Dark matching Logo-v3 contrast) */
+  --background: #060D1E;
+  --section: #091428;
+  --card: #0D192E;
+  --card-elevated: #12223C;
+  --card-hover: #162B4C;
 
   /* Borders & Surfaces */
-  --border: #1E3A5F;
-  --border-light: #254570;
-  --surface-subtle: #0D1B30;
-  --surface-muted: #1E3A5F;
-  --surface-glass: rgba(17, 31, 56, 0.75);
+  --border: #183050;
+  --border-light: #204068;
+  --surface-subtle: #091428;
+  --surface-muted: #183050;
+  --surface-glass: rgba(13, 25, 46, 0.85);
 
   /* Text */
   --text: #F1F5F9;
@@ -47,7 +50,7 @@
   --success: #00E676;
   --warning: #FFB020;
   --danger: #FF4757;
-  --info: #1B4DFF;
+  --info: #00F2FE;
 
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -59,12 +62,12 @@
   --shadow-glow-coral: 0 0 20px rgba(255, 107, 53, 0.2);
 
   /* Component-specific */
-  --navbar-bg: rgba(10, 22, 40, 0.88);
-  --navbar-border: rgba(30, 58, 95, 0.5);
-  --footer-bg: #070F1D;
-  --cta-gradient: linear-gradient(135deg, #1B4DFF 0%, #6366F1 50%, #FF6B35 100%);
-  --hero-gradient: linear-gradient(160deg, #0A1628 0%, #0D1B30 40%, #111F38 100%);
-  --headline-gradient: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 100%);
+  --navbar-bg: rgba(6, 13, 30, 0.88);
+  --navbar-border: rgba(24, 48, 80, 0.5);
+  --footer-bg: #040915;
+  --cta-gradient: linear-gradient(135deg, #00F2FE 0%, #1B4DFF 50%, #FF6B35 100%);
+  --hero-gradient: linear-gradient(160deg, #060D1E 0%, #091428 40%, #0D192E 100%);
+  --headline-gradient: linear-gradient(135deg, #00F2FE 0%, #FFFFFF 50%, #CBD5E1 100%);
   --badge-sale: var(--sunset-coral);
   --badge-new: var(--volt-green);
 

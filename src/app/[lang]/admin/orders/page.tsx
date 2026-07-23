@@ -40,35 +40,8 @@ export default function AdminOrdersPage() {
     const [filter, setFilter] = useState<'pending' | 'all'>('pending')
 
     useEffect(() => {
-        checkAdmin()
-    }, [])
-
-    useEffect(() => {
-        if (isAdmin) {
-            fetchOrders()
-        }
-    }, [filter, isAdmin])
-
-    async function checkAdmin() {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
-            router.push(`/${lang}`)
-            return
-        }
-
-        const { data: roles } = await supabase
-            .from('user_roles')
-            .select('role')
-            .eq('user_id', user.id)
-            .eq('role', 'admin')
-
-        if (!roles || roles.length === 0) {
-            router.push(`/${lang}`)
-            showToast('Access Denied', 'error')
-        } else {
-            setIsAdmin(true)
-        }
-    }
+        fetchOrders()
+    }, [filter])
 
     async function fetchOrders() {
         setLoading(true)
@@ -173,17 +146,6 @@ export default function AdminOrdersPage() {
             return order.payment_proofs[0]
         }
         return null
-    }
-
-    if (!isAdmin) {
-        return (
-            <main className={styles.container}>
-                <div className={styles.loadingState}>
-                    <Loader2 size={32} className={styles.spinner} />
-                    <p>Checking permissions...</p>
-                </div>
-            </main>
-        )
     }
 
     return (

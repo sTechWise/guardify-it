@@ -39,10 +39,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     const [productsOpen, setProductsOpen] = useState(true)
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
-    useEffect(() => {
-        checkAdmin()
-    }, [])
-
     // Auto-expand products section if on a products page
     useEffect(() => {
         if (pathname.includes('/admin/products') || pathname.includes('/admin/categories')) {
@@ -50,28 +46,60 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         }
     }, [pathname])
 
+    useEffect(() => {
+        let isMounted = true
+        
+        // Safety fallback timer: force loading to false if Supabase auth hangs over 3.5s
+        const safetyTimer = setTimeout(() => {
+            if (isMounted) {
+                setLoading((prev) => {
+                    if (prev) {
+                        console.warn('Admin auth check timed out, releasing loading state.')
+                        return false
+                    }
+                    return prev
+                })
+            }
+        }, 3500)
+
+        checkAdmin().finally(() => {
+            clearTimeout(safetyTimer)
+        })
+
+        return () => {
+            isMounted = false
+            clearTimeout(safetyTimer)
+        }
+    }, [])
+
     async function checkAdmin() {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
+        try {
+            const { data: { user }, error: userError } = await supabase.auth.getUser()
+            if (userError || !user) {
+                router.push(`/${lang}/login`)
+                return
+            }
+
+            setUserEmail(user.email || '')
+
+            const { data: roles, error: rolesError } = await supabase
+                .from('user_roles')
+                .select('role')
+                .eq('user_id', user.id)
+                .eq('role', 'admin')
+
+            if (rolesError || !roles || roles.length === 0) {
+                router.push(`/${lang}`)
+                showToast('Access Denied - Admin only', 'error')
+            } else {
+                setIsAdmin(true)
+            }
+        } catch (err) {
+            console.error('checkAdmin error:', err)
             router.push(`/${lang}/login`)
-            return
+        } finally {
+            setLoading(false)
         }
-
-        setUserEmail(user.email || '')
-
-        const { data: roles } = await supabase
-            .from('user_roles')
-            .select('role')
-            .eq('user_id', user.id)
-            .eq('role', 'admin')
-
-        if (!roles || roles.length === 0) {
-            router.push(`/${lang}`)
-            showToast('Access Denied - Admin only', 'error')
-        } else {
-            setIsAdmin(true)
-        }
-        setLoading(false)
     }
 
     async function handleLogout() {
