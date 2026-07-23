@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "../globals.css";
 import { CartProvider } from "@/context/CartContext";
@@ -96,6 +97,20 @@ export default async function RootLayout({
 
   return (
     <html lang={lang} suppressHydrationWarning>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-DJSTEQXNM4"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-DJSTEQXNM4');
+          `}
+        </Script>
+      </head>
       <body
         className={`${outfit.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}
         suppressHydrationWarning
