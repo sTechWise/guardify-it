@@ -73,6 +73,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         }
     }, [])
 
+    useEffect(() => {
+        if (!loading && !isAdmin) {
+            const redirectTimer = setTimeout(() => {
+                window.location.href = `/${lang}`
+            }, 1200)
+            return () => clearTimeout(redirectTimer)
+        }
+    }, [loading, isAdmin, lang])
+
     async function checkAdmin() {
         try {
             const { data: { user }, error: userError } = await supabase.auth.getUser()

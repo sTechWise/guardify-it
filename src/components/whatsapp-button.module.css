@@ -43,8 +43,10 @@
 
 @media (max-width: 768px) {
     .whatsappButton {
-        padding: 14px;
-        border-radius: var(--radius-full);
+        bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+        right: 16px !important;
+        padding: 12px !important;
+        z-index: 100000 !important;
     }
     .text {
         display: none;

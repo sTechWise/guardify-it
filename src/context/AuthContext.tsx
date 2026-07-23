@@ -116,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setSession(null)
             setUser(null)
             setLoading(false)
-            router.refresh()
+            window.location.href = '/'
         }
     }
 
