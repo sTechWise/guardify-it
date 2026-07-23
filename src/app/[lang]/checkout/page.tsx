@@ -22,6 +22,7 @@ export default function CheckoutPage() {
     const supabase = createClient()
     const [authChecking, setAuthChecking] = useState(true)
 
+    const [phone, setPhone] = useState('')
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -117,15 +118,18 @@ export default function CheckoutPage() {
         }, 30000)
 
         try {
+            const orderPhone = phone.trim()
             const orderEmail = email.trim()
-            if (!orderEmail) throw new Error('Email is required')
+
+            if (!orderPhone) {
+                throw new Error('WhatsApp / Phone number is required to process your order')
+            }
 
             // 1. Determine User ID
             let userId = user?.id || null
 
-            // If not logged in, try guest flow
-            if (!userId) {
-
+            // If not logged in and email provided, try guest flow
+            if (!userId && orderEmail) {
                 try {
                     const res = await fetch('/api/guest-checkout', {
                         method: 'POST',
@@ -133,7 +137,6 @@ export default function CheckoutPage() {
                         body: JSON.stringify({ email: orderEmail })
                     })
 
-                    // We don't abort, we just check result
                     if (res.ok) {
                         const data = await res.json()
                         if (data.userId) userId = data.userId
@@ -143,15 +146,14 @@ export default function CheckoutPage() {
                 }
             }
 
-
-
             // 2. Create Order
             const newOrder = await createOrder(
                 cart.map(i => ({
                     id: i.id,
                     quantity: i.quantity
                 })),
-                orderEmail,
+                orderPhone,
+                orderEmail || undefined,
                 userId,
                 appliedPromo
             )
@@ -239,10 +241,25 @@ export default function CheckoutPage() {
                             </div>
 
                             <div className={styles.inputGroup}>
-                                <label className={styles.label}>{dict.email_required}</label>
+                                <label className={styles.label}>
+                                    WhatsApp / Phone Number <span style={{ color: '#FF6B35' }}>*</span>
+                                </label>
+                                <input
+                                    type="tel"
+                                    required
+                                    className={styles.input}
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    placeholder="e.g. 01700000000 (For instant delivery & WhatsApp support)"
+                                />
+                            </div>
+
+                            <div className={styles.inputGroup}>
+                                <label className={styles.label}>
+                                    {dict.email_required} <span style={{ fontSize: '0.8rem', color: '#94A3B8' }}>(Optional)</span>
+                                </label>
                                 <input
                                     type="email"
-                                    required
                                     className={styles.input}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}

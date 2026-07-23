@@ -7,6 +7,13 @@
     margin: 0 auto;
 }
 
+@media (max-width: 640px) {
+    .scene {
+        transform: scale(0.75);
+        margin: -40px auto;
+    }
+}
+
 .carousel {
     width: 100%;
     height: 100%;

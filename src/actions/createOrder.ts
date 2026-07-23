@@ -2,8 +2,15 @@
 
 import { createClient } from '@supabase/supabase-js'
 import type { OrderItem } from '@/types'
+import { sendInstantOrderNotification } from './notifyOrder'
 
-export async function createOrder(items: OrderItem[], userEmail: string, userId?: string | null, promoCode?: string | null) {
+export async function createOrder(
+    items: OrderItem[], 
+    userPhone: string, 
+    userEmail?: string | null, 
+    userId?: string | null, 
+    promoCode?: string | null
+) {
     if (!items || items.length === 0) {
         throw new Error('No items in order')
     }
@@ -108,7 +115,8 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
         .from('orders')
         .insert({
             user_id: userId || null,
-            user_email: userEmail,
+            user_email: userEmail || userPhone,
+            user_phone: userPhone,
             total_amount: finalAmount,
             status: 'pending_payment',
             items: validatedItems,
@@ -121,6 +129,20 @@ export async function createOrder(items: OrderItem[], userEmail: string, userId?
     if (orderError) {
         console.error('Order creation failed:', orderError)
         throw new Error(`Failed to create order: ${orderError.message}`)
+    }
+
+    // Dispatch Instant Notification (Telegram / Logs)
+    try {
+        await sendInstantOrderNotification({
+            orderId: order.id,
+            customerPhone: userPhone,
+            customerEmail: userEmail || undefined,
+            totalAmount: finalAmount,
+            items: validatedItems.map(i => ({ name: i.name || 'Item', quantity: i.quantity || 1, price: i.price || 0 })),
+            discountAmount
+        })
+    } catch (notifErr) {
+        console.warn('Failed to send instant order notification:', notifErr)
     }
 
     // 5. If promo code was applied, increment usage count and insert tracking log

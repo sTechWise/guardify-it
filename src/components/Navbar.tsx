@@ -265,28 +265,60 @@ export default function Navbar({ dict }: NavbarProps) {
             {isMobileMenuOpen && (
                 <div className={styles.mobileMenuOverlay} onClick={() => setIsMobileMenuOpen(false)}>
                     <div className={styles.mobileMenu} onClick={(e) => e.stopPropagation()}>
+                        <div className={styles.mobileMenuHeader}>
+                            <div className={styles.mobileMenuTitle}>Menu</div>
+                            <button
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className={styles.mobileCloseBtn}
+                                aria-label="Close menu"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <div className={styles.mobileUtilityRow}>
+                            <ThemeToggle />
+                            <LanguageSwitcher />
+                        </div>
+
                         <nav className={styles.mobileNav}>
                             <Link href={`/${lang}`} className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>
                                 Home
                             </Link>
                             <Link href={`/${lang}/products`} className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>
-                                All Products
+                                All Products / Shop
+                            </Link>
+                            <Link href={`/${lang}/how-it-works`} className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>
+                                How It Works
+                            </Link>
+                            <Link href={`/${lang}/faq`} className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>
+                                FAQ
+                            </Link>
+                            <Link href={`/${lang}/about`} className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>
+                                About Us
                             </Link>
                             <Link href={`/${lang}/contact`} className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>
                                 Contact
                             </Link>
+                            
+                            {isAdmin && (
+                                <Link href={`/${lang}/admin/orders`} className={styles.mobileLink} style={{ color: '#ef4444' }} onClick={() => setIsMobileMenuOpen(false)}>
+                                    Admin Panel
+                                </Link>
+                            )}
+
                             <div className={styles.mobileDivider}></div>
 
                             {/* Mobile Auth Links */}
                             {user ? (
                                 <>
                                     <Link href={`/${lang}/my-orders`} className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>
-                                        My Orders
+                                        My Orders ({user.email})
                                     </Link>
                                     <button
                                         onClick={() => { handleSignOut(); setIsMobileMenuOpen(false); }}
                                         className={styles.mobileLink}
-                                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left' }}
+                                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left', color: '#FF6B35' }}
                                     >
                                         Sign Out
                                     </button>
@@ -296,13 +328,6 @@ export default function Navbar({ dict }: NavbarProps) {
                                     Sign In / Sign Up
                                 </Link>
                             )}
-
-                            <Link href={`/${lang}/about`} className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>
-                                About Us
-                            </Link>
-                            <Link href={`/${lang}/faq`} className={styles.mobileLink} onClick={() => setIsMobileMenuOpen(false)}>
-                                FAQ
-                            </Link>
                         </nav>
                     </div>
                 </div>
