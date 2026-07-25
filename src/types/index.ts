@@ -4,6 +4,17 @@
 // ==========================================
 
 /**
+ * SubscriptionPlan — a single duration+price option for a product.
+ * Stored as JSONB array in the products.subscription_plans column.
+ * Example: [{ duration: "1 Month", price: 250 }, { duration: "1 Year", price: 2000, sale_price: 1800 }]
+ */
+export interface SubscriptionPlan {
+    duration: string
+    price: number
+    sale_price?: number
+}
+
+/**
  * Product — matches the live Supabase `products` table exactly.
  */
 export interface Product {
@@ -17,6 +28,7 @@ export interface Product {
     currency?: string
     subscription_type?: string
     duration?: string
+    subscription_plans?: SubscriptionPlan[]
     image_url?: string
     status?: string
     stock_status?: 'in_stock' | 'out_of_stock'
@@ -53,6 +65,7 @@ export interface CartItem {
     is_featured?: boolean
     is_new?: boolean
     subscription_type?: string
+    duration?: string
     category_id?: string
     category?: string
 }
@@ -92,6 +105,7 @@ export interface OrderItem {
     name?: string
     price?: number
     quantity?: number
+    duration?: string
 }
 
 /**

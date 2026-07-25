@@ -4,7 +4,8 @@ import styles from './product-detail.module.css'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import AddToCartButton from '@/components/AddToCartButton'
-import { Star, Shield, Zap, Headphones, ChevronLeft, CheckCircle } from 'lucide-react'
+import PlanSelector from '@/components/PlanSelector'
+import { Star, Shield, Zap, Headphones, ChevronLeft, CheckCircle, Clock } from 'lucide-react'
 import { getDictionary } from "@/lib/dictionary";
 import { Locale } from "@/i18n-config";
 
@@ -160,54 +161,97 @@ export default async function ProductDetailPage({ params }: PageProps) {
                         ))}
                     </ul>
 
-                    {/* Price Block */}
-                    <div className={styles.priceContainer}>
-                        <div className={styles.priceWrapper}>
-                            {p.sale_price ? (
-                                <>
-                                    <span className={styles.oldPrice}>৳{p.price.toLocaleString()}</span>
-                                    <span className={styles.salePrice}>
-                                        ৳{p.sale_price.toLocaleString()}
-                                        {p.subscription_type && <span className={styles.perType}>/ {p.subscription_type}</span>}
-                                    </span>
-                                </>
-                            ) : (
-                                <span className={styles.salePrice}>
-                                    ৳{p.price.toLocaleString()}
-                                    {p.subscription_type && <span className={styles.perType}>/ {p.subscription_type}</span>}
-                                </span>
-                            )}
-                        </div>
-                        {p.sale_price && (
-                            <div className={styles.savingsTag}>
-                                {isBn ? 'সাশ্রয়' : 'Save'} {Math.round(((p.price - p.sale_price) / p.price) * 100)}%
+                    {/* Plan Selector or Fallback Price + AddToCart */}
+                    {p.subscription_plans && p.subscription_plans.length > 0 ? (
+                        <>
+                            {/* Scarcity Indicator */}
+                            <div className={styles.scarcityText}>
+                                <Zap size={14} fill="currentColor" />
+                                {isBn ? 'আজ সীমিত সংখ্যক অ্যাক্টিভেশন বাকি আছে' : 'Only limited activations available today'}
                             </div>
-                        )}
-                    </div>
 
-                    {/* Scarcity Indicator */}
-                    <div className={styles.scarcityText}>
-                        <Zap size={14} fill="currentColor" />
-                        {isBn ? 'আজ সীমিত সংখ্যক অ্যাক্টিভেশন বাকি আছে' : 'Only limited activations available today'}
-                    </div>
+                            <PlanSelector
+                                product={p}
+                                dict={dict}
+                                isBn={isBn}
+                                buttonClassName={styles.addToCartBtn}
+                            />
 
-                    {/* Mobile Only: How to Pay Hint */}
-                    <div className={styles.paymentHint}>
-                        {isBn ? 'নিরাপদ পেমেন্ট: বিকাশ • নগদ • রকেট' : 'Pay securely with bKash, Nagad, Rocket'}
-                    </div>
+                            <p className={styles.ctaSubtext}>
+                                {isBn ? 'কোন অ্যাকাউন্টের প্রয়োজন নেই • ইনস্ট্যান্ট অ্যাক্টিভেশন' : 'No account required • Instant activation'}
+                            </p>
+                        </>
+                    ) : (
+                        <>
+                            {/* Price Block (no plans) */}
+                            <div className={styles.priceContainer}>
+                                <div className={styles.priceWrapper}>
+                                    {p.sale_price ? (
+                                        <>
+                                            <span className={styles.oldPrice}>৳{p.price.toLocaleString()}</span>
+                                            <span className={styles.salePrice}>
+                                                ৳{p.sale_price.toLocaleString()}
+                                                {p.subscription_type && <span className={styles.perType}>/ {p.subscription_type}</span>}
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <span className={styles.salePrice}>
+                                            ৳{p.price.toLocaleString()}
+                                            {p.subscription_type && <span className={styles.perType}>/ {p.subscription_type}</span>}
+                                        </span>
+                                    )}
+                                </div>
+                                {p.sale_price && (
+                                    <div className={styles.savingsTag}>
+                                        {isBn ? 'সাশ্রয়' : 'Save'} {Math.round(((p.price - p.sale_price) / p.price) * 100)}%
+                                    </div>
+                                )}
+                            </div>
 
-                    {/* Add to Cart Button */}
-                    <div className={styles.ctaWrapper}>
-                        <AddToCartButton
-                            product={p}
-                            className={styles.addToCartBtn}
-                            dict={dict}
-                            customLabel={isBn ? 'সাবস্ক্রিপশন নিশ্চিত করুন' : 'Secure My Subscription'}
-                        />
-                        <p className={styles.ctaSubtext}>
-                            {isBn ? 'কোন অ্যাকাউন্টের প্রয়োজন নেই • ইনস্ট্যান্ট অ্যাক্টিভেশন' : 'No account required • Instant activation'}
-                        </p>
-                    </div>
+                            {/* Duration (no plans) */}
+                            {p.duration && (
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    padding: '0.65rem 1rem',
+                                    background: 'rgba(27, 77, 255, 0.08)',
+                                    border: '1px solid rgba(27, 77, 255, 0.2)',
+                                    borderRadius: '8px',
+                                    fontSize: '0.875rem',
+                                    fontWeight: 600,
+                                    color: 'var(--guardian-blue-light, #5B8DFF)'
+                                }}>
+                                    <Clock size={16} />
+                                    <span>{isBn ? 'মেয়াদ:' : 'Duration:'} {p.duration}</span>
+                                </div>
+                            )}
+
+                            {/* Scarcity Indicator */}
+                            <div className={styles.scarcityText}>
+                                <Zap size={14} fill="currentColor" />
+                                {isBn ? 'আজ সীমিত সংখ্যক অ্যাক্টিভেশন বাকি আছে' : 'Only limited activations available today'}
+                            </div>
+
+                            {/* Mobile Only: How to Pay Hint */}
+                            <div className={styles.paymentHint}>
+                                {isBn ? 'নিরাপদ পেমেন্ট: বিকাশ • নগদ • রকেট' : 'Pay securely with bKash, Nagad, Rocket'}
+                            </div>
+
+                            {/* Add to Cart Button */}
+                            <div className={styles.ctaWrapper}>
+                                <AddToCartButton
+                                    product={p}
+                                    className={styles.addToCartBtn}
+                                    dict={dict}
+                                    customLabel={isBn ? 'সাবস্ক্রিপশন নিশ্চিত করুন' : 'Secure My Subscription'}
+                                />
+                                <p className={styles.ctaSubtext}>
+                                    {isBn ? 'কোন অ্যাকাউন্টের প্রয়োজন নেই • ইনস্ট্যান্ট অ্যাক্টিভেশন' : 'No account required • Instant activation'}
+                                </p>
+                            </div>
+                        </>
+                    )}
 
                     {/* Brand Trust Block */}
                     <div className={styles.brandTrustBlock}>

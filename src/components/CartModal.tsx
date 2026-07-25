@@ -84,8 +84,10 @@ export default function CartModal({ isOpen, onClose, dict }: CartModalProps) {
 
                                     <div className={styles.itemDetails}>
                                         <h3 className={styles.itemName}>{item.title}</h3>
-                                        <p className={styles.itemVariant}>Qty: {item.quantity}</p>
-                                        <p className={styles.itemPrice}>৳{item.price.toLocaleString()}</p>
+                                        <p className={styles.itemVariant}>
+                                            {item.duration ? `${item.duration} • ` : ''}Qty: {item.quantity}
+                                        </p>
+                                        <p className={styles.itemPrice}>৳{(item.sale_price || item.price).toLocaleString()}</p>
                                     </div>
 
                                     <button

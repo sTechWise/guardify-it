@@ -35,11 +35,11 @@ export async function createOrder(
         }
     )
 
-    // 1. Fetch real prices from DB to prevent tampering
+    // 1b. Fetch real prices from DB to prevent tampering
     const itemIds = items.map(i => i.id)
     const { data: dbProducts, error: productsError } = await supabase
         .from('products')
-        .select('id, price, sale_price, title')
+        .select('id, price, sale_price, title, subscription_plans')
         .in('id', itemIds)
 
     if (productsError || !dbProducts) {
@@ -55,15 +55,26 @@ export async function createOrder(
             throw new Error(`Product not found: ${item.id}`)
         }
 
-        const price = dbProduct.sale_price || dbProduct.price
+        let price = dbProduct.sale_price || dbProduct.price
+        
+        // If item has a duration and product has subscription plans, use the plan's price
+        if (item.duration && dbProduct.subscription_plans && Array.isArray(dbProduct.subscription_plans)) {
+            const matchedPlan = dbProduct.subscription_plans.find(
+                (plan: any) => plan.duration === item.duration
+            )
+            if (matchedPlan) {
+                price = matchedPlan.sale_price || matchedPlan.price
+            }
+        }
+
         const quantity = item.quantity || 1
 
         calculatedTotal += price * quantity
 
         return {
             ...item,
-            name: dbProduct.title, // Ensure name is correct
-            price: price // Ensure price is correct
+            name: dbProduct.title,
+            price: price
         }
     })
 
@@ -165,7 +176,7 @@ export async function createOrder(
             customerPhone: userPhone,
             customerEmail: userEmail || undefined,
             totalAmount: finalAmount,
-            items: validatedItems.map(i => ({ name: i.name || 'Item', quantity: i.quantity || 1, price: i.price || 0 })),
+            items: validatedItems.map(i => ({ name: i.name || 'Item', quantity: i.quantity || 1, price: i.price || 0, duration: i.duration })),
             discountAmount
         })
     } catch (notifErr) {

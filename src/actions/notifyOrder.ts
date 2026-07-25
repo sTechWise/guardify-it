@@ -5,7 +5,7 @@ interface NotifyOrderParams {
     customerPhone: string
     customerEmail?: string
     totalAmount: number
-    items: Array<{ name: string; quantity: number; price: number }>
+    items: Array<{ name: string; quantity: number; price: number; duration?: string }>
     discountAmount?: number
 }
 
@@ -14,7 +14,10 @@ export async function sendInstantOrderNotification(params: NotifyOrderParams) {
 
     // 1. Prepare formatted Telegram Notification message
     const itemDetails = items
-        .map((item, idx) => `${idx + 1}. *${item.name}* (x${item.quantity}) - ৳${item.price * item.quantity}`)
+        .map((item, idx) => {
+            const durLabel = item.duration ? ` (${item.duration})` : ''
+            return `${idx + 1}. *${item.name}${durLabel}* (x${item.quantity}) - ৳${item.price * item.quantity}`
+        })
         .join('\n')
 
     const messageText = `🛍️ *NEW ORDER PLACED!*

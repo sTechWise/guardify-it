@@ -5,7 +5,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { useToast } from '@/context/ToastContext'
-import { Loader2, Upload, ImageIcon, AlertCircle } from 'lucide-react'
+import { Loader2, Upload, ImageIcon, AlertCircle, Plus, Trash2 } from 'lucide-react'
+import type { SubscriptionPlan } from '@/types'
 
 interface Category {
     id: string
@@ -29,6 +30,7 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
     const [uploading, setUploading] = useState(false)
     const [categories, setCategories] = useState<Category[]>([])
     const [error, setError] = useState<string | null>(null)
+    const [plans, setPlans] = useState<SubscriptionPlan[]>([])
 
     const [formData, setFormData] = useState({
         title: '',
@@ -75,6 +77,9 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                 rating: initialData.rating || 5.0,
                 review_count: initialData.review_count || 0
             })
+            if (initialData.subscription_plans && Array.isArray(initialData.subscription_plans)) {
+                setPlans(initialData.subscription_plans)
+            }
         }
     }, [initialData])
 
@@ -176,7 +181,8 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                 ...formData,
                 sale_price: formData.sale_price || null,
                 category_id: formData.category_id || null,
-                badge: formData.badge || null
+                badge: formData.badge || null,
+                subscription_plans: plans.length > 0 ? plans : null
             }
 
             if (mode === 'create') {
@@ -396,14 +402,17 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                         </select>
                     </div>
                     <div className={styles.group}>
-                        <label className={styles.label}>Duration</label>
+                        <label className={styles.label}>Default Duration (single plan fallback)</label>
                         <input
                             type="text"
                             className={styles.input}
                             value={formData.duration}
                             onChange={e => setFormData({ ...formData, duration: e.target.value })}
-                            placeholder="e.g., 1 Month, 1 Year"
+                            placeholder="e.g., 1 Month"
                         />
+                        <span style={{ fontSize: '0.72rem', color: 'var(--muted)', marginTop: '4px', display: 'block' }}>
+                            Used only if no subscription plans are added below.
+                        </span>
                     </div>
                 </div>
                 <div className={styles.row}>
@@ -430,6 +439,103 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                         />
                     </div>
                 </div>
+            </div>
+
+            {/* Subscription Plans — Duration + Price tiers */}
+            <div className={styles.section}>
+                <div className={styles.sectionTitle}>
+                    Subscription Plans
+                    <span style={{ fontSize: '0.72rem', fontWeight: 400, color: 'var(--muted)', marginLeft: '8px' }}>
+                        (Optional — add multiple duration options with different prices)
+                    </span>
+                </div>
+
+                {plans.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '12px' }}>
+                        {/* Header row */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 40px', gap: '8px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '0 4px' }}>
+                            <span>Duration</span>
+                            <span>Price (৳)</span>
+                            <span>Sale Price (৳)</span>
+                            <span></span>
+                        </div>
+                        {plans.map((plan, idx) => (
+                            <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 40px', gap: '8px', alignItems: 'center' }}>
+                                <input
+                                    type="text"
+                                    className={styles.input}
+                                    value={plan.duration}
+                                    onChange={e => {
+                                        const updated = [...plans]
+                                        updated[idx] = { ...updated[idx], duration: e.target.value }
+                                        setPlans(updated)
+                                    }}
+                                    placeholder="e.g., 1 Month"
+                                />
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    className={styles.input}
+                                    value={plan.price}
+                                    onChange={e => {
+                                        const updated = [...plans]
+                                        updated[idx] = { ...updated[idx], price: parseFloat(e.target.value) || 0 }
+                                        setPlans(updated)
+                                    }}
+                                    placeholder="250"
+                                />
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    className={styles.input}
+                                    value={plan.sale_price || ''}
+                                    onChange={e => {
+                                        const updated = [...plans]
+                                        updated[idx] = { ...updated[idx], sale_price: e.target.value ? parseFloat(e.target.value) : undefined }
+                                        setPlans(updated)
+                                    }}
+                                    placeholder="Optional"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setPlans(plans.filter((_, i) => i !== idx))}
+                                    style={{ background: 'none', border: 'none', color: '#FF6B35', cursor: 'pointer', padding: '4px' }}
+                                    title="Remove plan"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                <button
+                    type="button"
+                    onClick={() => setPlans([...plans, { duration: '', price: 0 }])}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '8px 16px',
+                        background: 'var(--card)',
+                        border: '1px dashed var(--border)',
+                        borderRadius: '8px',
+                        color: 'var(--guardian-blue)',
+                        cursor: 'pointer',
+                        fontSize: '0.8125rem',
+                        fontWeight: 600
+                    }}
+                >
+                    <Plus size={16} /> Add Plan
+                </button>
+
+                {plans.length === 0 && (
+                    <p style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: '8px' }}>
+                        No plans added. The product will use the base Price and Duration fields above. Add plans to let customers choose between durations like &quot;1 Month&quot;, &quot;3 Months&quot;, &quot;1 Year&quot; — each with its own price.
+                    </p>
+                )}
             </div>
 
             {/* Status & Featured Toggles */}

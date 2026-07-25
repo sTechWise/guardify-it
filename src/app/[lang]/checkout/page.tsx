@@ -150,7 +150,8 @@ export default function CheckoutPage() {
             const newOrder = await createOrder(
                 cart.map(i => ({
                     id: i.id,
-                    quantity: i.quantity
+                    quantity: i.quantity,
+                    duration: i.duration
                 })),
                 orderPhone,
                 orderEmail || undefined,
