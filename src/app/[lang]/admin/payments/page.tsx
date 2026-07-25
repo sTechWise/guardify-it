@@ -42,34 +42,39 @@ export default function AdminPaymentsPage() {
 
     async function fetchProofs() {
         setLoading(true)
+        try {
+            let query = supabase
+                .from('payment_proofs')
+                .select(`
+                    *,
+                    orders (
+                        id,
+                        user_email,
+                        total_amount,
+                        status,
+                        created_at
+                    )
+                `)
+                .order('submitted_at', { ascending: false })
 
-        let query = supabase
-            .from('payment_proofs')
-            .select(`
-                *,
-                orders (
-                    id,
-                    user_email,
-                    total_amount,
-                    status,
-                    created_at
-                )
-            `)
-            .order('submitted_at', { ascending: false })
+            if (filter === 'pending') {
+                query = query.in('status', ['submitted', 'pending'])
+            }
 
-        if (filter === 'pending') {
-            query = query.in('status', ['submitted', 'pending'])
+            const { data, error } = await query
+
+            if (error) {
+                console.error('Error fetching proofs:', error)
+                showToast('Failed to load payment proofs', 'error')
+            } else {
+                setProofs(data || [])
+            }
+        } catch (err) {
+            console.error('fetchProofs unexpected error:', err)
+            showToast('Something went wrong loading payments', 'error')
+        } finally {
+            setLoading(false)
         }
-
-        const { data, error } = await query
-
-        if (error) {
-            console.error('Error fetching proofs:', error)
-            showToast('Failed to load payment proofs', 'error')
-        } else {
-            setProofs(data || [])
-        }
-        setLoading(false)
     }
 
     async function handleApproveReject(proofId: string, orderId: string, newStatus: 'approved' | 'rejected') {

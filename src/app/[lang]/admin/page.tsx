@@ -50,35 +50,41 @@ export default function AdminDashboardPage() {
         fetchDashboardData()
 
         // Subscribe to real-time changes on orders table
-        const ordersChannel = supabase
-            .channel('dashboard-orders')
-            .on(
-                'postgres_changes',
-                { event: '*', schema: 'public', table: 'orders' },
-                () => {
-                    console.log('Orders changed, refreshing dashboard...')
-                    fetchDashboardData()
-                }
-            )
-            .subscribe()
+        let ordersChannel: any
+        let productsChannel: any
+        try {
+            ordersChannel = supabase
+                .channel('dashboard-orders')
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: 'orders' },
+                    () => {
+                        console.log('Orders changed, refreshing dashboard...')
+                        fetchDashboardData()
+                    }
+                )
+                .subscribe()
 
-        // Subscribe to real-time changes on products table
-        const productsChannel = supabase
-            .channel('dashboard-products')
-            .on(
-                'postgres_changes',
-                { event: '*', schema: 'public', table: 'products' },
-                () => {
-                    console.log('Products changed, refreshing dashboard...')
-                    fetchDashboardData()
-                }
-            )
-            .subscribe()
+            // Subscribe to real-time changes on products table
+            productsChannel = supabase
+                .channel('dashboard-products')
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: 'products' },
+                    () => {
+                        console.log('Products changed, refreshing dashboard...')
+                        fetchDashboardData()
+                    }
+                )
+                .subscribe()
+        } catch (err) {
+            console.warn('Real-time subscriptions failed (non-critical):', err)
+        }
 
         // Cleanup subscriptions on unmount
         return () => {
-            supabase.removeChannel(ordersChannel)
-            supabase.removeChannel(productsChannel)
+            if (ordersChannel) supabase.removeChannel(ordersChannel)
+            if (productsChannel) supabase.removeChannel(productsChannel)
         }
     }, [])
 

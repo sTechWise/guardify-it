@@ -35,6 +35,12 @@ export default function ShopClient({ products: initialProducts, categories, lang
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
+    // Sync search query from URL params (handles navbar search navigation)
+    useEffect(() => {
+        const urlSearch = searchParams.get('search') || ''
+        setSearchQuery(urlSearch)
+    }, [searchParams])
+
     // Simulate loading
     useEffect(() => {
         const timer = setTimeout(() => setIsLoading(false), 800)

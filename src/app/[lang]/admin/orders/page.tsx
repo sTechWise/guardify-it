@@ -34,7 +34,6 @@ export default function AdminOrdersPage() {
 
     const [orders, setOrders] = useState<Order[]>([])
     const [loading, setLoading] = useState(true)
-    const [isAdmin, setIsAdmin] = useState(false)
     const [selectedProof, setSelectedProof] = useState<PaymentProof | null>(null)
     const [processingId, setProcessingId] = useState<string | null>(null)
     const [filter, setFilter] = useState<'pending' | 'all'>('pending')
@@ -45,46 +44,50 @@ export default function AdminOrdersPage() {
 
     async function fetchOrders() {
         setLoading(true)
+        try {
+            // Fetch orders
+            let orderQuery = supabase
+                .from('orders')
+                .select('*')
+                .order('created_at', { ascending: false })
 
-        // Fetch orders
-        let orderQuery = supabase
-            .from('orders')
-            .select('*')
-            .order('created_at', { ascending: false })
-
-        if (filter === 'pending') {
-            orderQuery = orderQuery.in('status', ['payment_submitted'])
-        }
-
-        const { data: ordersData, error: ordersError } = await orderQuery
-
-        if (ordersError) {
-            console.error('Orders error:', ordersError)
-            showToast('Failed to load orders', 'error')
-            setLoading(false)
-            return
-        }
-
-        // Fetch all payment proofs separately (RLS might block join)
-        const { data: proofsData, error: proofsError } = await supabase
-            .from('payment_proofs')
-            .select('*')
-
-        if (proofsError) {
-            console.error('Proofs error:', proofsError)
-        }
-
-        // Merge proofs into orders
-        const ordersWithProofs = (ordersData || []).map(order => {
-            const orderProofs = (proofsData || []).filter(p => p.order_id === order.id)
-            return {
-                ...order,
-                payment_proofs: orderProofs.length > 0 ? orderProofs : null
+            if (filter === 'pending') {
+                orderQuery = orderQuery.in('status', ['payment_submitted'])
             }
-        })
 
-        setOrders(ordersWithProofs)
-        setLoading(false)
+            const { data: ordersData, error: ordersError } = await orderQuery
+
+            if (ordersError) {
+                console.error('Orders error:', ordersError)
+                showToast('Failed to load orders', 'error')
+                return
+            }
+
+            // Fetch all payment proofs separately (RLS might block join)
+            const { data: proofsData, error: proofsError } = await supabase
+                .from('payment_proofs')
+                .select('*')
+
+            if (proofsError) {
+                console.error('Proofs error:', proofsError)
+            }
+
+            // Merge proofs into orders
+            const ordersWithProofs = (ordersData || []).map(order => {
+                const orderProofs = (proofsData || []).filter(p => p.order_id === order.id)
+                return {
+                    ...order,
+                    payment_proofs: orderProofs.length > 0 ? orderProofs : null
+                }
+            })
+
+            setOrders(ordersWithProofs)
+        } catch (err) {
+            console.error('fetchOrders unexpected error:', err)
+            showToast('Something went wrong loading orders', 'error')
+        } finally {
+            setLoading(false)
+        }
     }
 
     async function handleApprove(proofId: string) {

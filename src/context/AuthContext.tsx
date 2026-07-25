@@ -116,7 +116,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setSession(null)
             setUser(null)
             setLoading(false)
-            window.location.href = '/'
+            // Detect current locale from URL for proper redirect
+            const pathLang = window.location.pathname.split('/')[1]
+            const lang = (pathLang === 'bn' || pathLang === 'en') ? pathLang : 'en'
+            window.location.href = `/${lang}`
         }
     }
 
