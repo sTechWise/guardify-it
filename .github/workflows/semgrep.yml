@@ -23,7 +23,9 @@ jobs:
       image: semgrep/semgrep
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        # Pinned to a full commit SHA instead of the @v4 tag — tags are
+        # mutable and could theoretically be repointed to different code.
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Run Semgrep
         run: semgrep ci --config=auto
