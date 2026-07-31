@@ -86,7 +86,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         try {
             const { data: { user }, error: userError } = await supabase.auth.getUser()
             if (userError || !user) {
-                window.location.href = `/${lang}/login`
+                router.replace(`/${lang}/login?redirect=${encodeURIComponent(pathname)}`)
                 return
             }
 
@@ -100,13 +100,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
             if (rolesError || !roles || roles.length === 0) {
                 showToast('Access Denied - Admin only', 'error')
-                window.location.href = `/${lang}`
+                router.replace(`/${lang}`)
             } else {
                 setIsAdmin(true)
             }
         } catch (err) {
             console.error('checkAdmin error:', err)
-            window.location.href = `/${lang}/login`
+            router.replace(`/${lang}/login?redirect=${encodeURIComponent(pathname)}`)
         } finally {
             setLoading(false)
         }

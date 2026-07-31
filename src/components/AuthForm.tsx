@@ -68,7 +68,31 @@ export default function AuthForm({ lang, dict }: AuthFormProps) {
                 // Link any guest orders to this user
                 await linkGuestOrders()
 
-                // Redirect to my-orders on success
+                // Check if redirect query parameter exists (e.g., /login?redirect=/admin)
+                const redirectParam = searchParams.get('redirect')
+                if (redirectParam && redirectParam.startsWith('/')) {
+                    router.push(redirectParam)
+                    router.refresh()
+                    return
+                }
+
+                // Check if user is an admin
+                const { data: { user } } = await supabase.auth.getUser()
+                if (user) {
+                    const { data: roles } = await supabase
+                        .from('user_roles')
+                        .select('role')
+                        .eq('user_id', user.id)
+                        .eq('role', 'admin')
+
+                    if (roles && roles.length > 0) {
+                        router.push(`/${lang}/admin/orders`)
+                        router.refresh()
+                        return
+                    }
+                }
+
+                // Redirect to my-orders on success for normal customers
                 router.push(`/${lang}/my-orders`)
                 router.refresh()
 
