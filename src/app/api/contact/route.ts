@@ -13,9 +13,9 @@ export async function POST(request: Request) {
             )
         }
 
-        // Basic email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        if (!emailRegex.test(email)) {
+        // ReDoS-safe email validation (strictly linear O(n) non-backtracking)
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        if (typeof email !== 'string' || email.length > 254 || !emailRegex.test(email)) {
             return NextResponse.json(
                 { error: 'Invalid email address' },
                 { status: 400 }
