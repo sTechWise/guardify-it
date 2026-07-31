@@ -206,13 +206,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
                                             <span className={styles.oldPrice}>৳{p.price.toLocaleString()}</span>
                                             <span className={styles.salePrice}>
                                                 ৳{p.sale_price.toLocaleString()}
-                                                {p.subscription_type && <span className={styles.perType}>/ {p.subscription_type}</span>}
+                                                <span className={styles.perType}> / {p.duration || p.subscription_type || 'subscription'}</span>
                                             </span>
                                         </>
                                     ) : (
                                         <span className={styles.salePrice}>
                                             ৳{p.price.toLocaleString()}
-                                            {p.subscription_type && <span className={styles.perType}>/ {p.subscription_type}</span>}
+                                            <span className={styles.perType}> / {p.duration || p.subscription_type || 'subscription'}</span>
                                         </span>
                                     )}
                                 </div>
@@ -223,24 +223,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                                 )}
                             </div>
 
-                            {/* Duration (no plans) */}
-                            {p.duration && (
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.5rem',
-                                    padding: '0.65rem 1rem',
-                                    background: 'rgba(27, 77, 255, 0.08)',
-                                    border: '1px solid rgba(27, 77, 255, 0.2)',
-                                    borderRadius: '8px',
-                                    fontSize: '0.875rem',
-                                    fontWeight: 600,
-                                    color: 'var(--guardian-blue-light, #5B8DFF)'
-                                }}>
-                                    <Clock size={16} />
-                                    <span>{isBn ? 'মেয়াদ:' : 'Duration:'} {p.duration}</span>
-                                </div>
-                            )}
+
 
                             {/* Scarcity Indicator */}
                             <div className={styles.scarcityText}>

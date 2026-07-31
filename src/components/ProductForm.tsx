@@ -342,7 +342,7 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                 <div className={styles.row}>
                     <div className={styles.group}>
                         <label className={styles.label}>
-                            Regular Price <span className={styles.required}>*</span>
+                            Regular Price (৳) <span className={styles.required}>*</span>
                         </label>
                         <input
                             type="number"
@@ -353,9 +353,12 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                             value={formData.price}
                             onChange={e => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
                         />
+                        <span style={{ fontSize: '0.72rem', color: 'var(--muted)', marginTop: '2px', display: 'block' }}>
+                            Base product price (e.g. ৳1800 for 1 Month).
+                        </span>
                     </div>
                     <div className={styles.group}>
-                        <label className={styles.label}>Sale Price</label>
+                        <label className={styles.label}>Sale Price (৳)</label>
                         <input
                             type="number"
                             min="0"
@@ -365,6 +368,9 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                             onChange={e => setFormData({ ...formData, sale_price: e.target.value ? parseFloat(e.target.value) : null })}
                             placeholder="Leave empty if no sale"
                         />
+                        <span style={{ fontSize: '0.72rem', color: 'var(--muted)', marginTop: '2px', display: 'block' }}>
+                            Discounted price (e.g. ৳1500).
+                        </span>
                     </div>
                 </div>
                 <div className={styles.row}>
