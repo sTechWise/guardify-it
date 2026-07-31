@@ -75,6 +75,21 @@ export default async function ProductDetailPage({ params }: PageProps) {
                         )}
                     </div>
 
+                    {/* Product Description */}
+                    {(p.description || p.description_bengali) && (
+                        <div className={styles.section}>
+                            <h2 className={styles.sectionTitle}>{isBn ? 'পণ্যের বিবরণ' : 'Product Description'}</h2>
+                            <div style={{
+                                color: 'var(--text-secondary, #94a3b8)',
+                                lineHeight: '1.7',
+                                fontSize: '0.95rem',
+                                whiteSpace: 'pre-line'
+                            }}>
+                                {(isBn ? (p.description_bengali || p.description) : (p.description || p.description_bengali))}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Desktop Highlight Section */}
                     <div className={styles.desktopHighlight}>
                         <h2 className={styles.sectionTitle}>

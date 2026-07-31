@@ -11,7 +11,7 @@
 export interface SubscriptionPlan {
     duration: string
     price: number
-    sale_price?: number
+    sale_price?: number | null
 }
 
 /**

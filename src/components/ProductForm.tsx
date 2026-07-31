@@ -176,13 +176,25 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
         setError(null)
 
         try {
+            // Sanitize subscription plans: remove empty durations, coerce numbers, use null instead of undefined
+            const cleanedPlans = plans
+                .filter(p => p.duration && p.duration.trim().length > 0)
+                .map(p => ({
+                    duration: p.duration.trim(),
+                    price: Number(p.price) || 0,
+                    sale_price: (p.sale_price !== null && p.sale_price !== undefined && !isNaN(Number(p.sale_price)) && Number(p.sale_price) > 0)
+                        ? Number(p.sale_price)
+                        : null
+                }))
+
             // Prepare data for submission
             const submitData = {
                 ...formData,
-                sale_price: formData.sale_price || null,
+                price: Number(formData.price) || 0,
+                sale_price: formData.sale_price ? Number(formData.sale_price) : null,
                 category_id: formData.category_id || null,
                 badge: formData.badge || null,
-                subscription_plans: plans.length > 0 ? plans : null
+                subscription_plans: cleanedPlans.length > 0 ? cleanedPlans : null
             }
 
             if (mode === 'create') {
@@ -206,8 +218,9 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
             router.refresh()
 
         } catch (err: any) {
-            console.error(err)
-            setError(err.message || 'An error occurred')
+            console.error('ProductForm submit error:', err)
+            setError(err.message || 'An error occurred while saving the product')
+            showToast(err.message || 'Failed to save product', 'error')
         } finally {
             setLoading(false)
         }
@@ -444,23 +457,51 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
             {/* Subscription Plans — Duration + Price tiers */}
             <div className={styles.section}>
                 <div className={styles.sectionTitle}>
-                    Subscription Plans
-                    <span style={{ fontSize: '0.72rem', fontWeight: 400, color: 'var(--muted)', marginLeft: '8px' }}>
-                        (Optional — add multiple duration options with different prices)
+                    Subscription Plans / Tiers
+                    <span style={{ fontSize: '0.75rem', fontWeight: 400, color: 'var(--muted)', marginLeft: '8px' }}>
+                        (Add multiple duration tiers with different pricing like ChatGPT Plus)
                     </span>
+                </div>
+
+                {/* Quick Presets */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--muted)', alignSelf: 'center', marginRight: '4px' }}>Quick Add:</span>
+                    {['1 Month', '3 Months', '6 Months', '1 Year', 'Lifetime'].map(preset => (
+                        <button
+                            key={preset}
+                            type="button"
+                            onClick={() => {
+                                if (!plans.some(p => p.duration === preset)) {
+                                    setPlans([...plans, { duration: preset, price: formData.price || 0, sale_price: formData.sale_price || null }])
+                                }
+                            }}
+                            style={{
+                                padding: '4px 10px',
+                                background: 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid var(--border)',
+                                borderRadius: '6px',
+                                color: 'var(--text)',
+                                fontSize: '0.75rem',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s'
+                            }}
+                        >
+                            + {preset}
+                        </button>
+                    ))}
                 </div>
 
                 {plans.length > 0 && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '12px' }}>
                         {/* Header row */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 40px', gap: '8px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '0 4px' }}>
-                            <span>Duration</span>
-                            <span>Price (৳)</span>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 40px', gap: '8px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '0 4px' }}>
+                            <span>Duration / Plan Name</span>
+                            <span>Regular Price (৳)</span>
                             <span>Sale Price (৳)</span>
                             <span></span>
                         </div>
                         {plans.map((plan, idx) => (
-                            <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 40px', gap: '8px', alignItems: 'center' }}>
+                            <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 40px', gap: '8px', alignItems: 'center' }}>
                                 <input
                                     type="text"
                                     className={styles.input}
@@ -477,7 +518,7 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                                     min="0"
                                     step="1"
                                     className={styles.input}
-                                    value={plan.price}
+                                    value={plan.price || ''}
                                     onChange={e => {
                                         const updated = [...plans]
                                         updated[idx] = { ...updated[idx], price: parseFloat(e.target.value) || 0 }
@@ -490,10 +531,11 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                                     min="0"
                                     step="1"
                                     className={styles.input}
-                                    value={plan.sale_price || ''}
+                                    value={plan.sale_price !== null && plan.sale_price !== undefined ? plan.sale_price : ''}
                                     onChange={e => {
                                         const updated = [...plans]
-                                        updated[idx] = { ...updated[idx], sale_price: e.target.value ? parseFloat(e.target.value) : undefined }
+                                        const val = e.target.value ? parseFloat(e.target.value) : null
+                                        updated[idx] = { ...updated[idx], sale_price: val }
                                         setPlans(updated)
                                     }}
                                     placeholder="Optional"
@@ -513,7 +555,7 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
 
                 <button
                     type="button"
-                    onClick={() => setPlans([...plans, { duration: '', price: 0 }])}
+                    onClick={() => setPlans([...plans, { duration: '', price: 0, sale_price: null }])}
                     style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -528,12 +570,12 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                         fontWeight: 600
                     }}
                 >
-                    <Plus size={16} /> Add Plan
+                    <Plus size={16} /> Add Custom Tier
                 </button>
 
                 {plans.length === 0 && (
                     <p style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: '8px' }}>
-                        No plans added. The product will use the base Price and Duration fields above. Add plans to let customers choose between durations like &quot;1 Month&quot;, &quot;3 Months&quot;, &quot;1 Year&quot; — each with its own price.
+                        No plan tiers added yet. Click any quick add preset above or &quot;Add Custom Tier&quot; to allow customers to select subscription duration options on the product page.
                     </p>
                 )}
             </div>

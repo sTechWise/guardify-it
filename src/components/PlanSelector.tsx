@@ -34,7 +34,7 @@ export default function PlanSelector({ product, dict, isBn = false, buttonClassN
             id: product.id,
             title: product.title,
             price: selectedPlan ? selectedPlan.price : product.price,
-            sale_price: selectedPlan ? selectedPlan.sale_price : product.sale_price,
+            sale_price: selectedPlan ? (selectedPlan.sale_price || undefined) : (product.sale_price || undefined),
             image_url: product.image_url,
             subscription_type: product.subscription_type,
             duration: duration || undefined,
