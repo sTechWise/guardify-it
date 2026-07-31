@@ -62,9 +62,8 @@ export default function Navbar({ dict }: NavbarProps) {
     }, [user])
 
     const handleSignOut = async () => {
-        await signOut()
         setIsAccountMenuOpen(false)
-        window.location.href = `/${lang}` // Force hard refresh to clear all state
+        await signOut()
     }
 
     // Close account menu when clicking outside

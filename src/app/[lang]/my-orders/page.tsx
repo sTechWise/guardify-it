@@ -37,25 +37,64 @@ export default function MyOrdersPage() {
     const [isAdmin, setIsAdmin] = useState(false)
 
     useEffect(() => {
-        if (!authLoading) {
-            if (!user) {
-                setLoading(false)
-            } else {
-                checkAdminStatus()
-                fetchOrders()
+        let isMounted = true
+
+        // Safety fallback timer: force loading to false if order fetching hangs over 3.5s
+        const safetyTimer = setTimeout(() => {
+            if (isMounted) {
+                setLoading((prev) => {
+                    if (prev) {
+                        console.warn('MyOrders fetch timed out, releasing loading spinner.')
+                        return false
+                    }
+                    return prev
+                })
             }
+        }, 3500)
+
+        async function loadData() {
+            if (!authLoading) {
+                if (!user) {
+                    if (isMounted) setLoading(false)
+                } else {
+                    try {
+                        await Promise.all([
+                            checkAdminStatus(),
+                            fetchOrders()
+                        ])
+                    } catch (err) {
+                        console.error('Error loading order page data:', err)
+                    } finally {
+                        if (isMounted) setLoading(false)
+                    }
+                }
+            }
+        }
+
+        loadData().finally(() => {
+            clearTimeout(safetyTimer)
+        })
+
+        return () => {
+            isMounted = false
+            clearTimeout(safetyTimer)
         }
     }, [user, authLoading])
 
     async function checkAdminStatus() {
         if (!user) return
-        const { data: roles } = await supabase
-            .from('user_roles')
-            .select('role')
-            .eq('user_id', user.id)
-            .eq('role', 'admin')
+        try {
+            const { data: roles } = await supabase
+                .from('user_roles')
+                .select('role')
+                .eq('user_id', user.id)
+                .eq('role', 'admin')
 
-        setIsAdmin(!!(roles && roles.length > 0))
+            setIsAdmin(!!(roles && roles.length > 0))
+        } catch (err) {
+            console.error('checkAdminStatus error:', err)
+            setIsAdmin(false)
+        }
     }
 
     async function fetchOrders() {
@@ -81,7 +120,7 @@ export default function MyOrdersPage() {
                 setOrders(data || [])
             }
         } catch (err) {
-            console.error('Error:', err)
+            console.error('Error in fetchOrders:', err)
             setOrders([])
         } finally {
             setLoading(false)
