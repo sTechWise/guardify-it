@@ -1,0 +1,34 @@
+# Semgrep code scanning workflow
+# Drop this file into: .github/workflows/semgrep.yml in your repo
+#
+# What it does:
+# - Runs automatically on every push and every pull request
+# - Scans your code for bugs, bad patterns, and security issues
+# - Shows results as annotations directly on the PR/commit in GitHub
+# - Free for public AND private repos (no GitHub Advanced Security needed)
+
+name: Semgrep
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  semgrep:
+    name: Run Semgrep scan
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        run: semgrep ci --config=auto
+        env:
+          # Optional: sign up free at semgrep.dev to get a token for their
+          # dashboard + Pro rules. Not required — without it, Semgrep still
+          # runs full open-source scanning and posts results in the Actions log.
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
