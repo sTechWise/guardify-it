@@ -466,7 +466,7 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                 {/* Quick Presets */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '12px' }}>
                     <span style={{ fontSize: '0.75rem', color: 'var(--muted)', alignSelf: 'center', marginRight: '4px' }}>Quick Add:</span>
-                    {['1 Month', '3 Months', '6 Months', '1 Year', 'Lifetime'].map(preset => (
+                    {['1 Month', '3 Months', '4 Months', '6 Months', '1 Year', 'Lifetime'].map(preset => (
                         <button
                             key={preset}
                             type="button"
@@ -511,7 +511,7 @@ export default function ProductForm({ initialData, mode, lang = 'en' }: ProductF
                                         updated[idx] = { ...updated[idx], duration: e.target.value }
                                         setPlans(updated)
                                     }}
-                                    placeholder="e.g., 1 Month"
+                                    placeholder="e.g., 4 Months, 1 Year"
                                 />
                                 <input
                                     type="number"
